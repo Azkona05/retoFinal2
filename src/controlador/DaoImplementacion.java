@@ -27,7 +27,7 @@ public class DaoImplementacion implements InterfazDao {
 	private CallableStatement cs;
 	
 	// SQL Login
-	final String LOGIN = "SELECT * FROM USUARIO WHERE NOM = ? AND CONTRASENIA = ?";
+	final String LOGIN = "SELECT * FROM USUARIO WHERE NOMBRE = ? AND CLAVE = ?";
 	
 	public DaoImplementacion() {
 		this.configFile = ResourceBundle.getBundle("modelo.configClass");

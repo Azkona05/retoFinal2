@@ -56,7 +56,6 @@ public class VLogin extends JDialog implements ActionListener {
 		super(padre);
 		this.setModal(modal);
 		setTitle("Iniciar Sesion");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/resources/icono.jpg")));
 		setBounds(100, 100, 705, 428);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
