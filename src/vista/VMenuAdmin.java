@@ -42,6 +42,7 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 		btnConsultar = new JButton("CONSULTAR");
 		btnConsultar.setBounds(256, 170, 128, 39);
 		contentPanel.add(btnConsultar);
+		btnConsultar.addActionListener(this);
 	}
 
 	@Override
@@ -53,7 +54,8 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 		} else if(e.getSource().equals(btnModificar)) {
 			
 		} else if(e.getSource().equals(btnConsultar)) {
-			
+			VConsultar vC = new VConsultar(this, true);
+			vC.setVisible(true);
 		}
 	}
 }

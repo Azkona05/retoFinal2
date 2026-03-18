@@ -7,6 +7,7 @@ public class Album {
 	private int id;
 	private String nombre;
 	private ArrayList<Cancion> canciones;
+	private int idArtista;
 
 	public Album() {
 		super();
@@ -36,7 +37,7 @@ public class Album {
 	}
 
 	public String toString() {
-		return "Album [id=" + id + ", nombre=" + nombre + "]";
+		return nombre;
 	}
 
 	public ArrayList<Cancion> getCanciones() {
@@ -46,4 +47,13 @@ public class Album {
 	public void setCanciones(ArrayList<Cancion> canciones) {
 		this.canciones = canciones;
 	}
+
+	public int getIdArtista() {
+		return idArtista;
+	}
+
+	public void setIdArtista(int idArtista) {
+		this.idArtista = idArtista;
+	}
+
 }
