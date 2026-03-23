@@ -23,78 +23,71 @@ import modelo.Cancion;
 public class ExportadorXML implements InterfazExportador {
 
 	public void exportarArtistas(List<Artista> listaArtistas, String rutaArchivo) {
-	    try {
-	        DocumentBuilderFactory fabrica = DocumentBuilderFactory.newInstance();
-	        DocumentBuilder constructor = fabrica.newDocumentBuilder();
-	        Document doc = constructor.newDocument();
+		try {
+			DocumentBuilderFactory fabrica = DocumentBuilderFactory.newInstance();
+			DocumentBuilder constructor = fabrica.newDocumentBuilder();
+			Document doc = constructor.newDocument();
 
-	        Element root = doc.createElement("TartangaMusic");
-	        doc.appendChild(root);
+			Element root = doc.createElement("TartangaMusic");
+			doc.appendChild(root);
 
-	        Element artistasContenedor = doc.createElement("Artistas");
-	        root.appendChild(artistasContenedor);
+			Element artistasContenedor = doc.createElement("Artistas");
+			root.appendChild(artistasContenedor);
 
-	        for (Artista art : listaArtistas) {
-	            Element artistaNode = doc.createElement("Artista");
-	            artistaNode.setAttribute("id", String.valueOf(art.getId()));
-	            artistasContenedor.appendChild(artistaNode);
+			Element cancionesContenedor = doc.createElement("CancionesTotales"); 
+			root.appendChild(cancionesContenedor);
 
-	            Element nombreArt = doc.createElement("Nombre");
-	            nombreArt.setTextContent(art.getNombre());
-	            artistaNode.appendChild(nombreArt);
+			for (Artista art : listaArtistas) {
+				Element artistaNode = doc.createElement("Artista");
+				artistaNode.setAttribute("id", String.valueOf(art.getId()));
+				artistasContenedor.appendChild(artistaNode);
 
-	            Element tipoArt = doc.createElement("Tipo");
-	            tipoArt.setTextContent(art.getTipo() != null ? art.getTipo().name() : "DESCONOCIDO");
-	            artistaNode.appendChild(tipoArt);
+				Element nombreArt = doc.createElement("Nombre");
+				nombreArt.setTextContent(art.getNombre());
+				artistaNode.appendChild(nombreArt);
 
-	            if (art.getListaAlbumes() != null && !art.getListaAlbumes().isEmpty()) {
-	                Element albumesWrapper = doc.createElement("Albumes");
-	                artistaNode.appendChild(albumesWrapper);
+				Element tipoArt = doc.createElement("Tipo");
+				tipoArt.setTextContent(art.getTipo() != null ? art.getTipo().name() : "DESCONOCIDO");
+				artistaNode.appendChild(tipoArt);
 
-	                for (Album alb : art.getListaAlbumes()) {
-	                    Element albumNode = doc.createElement("Album");
-	                    albumNode.setAttribute("id", String.valueOf(alb.getId()));
-	                    albumesWrapper.appendChild(albumNode);
+				if (art.getListaAlbumes() != null) {
+					for (Album alb : art.getListaAlbumes()) {
 
-	                    Element nomAlbum = doc.createElement("Nombre");
-	                    nomAlbum.setTextContent(alb.getNombre()); // Añadido el contenido
-	                    albumNode.appendChild(nomAlbum);
+						if (alb.getCanciones() != null) {
+							for (Cancion can : alb.getCanciones()) {
+								Element cancionNode = doc.createElement("Cancion");
+								cancionNode.setAttribute("id", String.valueOf(can.getId()));
+								cancionNode.setAttribute("albumId", String.valueOf(alb.getId()));
+								cancionesContenedor.appendChild(cancionNode);
 
-	                    if (alb.getCanciones() != null && !alb.getCanciones().isEmpty()) {
-	                        Element cancionesWrapper = doc.createElement("Canciones");
-	                        albumNode.appendChild(cancionesWrapper);
+								Element nomCancion = doc.createElement("Nombre");
+								nomCancion.setTextContent(can.getNombre());
+								cancionNode.appendChild(nomCancion);
 
-	                        for (Cancion can : alb.getCanciones()) {
-	                            Element cancionNode = doc.createElement("Cancion");
-	                            cancionNode.setAttribute("id", String.valueOf(can.getId()));
-	                            cancionesWrapper.appendChild(cancionNode);
+								Element generoNode = doc.createElement("Genero");
+								generoNode.setTextContent(
+										can.getGenero() != null ? can.getGenero().name() : "DESCONOCIDO");
+								cancionNode.appendChild(generoNode);
+							}
+						}
+					}
+				}
+			}
 
-	                            Element nomCancion = doc.createElement("Nombre");
-	                            nomCancion.setTextContent(can.getNombre()); 
-	                            cancionNode.appendChild(nomCancion);
+			TransformerFactory instanciaTransformador = TransformerFactory.newInstance();
+			Transformer transformador = instanciaTransformador.newTransformer();
+			transformador.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformador.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
-	                            Element generoNode = doc.createElement("Genero");
-	                            generoNode.setTextContent(can.getGenero() != null ? can.getGenero().name() : "DESCONOCIDO");
-	                            cancionNode.appendChild(generoNode); 
-	                        }
-	                    }
-	                }
-	            }
-	        }
+			DOMSource fuente = new DOMSource(doc);
+			StreamResult resultado = new StreamResult(new File(rutaArchivo));
+			transformador.transform(fuente, resultado);
 
-	        TransformerFactory instanciaTransformador = TransformerFactory.newInstance();
-	        Transformer transformador = instanciaTransformador.newTransformer();
-	        transformador.setOutputProperty(OutputKeys.INDENT, "yes");
-	        transformador.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+			System.out.println("Archivo XML generado con éxito.");
 
-	        DOMSource fuente = new DOMSource(doc);
-	        StreamResult resultado = new StreamResult(new File(rutaArchivo));
-	        transformador.transform(fuente, resultado);
+		} catch (ParserConfigurationException | TransformerException e) {
+			System.err.println("Error al generar el XML: " + e.getMessage());
+		}
 
-	        System.out.println("Archivo XML generado con éxito en: " + rutaArchivo);
-
-	    } catch (ParserConfigurationException | TransformerException e) {
-	        System.err.println("Error al generar el XML: " + e.getMessage());
-	    }
 	}
 }

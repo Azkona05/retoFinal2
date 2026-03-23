@@ -25,7 +25,7 @@ public class VPrincipal extends JFrame implements ActionListener{
 		contentPane.setLayout(null);
 		
 		btnInicioSesion = new JButton("Iniciar Sesion");
-		btnInicioSesion.setBounds(238, 26, 88, 22);
+		btnInicioSesion.setBounds(311, 11, 115, 22);
 		contentPane.add(btnInicioSesion);
 		btnInicioSesion.addActionListener(this);
 		

@@ -70,7 +70,6 @@ public class VConsultaAlbum extends JDialog {
 				int column = table.columnAtPoint(e.getPoint());
 				if (row != -1 && column == 4) {
 					String nombreCancion = table.getValueAt(row, 1).toString();
-
 					System.out.println("Intentando reproducir: " + nombreCancion);
 					reproducirAudio(nombreCancion);
 				}

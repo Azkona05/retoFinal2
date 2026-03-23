@@ -38,8 +38,9 @@ public class DaoImplementacion implements InterfazDao {
 	final String BUSCAR_ARTISTA = "SELECT * FROM ARTISTA";
 	final String BUSCAR_ALBUM = "SELECT * FROM ALBUM";
 	final String BUSCAR_CANCIONES_POR_ALBUM = "SELECT ID_C, NOMBRE, GENERO, ID_AL FROM CANCION WHERE ID_AL = ?";
-	final String BUSCAR_CANCIONES_ARTISTA = "SELECT c.ID_C, c.NOMBRE, c.GENERO, al.NOMBRE AS nombre_album "
-			+ "FROM CANCION c " + "JOIN ALBUM al ON c.ID_AL = al.ID_AL " + "WHERE al.ID_A = ?";
+//	final String BUSCAR_CANCIONES_ARTISTA = "SELECT c.ID_C, c.NOMBRE, c.GENERO, al.NOMBRE AS nombre_album "
+//			+ "FROM CANCION c " + "JOIN ALBUM al ON c.ID_AL = al.ID_AL " + "WHERE al.ID_A = ?";
+	final String CALL_BUSCAR_CANCIONES_ARTISTA = "{call obtenerCancionesPorArtista(?)}";
 
 	public DaoImplementacion() {
 		this.configFile = ResourceBundle.getBundle("modelo.configClass");
@@ -211,11 +212,12 @@ public class DaoImplementacion implements InterfazDao {
 
 		try {
 			openConnection();
-			stmt = con.prepareStatement(BUSCAR_CANCIONES_ARTISTA);
-			stmt.setInt(1, a.getId());
-
-			rs = stmt.executeQuery();
-
+//			stmt = con.prepareStatement(BUSCAR_CANCIONES_ARTISTA);
+//			stmt.setInt(1, a.getId());
+//			rs = stmt.executeQuery();
+			cs = (CallableStatement) con.prepareCall(CALL_BUSCAR_CANCIONES_ARTISTA);
+	        cs.setInt(1, a.getId());
+	        rs = cs.executeQuery();
 			while (rs.next()) {
 				Object[] fila = { rs.getInt("ID_C"), rs.getString("NOMBRE"), rs.getString("GENERO"),
 						rs.getString("nombre_album") };
