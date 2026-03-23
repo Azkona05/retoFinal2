@@ -32,6 +32,7 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 		contentPanel.add(btnAlta);
 
 		btnBaja = new JButton("BAJA");
+		btnBaja.addActionListener(this);
 		btnBaja.setBounds(256, 62, 128, 39);
 		contentPanel.add(btnBaja);
 
@@ -42,7 +43,6 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 		btnConsultar = new JButton("CONSULTAR");
 		btnConsultar.setBounds(256, 170, 128, 39);
 		contentPanel.add(btnConsultar);
-		btnConsultar.addActionListener(this);
 	}
 
 	@Override
@@ -50,12 +50,13 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 		if(e.getSource().equals(btnAlta)) {
 			
 		} else if(e.getSource().equals(btnBaja)) {
+			VBaja vBaja=new VBaja(this,true);
+			vBaja.setVisible(true);
 			
 		} else if(e.getSource().equals(btnModificar)) {
 			
 		} else if(e.getSource().equals(btnConsultar)) {
-			VConsultar vC = new VConsultar(this, true);
-			vC.setVisible(true);
+			
 		}
 	}
 }

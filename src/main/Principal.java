@@ -1,6 +1,7 @@
 package main;
 
 import java.util.List;
+import java.sql.SQLException;
 
 import controlador.DaoImplementacion;
 import controlador.InterfazDao;
@@ -38,4 +39,15 @@ public class Principal {
 	public static Object[][] devolverCancionesArtista(Artista a) throws LoginException{
 		return dao.devolverCancionesArtista(a);
 	}
+	public static boolean eliminarCancion(int idC) throws SQLException {
+		return dao.eliminarCancion(idC);
+	}
+	public static boolean eliminarAlbum(int idAlb) throws SQLException {
+		return dao.eliminarAlbum(idAlb);
+	}
+
+	public static boolean eliminarArtista(int idArt) throws SQLException {
+		return dao.eliminarArtista(idArt);
+	}
+
 }

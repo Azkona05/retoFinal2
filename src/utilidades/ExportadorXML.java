@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 import modelo.Album;
 import modelo.Artista;
 import modelo.Cancion;
+import modelo.Artista;
 
 public class ExportadorXML implements InterfazExportador {
 

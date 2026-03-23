@@ -41,7 +41,42 @@ public class DaoImplementacion implements InterfazDao {
 //	final String BUSCAR_CANCIONES_ARTISTA = "SELECT c.ID_C, c.NOMBRE, c.GENERO, al.NOMBRE AS nombre_album "
 //			+ "FROM CANCION c " + "JOIN ALBUM al ON c.ID_AL = al.ID_AL " + "WHERE al.ID_A = ?";
 	final String CALL_BUSCAR_CANCIONES_ARTISTA = "{call obtenerCancionesPorArtista(?)}";
+	
+	// ---------------------- ELIMINAR ARTISTA ----------------------
 
+	// Elimina las relaciones del artista con las canciones en la tabla TIENE
+	final String DELETE_TIENE_ARTISTA = "DELETE FROM TIENE WHERE ID_A = ?";
+
+	// Elimina todas las canciones de los álbumes que pertenecen a ese artista
+	final String DELETE_CANCIONES_ARTISTA = "DELETE FROM CANCION WHERE ID_AL IN (SELECT ID_AL FROM ALBUM WHERE ID_A = ?)";
+
+	// Elimina todos los álbumes del artista
+	final String DELETE_ALBUMES_ARTISTA = "DELETE FROM ALBUM WHERE ID_A = ?";
+
+	// Elimina el artista de la tabla ARTISTA
+	final String DELETE_ARTISTA = "DELETE FROM ARTISTA WHERE ID_A = ?";
+
+
+	// ---------------------- ELIMINAR ALBUM ----------------------
+
+	// Elimina las relaciones de las canciones del álbum en la tabla TIENE
+	final String DELETE_TIENE_ALBUM = "DELETE FROM TIENE WHERE ID_C IN (SELECT ID_C FROM CANCION WHERE ID_AL = ?)";
+
+	// Elimina todas las canciones que pertenecen al álbum
+	final String DELETE_CANCIONES_ALBUM = "DELETE FROM CANCION WHERE ID_AL = ?";
+
+	// Elimina el álbum de la tabla ALBUM
+	final String DELETE_ALBUM = "DELETE FROM ALBUM WHERE ID_AL = ?";
+
+
+	// ---------------------- ELIMINAR CANCION ----------------------
+
+	// Elimina la relación de la canción con los artistas en la tabla TIENE
+	final String DELETE_TIENE_CANCION = "DELETE FROM TIENE WHERE ID_C = ?";
+
+	// Elimina la canción de la tabla CANCION
+	final String DELETE_CANCION = "DELETE FROM CANCION WHERE ID_C = ?";
+	
 	public DaoImplementacion() {
 		this.configFile = ResourceBundle.getBundle("modelo.configClass");
 		this.urlDB = this.configFile.getString("Conn");
@@ -82,6 +117,96 @@ public class DaoImplementacion implements InterfazDao {
 
 	}
 
+	/////////NORA
+	public boolean eliminarArtista(int idArtista) throws SQLException {
+
+		openConnection();
+
+		try {
+
+			// Elimina relaciones en TIENE
+			stmt = con.prepareStatement(DELETE_TIENE_ARTISTA);
+			stmt.setInt(1, idArtista);
+			stmt.executeUpdate();
+
+			// Elimina canciones de sus álbumes
+			stmt = con.prepareStatement(DELETE_CANCIONES_ARTISTA);
+			stmt.setInt(1, idArtista);
+			stmt.executeUpdate();
+
+			// Elimina álbumes
+			stmt = con.prepareStatement(DELETE_ALBUMES_ARTISTA);
+			stmt.setInt(1, idArtista);
+			stmt.executeUpdate();
+
+			// Elimina artista
+			stmt = con.prepareStatement(DELETE_ARTISTA);
+			stmt.setInt(1, idArtista);
+
+			int filas = stmt.executeUpdate();
+
+			return filas > 0;
+
+		} finally {
+			closeConnection();
+		}
+	}
+	////////NORAAA
+	
+	public boolean eliminarAlbum(int idAlbum) throws SQLException {
+
+		openConnection();
+
+		try {
+
+			// Elimina relaciones en TIENE
+			stmt = con.prepareStatement(DELETE_TIENE_ALBUM);
+			stmt.setInt(1, idAlbum);
+			stmt.executeUpdate();
+
+			// Elimina canciones del álbum
+			stmt = con.prepareStatement(DELETE_CANCIONES_ALBUM);
+			stmt.setInt(1, idAlbum);
+			stmt.executeUpdate();
+
+			// Elimina álbum
+			stmt = con.prepareStatement(DELETE_ALBUM);
+			stmt.setInt(1, idAlbum);
+
+			int filas = stmt.executeUpdate();
+
+			return filas > 0;
+
+		} finally {
+			closeConnection();
+		}
+	}
+	
+	/////////NORA
+	
+	public boolean eliminarCancion(int idCancion) throws SQLException {
+
+		openConnection();
+
+		try {
+
+			// Elimina relación en TIENE
+			stmt = con.prepareStatement(DELETE_TIENE_CANCION);
+			stmt.setInt(1, idCancion);
+			stmt.executeUpdate();
+
+			// Elimina canción
+			stmt = con.prepareStatement(DELETE_CANCION);
+			stmt.setInt(1, idCancion);
+
+			int filas = stmt.executeUpdate(); // 🔥 guarda cuántas filas borra
+
+			return filas > 0; // true = se ha borrado, false = no existe
+
+		} finally {
+			closeConnection();
+		}
+	}
 	@Override
 	public void login(Usuario usuario) throws LoginException {
 		ResultSet rs = null;
