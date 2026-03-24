@@ -28,6 +28,7 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 		contentPanel.setLayout(null);
 
 		btnAlta = new JButton("ALTA");
+		btnAlta.addActionListener(this);
 		btnAlta.setBounds(60, 62, 128, 39);
 		contentPanel.add(btnAlta);
 
@@ -40,6 +41,7 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 		btnModificar.setBounds(60, 170, 128, 39);
 		contentPanel.add(btnModificar);
 		
+
 		btnConsultar = new JButton("CONSULTAR");
 		btnConsultar.setBounds(256, 170, 128, 39);
 		contentPanel.add(btnConsultar);
@@ -47,15 +49,22 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(btnAlta)) {
+		if (e.getSource().equals(btnAlta)) {
+			VAlta alta = new VAlta(this,true);
+			alta.setVisible(true);
+			alta.toFront();
 			
-		} else if(e.getSource().equals(btnBaja)) {
-			VBaja vBaja=new VBaja(this,true);
-			vBaja.setVisible(true);
+		} else if (e.getSource().equals(btnBaja)) {
+			VBaja baja = new VBaja(this,true);
+			baja.setVisible(true);
+			baja.toFront();
 			
-		} else if(e.getSource().equals(btnModificar)) {
+		} else if (e.getSource().equals(btnModificar)) {
 			
-		} else if(e.getSource().equals(btnConsultar)) {
+		} else if (e.getSource().equals(btnConsultar)) {
+			VConsultar consultar = new VConsultar(this,true);
+			consultar.setVisible(true);
+			consultar.toFront();
 			
 		}
 	}

@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.mysql.cj.jdbc.CallableStatement;
@@ -16,6 +18,10 @@ import modelo.Album;
 import modelo.Artista;
 import modelo.Cancion;
 import modelo.Genero;
+import exception.AltaException;
+import exception.LoginException;
+import modelo.Artista;
+import modelo.Tipo;
 import modelo.Usuario;
 
 public class DaoImplementacion implements InterfazDao {
@@ -76,6 +82,12 @@ public class DaoImplementacion implements InterfazDao {
 
 	// Elimina la canción de la tabla CANCION
 	final String DELETE_CANCION = "DELETE FROM CANCION WHERE ID_C = ?";
+	
+	// SQL Login
+	final String ALTAARTI="INSERT INTO ARTISTA (ID_A, NOMBRE, TIPO) VALUES (?, ?, ?)";
+	final String leerArtiId="SELECT ID_A FROM ARTISTA";
+	final String leerArtiNombre="SELECT NOMBRE FROM ARTISTA";
+	//SELECT ID_A FROM ARTISTA WHERE ID_A NOT IN (SELECT ID_A FROM ARTISTA WHERE ID_A=?)";
 	
 	public DaoImplementacion() {
 		this.configFile = ResourceBundle.getBundle("modelo.configClass");
@@ -257,11 +269,40 @@ public class DaoImplementacion implements InterfazDao {
 			try {
 				if (rs != null)
 					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	public boolean altaArtista(Artista artista) throws AltaException {
+		// TODO Auto-generated method stub
+		boolean result=false;
+		//ResultSet rs = null;
+		openConnection();
+		try {
+			stmt = con.prepareStatement(ALTAARTI);
+			stmt.setInt(1, artista.getId());
+			stmt.setString(2, artista.getNombre());
+			stmt.setString(3, artista.getTipo().name());
+
+			   int filasAfectadas = stmt.executeUpdate();	//DIFERENCIA BASTA EL EXECUTEUODATE ES PARA INSERT UPDATE Y DELETE		
+			   if(filasAfectadas>0){
+				   result=true;
+				   return result;
+			   }
+			
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR, SQL ERROR");
+		} finally {
+			try {
+				
 				closeConnection();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
+		return result;
 	}
 
 	@Override
@@ -284,13 +325,49 @@ public class DaoImplementacion implements InterfazDao {
 			throw new LoginException("Problemas en la BDs");
 		} finally {
 			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	}
+		return albumes;
+}
+
+	@Override
+	public ArrayList<Integer> ides() throws AltaException {
+		// TODO Auto-generated method stub
+		ArrayList<Integer> id= new ArrayList<>();
+		
+		ResultSet rs = null;
+		openConnection();
+		
+		try {
+			stmt = con.prepareStatement(leerArtiId);
+	
+
+			rs = stmt.executeQuery(); //exequery es para usarlo con consultas
+			while(rs.next()){
+				id.add(rs.getInt("ID_A"));
+				
+				
+			}
+//			if (!rs.next()) {
+//				throw new AltaException("ERROR AL LEER DATOS");
+//			}
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR, SQL ERROR");
+		} finally {
+			try {
 				rs.close();
 				closeConnection();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		return albumes;
+		return id;
 	}
 
 	@Override
@@ -325,9 +402,40 @@ public class DaoImplementacion implements InterfazDao {
 				closeConnection();
 			} catch (SQLException e) {
 				e.printStackTrace();
+			}	
+	}
+		return canciones;
+	}
+
+	@Override
+	public ArrayList<String> nomArti() throws AltaException {
+		// TODO Auto-generated method stub
+		ArrayList<String> artis= new ArrayList<>();
+		ResultSet rs = null;
+		openConnection();
+		try {
+			stmt = con.prepareStatement(leerArtiNombre);
+
+			rs = stmt.executeQuery();
+			while(rs.next()){
+			artis.add(rs.getString("NOMBRE"));
+				
+				
+			}
+			
+			
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR, SQL ERROR");
+		} finally {
+			try {
+				rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
 		}
-		return canciones;
+		return artis;
 	}
 
 	@Override
@@ -349,7 +457,6 @@ public class DaoImplementacion implements InterfazDao {
 				listaCanciones.add(fila);
 			}
 
-			return listaCanciones.toArray(new Object[0][0]);
 
 		} catch (SQLException e) {
 			System.out.println("Error al buscar las canciones del artista: " + e.getMessage());
@@ -361,7 +468,82 @@ public class DaoImplementacion implements InterfazDao {
 				closeConnection();
 			} catch (SQLException e) {
 				e.printStackTrace();
+			}		
+	}
+		return listaCanciones.toArray(new Object[0][0]);
+
+	}
+	
+	public ArrayList<Artista> listarArtistas() throws AltaException {
+	    ArrayList<Artista> artistas = new ArrayList<>();
+	    ResultSet rs = null;
+	    openConnection();
+	    
+	    try {
+	        cs = (CallableStatement) con.prepareCall("{call ListarArtistas()}");
+	        rs = cs.executeQuery();
+	        
+	        while(rs.next()) {
+	            Artista artista = new Artista();
+	            artista.setId(rs.getInt("ID_A"));
+	            artista.setNombre(rs.getString("NOMBRE"));
+	            artista.setTipo(Tipo.valueOf(rs.getString("TIPO")));
+	            artistas.add(artista);
+	        }
+	        
+	    } catch (SQLException e) {
+	        throw new AltaException("ERROR AL LISTAR ARTISTAS: " + e.getMessage());
+	    } finally {
+	        try {
+	            if(rs != null) rs.close();
+	            closeConnection();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return artistas;
+	}
+
+/*	@Override
+	public Map<Integer, Artista> leerDatosArtista() throws AltaException {
+		// TODO Auto-generated method stub
+		Map<Integer, Artista> ids= new HashMap<Integer, Artista>();
+		ResultSet rs = null;
+		openConnection();
+		Artista arti;
+		int cont=1;
+		try {
+			stmt = con.prepareStatement(leerArtiId);
+	
+
+			rs = stmt.executeQuery();
+			while(rs.next()){
+				arti = new Artista();
+				arti.setId(rs.getInt("Id_A"));
+				ids.put(cont, arti);
+				cont++;
+				
+			}
+			if (!rs.next()) {
+				throw new AltaException("ERROR AL LEER DATOS");
+			}
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR, SQL ERROR");
+		} finally {
+			try {
+				rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
 		}
 	}
+		
+		
+		return ids;
+	}*/
+	
+	
+
 }

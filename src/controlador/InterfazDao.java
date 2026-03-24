@@ -8,6 +8,11 @@ import java.sql.SQLException;
 import modelo.Album;
 import modelo.Artista;
 import modelo.Cancion;
+import java.util.ArrayList;
+
+import exception.AltaException;
+import exception.LoginException;
+import modelo.Artista;
 import modelo.Usuario;
 
 public interface InterfazDao {
@@ -21,4 +26,9 @@ public interface InterfazDao {
 	public boolean eliminarArtista(int idArtista) throws SQLException;
 	public boolean eliminarCancion(int idCancion) throws SQLException;
 
+	 public boolean altaArtista(Artista artista) throws AltaException;//necesito hcer alta de artista,album,cancion
+	 public ArrayList<Integer>ides() throws AltaException;
+	 public ArrayList<String>nomArti() throws AltaException;
+	
+	
 }

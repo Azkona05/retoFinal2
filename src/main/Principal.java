@@ -9,6 +9,14 @@ import exception.LoginException;
 import modelo.Album;
 import modelo.Artista;
 import modelo.Cancion;
+import java.util.ArrayList;
+
+import controlador.DaoImplementacion;
+import controlador.InterfazDao;
+import exception.AltaException;
+import exception.LoginException;
+import modelo.Artista;
+import modelo.Tipo;
 import vista.VPrincipal;
 
 public class Principal {
@@ -50,4 +58,22 @@ public class Principal {
 		return dao.eliminarArtista(idArt);
 	}
 
+
+	public static boolean alta(Artista artista) throws AltaException {
+				return dao.altaArtista(artista);
+
+	}
+//	public static Map<Integer,Artista>leerDatosArtista()throws AltaException{
+//		return dao.leerDatosArtista();
+//	}
+	
+	public static ArrayList<Integer>leerIds() throws AltaException{
+		return dao.ides();
+		
+	}
+	public static ArrayList<String>leerNombreArti() throws AltaException{
+		return dao.nomArti();
+	}
 }
+
+
