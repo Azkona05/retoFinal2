@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.UIManager;
+
 import controlador.DaoImplementacion;
 import controlador.InterfazDao;
 import exception.AltaException;
@@ -19,7 +21,7 @@ public class Principal {
 
 	public static void main(String[] args) {
 		try {
-			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			VPrincipal vPrincipal = new VPrincipal();
 			vPrincipal.setVisible(true);
 		} catch (Exception e) {
