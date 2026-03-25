@@ -2,7 +2,6 @@ package vista;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -25,20 +24,7 @@ import exception.LoginException;
 import main.Principal;
 import modelo.Usuario;
 
-/**
- * Clase que representa la ventana de login de la aplicación.
- * Permite al usuario introducir su nombre de usuario y contraseña para autenticarse.
- * Implementa {@link ActionListener} para manejar los eventos de los botones.
- * 
- * Se pueden realizar las siguientes acciones:
- *   Autenticarse mediante el botón "Comprobar".
- *   Cancelar y cerrar la ventana mediante el botón "Cancelar" o la tecla Escape.
- * 
- * 
- * Al presionar Enter, se activa el botón "Comprobar" por defecto.
- * 
- * @author An Azkona, Ander Arilla, Maleck Benigno, Nora Yakoubi
- */
+
 public class VLogin extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -64,12 +50,12 @@ public class VLogin extends JDialog implements ActionListener {
 		this.setResizable(false);
 
 		lblUsuario = new JLabel("Usuario: ");
-		lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblUsuario.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblUsuario.setBounds(119, 109, 147, 29);
 		contentPane.add(lblUsuario);
 
 		lblContra = new JLabel("Contraseña: ");
-		lblContra.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblContra.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblContra.setBounds(119, 174, 147, 29);
 		contentPane.add(lblContra);
 
@@ -100,7 +86,7 @@ public class VLogin extends JDialog implements ActionListener {
 		lblImagen.setIcon(new ImageIcon("src\\resources\\iconoPersonaEditado.png"));
 		lblImagen.setBounds(319, 11, 67, 87);
 		contentPane.add(lblImagen);
-
+		
 		// ✅ Enter activa btnComprobar
 		getRootPane().setDefaultButton(btnComprobar);
 

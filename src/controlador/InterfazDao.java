@@ -29,6 +29,7 @@ public interface InterfazDao {
 	 public boolean altaArtista(Artista artista) throws AltaException;//necesito hcer alta de artista,album,cancion
 	 public ArrayList<Integer>ides() throws AltaException;
 	 public ArrayList<String>nomArti() throws AltaException;
+	 public List<Artista> obtenerTodosLosArtistasCompletos() throws LoginException;
 	
 	
 }
