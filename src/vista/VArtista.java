@@ -46,7 +46,8 @@ public class VArtista extends JDialog implements ActionListener {
 	 * @param vAlta
 	 */
 
-	public VArtista(boolean modal) {
+	public VArtista(VAlta padre, boolean modal) {
+		super(padre);
 		setModal(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());

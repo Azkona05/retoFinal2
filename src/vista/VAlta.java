@@ -20,7 +20,6 @@ public class VAlta extends JDialog implements ActionListener {
 	private JButton btnMusica;
 	private JButton btnAlbum;
 	private JButton btnVolver;
-	private VMenuAdmin vMenuAdmin;
 
 	/**
 	 * Launch the application.
@@ -35,10 +34,8 @@ public class VAlta extends JDialog implements ActionListener {
 	 * @param vMenuAdmin
 	 */
 	public VAlta(VMenuAdmin padre, boolean modal) {
-		
-		super(padre,modal);
-		this.vMenuAdmin=padre;
-		//setModal(true);
+		super(padre);
+		setModal(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -70,7 +67,8 @@ public class VAlta extends JDialog implements ActionListener {
 		btnVolver.addActionListener(this);
 		btnVolver.setBounds(292, 232, 121, 21);
 		contentPanel.add(btnVolver);
-		//this.setAlwaysOnTop(true);// esto es porque la ventana alta se ponia por la cara detras de eclipse
+		// this.setAlwaysOnTop(true);// esto es porque la ventana alta se ponia por la
+		// cara detras de eclipse
 	}
 
 	@Override
@@ -78,14 +76,13 @@ public class VAlta extends JDialog implements ActionListener {
 		// TODO Auto-generated method stub
 		if (e.getSource() == btnVolver) {
 			this.dispose();
-			//this.setVisible(false);
-			//vMenuAdmin.setVisible(true);
-			
+			// this.setVisible(false);
+			// vMenuAdmin.setVisible(true);
 
 		} else if (e.getSource() == buttonArtista) {
-			VArtista vArti = new VArtista(true);
+			VArtista vArti = new VArtista(this, true);
 			vArti.setVisible(true);
-			
+
 		} else if (e.getSource() == btnMusica) {
 
 		} else if (e.getSource() == btnAlbum) {

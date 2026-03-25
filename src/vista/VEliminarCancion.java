@@ -5,7 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -28,7 +27,8 @@ public class VEliminarCancion extends JDialog implements ActionListener {
 	/**
 	 * Create the dialog.
 	 */
-	public VEliminarCancion(boolean modal) {
+	public VEliminarCancion(VBaja padre, boolean modal) {
+		super(padre);
 		setModal(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());

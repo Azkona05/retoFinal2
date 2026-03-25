@@ -2,23 +2,19 @@ package vista;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import main.Principal;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import main.Principal;
 
 public class VEliminarAlbum extends JDialog implements ActionListener{
 
@@ -31,7 +27,8 @@ public class VEliminarAlbum extends JDialog implements ActionListener{
 	/**
 	 * Create the dialog.
 	 */
-	public VEliminarAlbum(boolean modal) {
+	public VEliminarAlbum(VBaja padre, boolean modal) {
+		super(padre);
 		setModal(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());

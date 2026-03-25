@@ -2,7 +2,7 @@ package exception;
 
 import javax.swing.JOptionPane;
 
-public class BajaException {
+public class BajaException extends Exception {
 
 	 /** Versión de la clase para la serialización */
     private static final long serialVersionUID = 1L;

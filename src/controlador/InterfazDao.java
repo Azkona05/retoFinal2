@@ -11,8 +11,6 @@ import modelo.Cancion;
 import java.util.ArrayList;
 
 import exception.AltaException;
-import exception.LoginException;
-import modelo.Artista;
 import modelo.Usuario;
 
 public interface InterfazDao {
