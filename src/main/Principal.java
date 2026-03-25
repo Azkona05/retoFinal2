@@ -19,11 +19,11 @@ public class Principal {
 
 	public static void main(String[] args) {
 		try {
-		    javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
-		    VPrincipal vPrincipal = new VPrincipal();
+			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
+			VPrincipal vPrincipal = new VPrincipal();
 			vPrincipal.setVisible(true);
 		} catch (Exception e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -48,20 +48,35 @@ public class Principal {
 	}
 
 	public static boolean eliminarCancion(int idC) throws SQLException {
-		return dao.eliminarCancion(idC);
-	}
-
-	public static boolean eliminarAlbum(int idAlb) throws SQLException {
-		return dao.eliminarAlbum(idAlb);
+		boolean resultado = dao.eliminarCancion(idC);
+		if (resultado) {
+			dao.forzarGuardadoXML();
+		}
+		return resultado;
 	}
 
 	public static boolean eliminarArtista(int idArt) throws SQLException {
-		return dao.eliminarArtista(idArt);
+		boolean resultado = dao.eliminarArtista(idArt);
+		if (resultado) {
+			dao.forzarGuardadoXML();
+		}
+		return resultado;
+	}
+
+	public static boolean eliminarAlbum(int idAlb) throws SQLException {
+		boolean resultado = dao.eliminarAlbum(idAlb);
+		if (resultado) {
+			dao.forzarGuardadoXML();
+		}
+		return resultado;
 	}
 
 	public static boolean alta(Artista artista) throws AltaException {
-		return dao.altaArtista(artista);
-
+		boolean resultado = dao.altaArtista(artista);
+		if (resultado) {
+			dao.forzarGuardadoXML();
+		}
+		return resultado;
 	}
 //	public static Map<Integer,Artista>leerDatosArtista()throws AltaException{
 //		return dao.leerDatosArtista();

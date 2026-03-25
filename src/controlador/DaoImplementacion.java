@@ -13,12 +13,14 @@ import com.mysql.cj.jdbc.CallableStatement;
 
 import exception.AltaException;
 import exception.LoginException;
+import main.Principal;
 import modelo.Album;
 import modelo.Artista;
 import modelo.Cancion;
 import modelo.Genero;
 import modelo.Tipo;
 import modelo.Usuario;
+import utilidades.ExportadorXML;
 
 public class DaoImplementacion implements InterfazDao {
 
@@ -592,4 +594,15 @@ public class DaoImplementacion implements InterfazDao {
 		return canciones;
 	}
 
+	public void forzarGuardadoXML() {
+	    try {
+	        List<Artista> listaParaExportar = Principal.obtenerTodosLosArtistasCompletos();
+	        ExportadorXML exportador = new ExportadorXML();
+	        String ruta = "artistas.xml";
+	        exportador.exportarArtistas(listaParaExportar, ruta);
+	        System.out.println("XML sincronizado automáticamente.");
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	    }
+	}
 }
