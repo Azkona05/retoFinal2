@@ -18,14 +18,14 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 
-public class VPrincipal extends JFrame implements ActionListener{
+public class VPrincipal extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+
 	private JPanel contentPane;
 	private JButton btnInicioSesion;
-	/**
-	 * Create the frame.
-	 */
+	private JButton btnAcceder;
+
 	public VPrincipal() {
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    setBounds(100, 100, 600, 400);
@@ -75,9 +75,10 @@ public class VPrincipal extends JFrame implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(btnInicioSesion)) {
-			VLogin vL = new VLogin(this, true);
-			vL.setVisible(true);
+		if(e.getSource() == btnInicioSesion || e.getSource() == btnAcceder) {
+			VLogin login = new VLogin(this, true);
+			login.setVisible(true);
+			this.dispose();
 		}
 	}
 

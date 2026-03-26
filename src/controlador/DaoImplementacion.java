@@ -47,6 +47,7 @@ public class DaoImplementacion implements InterfazDao {
 	final String CALL_BUSCAR_CANCIONES_ARTISTA = "{call obtenerCancionesPorArtista(?)}";
 	final String SQL_BUSCAR_ALBUM_ARTISTA = "SELECT ID_AL, NOMBRE FROM ALBUM WHERE ID_A = ?";
 
+	final String BUSCAR_CANCIONES = "SELECT * FROM CANCION";
 	
 	//SQL NORA
 	// ---------------------- ELIMINAR ARTISTA ----------------------
@@ -330,36 +331,6 @@ public class DaoImplementacion implements InterfazDao {
 	}
 
 	@Override
-	public List<Album> devolverAlbumes() throws LoginException {
-		Album al;
-		List<Album> albumes = new ArrayList<Album>();
-		ResultSet rs = null;
-		openConnection();
-		try {
-			stmt = con.prepareStatement(BUSCAR_ALBUM);
-			rs = stmt.executeQuery();
-			while (rs.next()) {
-				al = new Album();
-				al.setId(rs.getInt(1));
-				al.setNombre(rs.getString(2));
-				al.setIdArtista(rs.getInt("id_a"));
-				albumes.add(al);
-			}
-		} catch (SQLException e) {
-			throw new LoginException("Problemas en la BDs");
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				closeConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return albumes;
-	}
-
-	@Override
 	public ArrayList<Integer> ides() throws AltaException {
 		// TODO Auto-generated method stub
 		ArrayList<Integer> id = new ArrayList<>();
@@ -625,5 +596,95 @@ public class DaoImplementacion implements InterfazDao {
 	    } catch (Exception ex) {
 	        ex.printStackTrace();
 	    }
+	}
+	@Override
+	public Object[][] devolverAlbumesT() throws LoginException {
+		List<Object[]> listaAlbumes = new ArrayList<>();
+		ResultSet rs = null;
+
+		try {
+			openConnection();
+			stmt = con.prepareStatement(BUSCAR_ALBUM);
+			rs = stmt.executeQuery();
+			
+			while (rs.next()) {
+				Object[] fila = { rs.getInt("ID_AL"), rs.getString("NOMBRE"), rs.getInt("ID_A") };
+				listaAlbumes.add(fila);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error al buscar las canciones del artista: " + e.getMessage());
+			return new Object[0][0];
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return listaAlbumes.toArray(new Object[0][0]);
+
+	}
+
+	@Override
+	public List<Album> devolverAlbumes() throws LoginException {
+		Album al;
+		List<Album> albumes = new ArrayList<Album>();
+		ResultSet rs = null;
+		openConnection();
+		try {
+			stmt = con.prepareStatement(BUSCAR_ALBUM);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				al = new Album();
+				al.setId(rs.getInt(1));
+				al.setNombre(rs.getString(2));
+				al.setIdArtista(rs.getInt("id_a"));
+				albumes.add(al);
+			}
+		} catch (SQLException e) {
+			throw new LoginException("Problemas en la BDs");
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return albumes;
+	}
+
+	@Override
+	public Object[][] devolverCanciones() throws LoginException {
+		List<Object[]> listaCanciones = new ArrayList<>();
+		ResultSet rs = null;
+
+		try {
+			openConnection();
+			stmt = con.prepareStatement(BUSCAR_CANCIONES);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				Object[] fila = { rs.getInt("ID_C"), rs.getString("NOMBRE"), rs.getString("GENERO"),
+						rs.getString("ID_AL") };
+				listaCanciones.add(fila);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error al buscar las canciones del artista: " + e.getMessage());
+			return new Object[0][0];
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return listaCanciones.toArray(new Object[0][0]);
 	}
 }

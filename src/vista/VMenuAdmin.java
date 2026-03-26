@@ -3,115 +3,200 @@ package vista;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 public class VMenuAdmin extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private JButton btnBaja, btnAlta, btnModificar, btnConsultar, btnCerrar;;
+	private JButton btnAlta;
+	private JButton btnBaja;
+	private JButton btnModificar;
+	private JButton btnConsultar;
+	private JButton btnCerrar;
 	private JLabel lblFooter;
 	private Timer timerReloj;
 
 	public VMenuAdmin(VLogin padre, boolean modal) {
 		super(padre, modal);
+
 		setTitle("Panel de Administración - Tartanga Music");
-		setSize(600, 450);
-		setLocationRelativeTo(padre);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setResizable(false);
+
+		Color fondoVentana = new Color(245, 247, 250);
+		Color fondoTarjeta = Color.WHITE;
+		Color colorPrimario = new Color(52, 120, 246);
+		Color colorTexto = new Color(40, 40, 40);
+		Color colorSecundario = new Color(120, 120, 120);
+		Color colorBorde = new Color(220, 224, 230);
 
 		JPanel contentPane = new JPanel(new BorderLayout(20, 20));
-		contentPane.setBorder(new EmptyBorder(25, 25, 25, 25));
+		contentPane.setBackground(fondoVentana);
+		contentPane.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
 		setContentPane(contentPane);
 
-		// --- CABECERA ---
-		JPanel headerPanel = new JPanel(new GridLayout(2, 1));
-		JLabel lblTitulo = new JLabel("GESTIÓN DE LOS DATOS", JLabel.CENTER);
-		lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
+		JPanel panelCentral = new JPanel(new BorderLayout(0, 20));
+		panelCentral.setBackground(fondoTarjeta);
+		panelCentral.setBorder(BorderFactory.createCompoundBorder(
+				new LineBorder(colorBorde, 1, true),
+				BorderFactory.createEmptyBorder(25, 25, 25, 25)));
 
-		JLabel lblSubtitulo = new JLabel("Seleccione una operación para continuar", JLabel.CENTER);
-		lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblSubtitulo.setForeground(Color.GRAY);
+		JPanel panelCabecera = new JPanel();
+		panelCabecera.setBackground(fondoTarjeta);
+		panelCabecera.setLayout(new BoxLayout(panelCabecera, BoxLayout.Y_AXIS));
 
-		headerPanel.add(lblTitulo);
-		headerPanel.add(lblSubtitulo);
-		contentPane.add(headerPanel, BorderLayout.NORTH);
+		JLabel lblPanel = new JLabel("Administrador");
+		lblPanel.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		lblPanel.setForeground(colorPrimario);
+		lblPanel.setAlignmentX(CENTER_ALIGNMENT);
 
-		JPanel panelAcciones = new JPanel(new GridLayout(2, 2, 20, 20));
+		JLabel lblTitulo = new JLabel("Gestión de los datos");
+		lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
+		lblTitulo.setForeground(colorTexto);
+		lblTitulo.setAlignmentX(CENTER_ALIGNMENT);
 
-		btnAlta = crearBotonMenu("DAR DE ALTA", "Añadir nuevos artistas");
-		btnBaja = crearBotonMenu("DAR DE BAJA", "Eliminar registros");
-		btnModificar = crearBotonMenu("MODIFICAR", "Editar información");
-		btnConsultar = crearBotonMenu("CONSULTAR", "Ver lista completa");
+		JLabel lblSubtitulo = new JLabel("Seleccione una operación para continuar");
+		lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		lblSubtitulo.setForeground(colorSecundario);
+		lblSubtitulo.setAlignmentX(CENTER_ALIGNMENT);
+
+		panelCabecera.add(lblPanel);
+		panelCabecera.add(Box.createVerticalStrut(8));
+		panelCabecera.add(lblTitulo);
+		panelCabecera.add(Box.createVerticalStrut(8));
+		panelCabecera.add(lblSubtitulo);
+
+		panelCentral.add(panelCabecera, BorderLayout.NORTH);
+
+		JPanel panelAcciones = new JPanel(new GridLayout(2, 2, 18, 18));
+		panelAcciones.setBackground(fondoTarjeta);
+		panelAcciones.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+		btnAlta = new JButton("Dar de alta");
+		btnAlta.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		btnAlta.setPreferredSize(new Dimension(220, 85));
+		btnAlta.setFocusPainted(false);
+		btnAlta.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnAlta.setBackground(Color.WHITE);
+		btnAlta.setForeground(colorTexto);
+		btnAlta.setBorder(new LineBorder(colorBorde, 1, true));
+		btnAlta.addActionListener(this);
+		btnAlta.setToolTipText("Añadir nuevos artistas");
+
+		btnBaja = new JButton("Dar de baja");
+		btnBaja.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		btnBaja.setPreferredSize(new Dimension(220, 85));
+		btnBaja.setFocusPainted(false);
+		btnBaja.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnBaja.setBackground(Color.WHITE);
+		btnBaja.setForeground(colorTexto);
+		btnBaja.setBorder(new LineBorder(colorBorde, 1, true));
+		btnBaja.addActionListener(this);
+		btnBaja.setToolTipText("Eliminar registros");
+
+		btnModificar = new JButton("Modificar");
+		btnModificar.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		btnModificar.setPreferredSize(new Dimension(220, 85));
+		btnModificar.setFocusPainted(false);
+		btnModificar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnModificar.setBackground(Color.WHITE);
+		btnModificar.setForeground(colorTexto);
+		btnModificar.setBorder(new LineBorder(colorBorde, 1, true));
+		btnModificar.addActionListener(this);
+		btnModificar.setToolTipText("Editar información");
+
+		btnConsultar = new JButton("Consultar");
+		btnConsultar.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		btnConsultar.setPreferredSize(new Dimension(220, 85));
+		btnConsultar.setFocusPainted(false);
+		btnConsultar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnConsultar.setBackground(Color.WHITE);
+		btnConsultar.setForeground(colorTexto);
+		btnConsultar.setBorder(new LineBorder(colorBorde, 1, true));
+		btnConsultar.addActionListener(this);
+		btnConsultar.setToolTipText("Ver lista completa");
 
 		panelAcciones.add(btnAlta);
 		panelAcciones.add(btnBaja);
 		panelAcciones.add(btnModificar);
 		panelAcciones.add(btnConsultar);
 
-		contentPane.add(panelAcciones, BorderLayout.CENTER);
+		panelCentral.add(panelAcciones, BorderLayout.CENTER);
 
-		JPanel panelInferior = new JPanel(new BorderLayout()); 
-		panelInferior.setBorder(new javax.swing.border.EmptyBorder(5, 15, 5, 15));
+		contentPane.add(panelCentral, BorderLayout.CENTER);
 
-		lblFooter = new JLabel("Sesión activa...", JLabel.CENTER);
-		panelInferior.add(lblFooter, BorderLayout.CENTER);
+		JPanel panelInferior = new JPanel(new BorderLayout(15, 0));
+		panelInferior.setBackground(fondoVentana);
+		panelInferior.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
-		btnCerrar = new JButton("Cerrar Sesión");
-		btnCerrar.setFont(new Font("Segoe UI", Font.BOLD, 11));
+		lblFooter = new JLabel("Sesión de Administrador activa");
+		lblFooter.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		lblFooter.setForeground(colorSecundario);
+
+		btnCerrar = new JButton("Cerrar sesión");
+		btnCerrar.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btnCerrar.setFocusPainted(false);
+		btnCerrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnCerrar.setBackground(colorPrimario);
+		btnCerrar.setForeground(Color.WHITE);
+		btnCerrar.setBorderPainted(false);
+		btnCerrar.setOpaque(true);
 		btnCerrar.addActionListener(this);
+
+		panelInferior.add(lblFooter, BorderLayout.WEST);
 		panelInferior.add(btnCerrar, BorderLayout.EAST);
 
 		contentPane.add(panelInferior, BorderLayout.SOUTH);
 
 		timerReloj = new Timer(1000, this);
 		timerReloj.start();
-	}
 
-	private JButton crearBotonMenu(String titulo, String toolTip) {
-		JButton btn = new JButton(titulo);
-		btn.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 15));
-		btn.setToolTipText(toolTip);
-		btn.setFocusPainted(false);
-		btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		btn.addActionListener(this);
-		return btn;
+		pack();
+		setLocationRelativeTo(padre);
 	}
 
 	@Override
 	public void dispose() {
 		if (timerReloj != null && timerReloj.isRunning()) {
 			timerReloj.stop();
-			System.out.println("Timer detenido correctamente.");
 		}
 		super.dispose();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(btnAlta)) {
+		if (e.getSource() == btnAlta) {
 			VAlta alta = new VAlta(this, true);
 			alta.setVisible(true);
-		} else if (e.getSource().equals(btnBaja)) {
+		} else if (e.getSource() == btnBaja) {
 			VBaja baja = new VBaja(this, true);
 			baja.setVisible(true);
-		} else if (e.getSource().equals(btnConsultar)) {
+		} else if (e.getSource() == btnConsultar) {
 			VConsultar consultar = new VConsultar(this, true);
 			consultar.setVisible(true);
-		} else if (e.getSource().equals(timerReloj)) {
-			String hora = java.time.LocalTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss"));
+		} else if (e.getSource() == btnModificar) {
+			// Aquí abrirías la ventana de modificar cuando la tengas hecha
+		} else if (e.getSource() == btnCerrar) {
+			dispose();
+		} else if (e.getSource() == timerReloj) {
+			String hora = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 			lblFooter.setText("Sesión de Administrador activa  |  " + hora + "  |  2026");
-		} else if (e.getSource().equals(btnCerrar)) {
-			this.dispose();
 		}
 	}
 }

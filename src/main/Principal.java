@@ -13,6 +13,7 @@ import exception.LoginException;
 import modelo.Album;
 import modelo.Artista;
 import modelo.Cancion;
+import modelo.Usuario;
 import vista.VPrincipal;
 
 public class Principal {
@@ -29,7 +30,7 @@ public class Principal {
 		}
 	}
 
-	public static void login(modelo.Usuario usuario) throws LoginException {
+	public static void login(Usuario usuario) throws LoginException {
 		dao.login(usuario);
 	}
 
@@ -47,6 +48,10 @@ public class Principal {
 
 	public static Object[][] devolverCancionesArtista(Artista a) throws LoginException {
 		return dao.devolverCancionesArtista(a);
+	}
+	
+	public static Object[][] devolverAlbumesT() throws LoginException {
+		return dao.devolverAlbumesT();
 	}
 
 	public static boolean eliminarCancion(int idC) throws SQLException {
@@ -96,5 +101,9 @@ public class Principal {
 	public static List<Artista> obtenerTodosLosArtistasCompletos() throws LoginException {
 		return dao.obtenerTodosLosArtistasCompletos();
 
+	}
+	
+	public static Object[][] devolverCanciones() throws LoginException {
+		return dao.devolverCanciones();
 	}
 }
