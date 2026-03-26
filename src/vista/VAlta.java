@@ -80,7 +80,7 @@ public class VAlta extends JDialog implements ActionListener {
 			
 
 		} else if (e.getSource() == buttonArtista) {
-			VArtista vArti = new VArtista(true);
+			VArtista vArti = new VArtista(this,true);
 			vArti.setVisible(true);
 			this.dispose();
 			
