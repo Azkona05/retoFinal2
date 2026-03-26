@@ -16,73 +16,88 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import modelo.Album;
 import modelo.Artista;
+import modelo.Cancion;
 
 public class ExportadorXML implements InterfazExportador {
 
 	public void exportarArtistas(List<Artista> listaArtistas, String rutaArchivo) {
-		try {
-			// 1. EL ARQUITECTO: Configuramos la fábrica y el constructor
-			DocumentBuilderFactory fabrica = DocumentBuilderFactory.newInstance();
-			DocumentBuilder constructor = fabrica.newDocumentBuilder();
+	    try {
+	        DocumentBuilderFactory fabrica = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder constructor = fabrica.newDocumentBuilder();
+	        Document doc = constructor.newDocument();
 
-			// 2. EL LIENZO: Creamos el documento vacío
-			Document doc = constructor.newDocument();
+	        Element root = doc.createElement("TartangaMusic");
+	        doc.appendChild(root);
 
-			// 3. LA RAÍZ: Creamos el nodo principal <TartangaMusic>
-			Element root = doc.createElement("TartangaMusic");
-			doc.appendChild(root);
+	        Element artistasContenedor = doc.createElement("Artistas");
+	        root.appendChild(artistasContenedor);
 
-			// 4. EL BUCLE: Recorremos los objetos que vinieron del DAO
-			for (Artista art : listaArtistas) {
-				// Nodo <Artista>
-				Element artistaNode = doc.createElement("Artista");
-				artistaNode.setAttribute("id", String.valueOf(art.getId())); // Atributo ID
-				root.appendChild(artistaNode);
+	        Element cancionesContenedor = doc.createElement("Canciones");
+	        root.appendChild(cancionesContenedor);
 
-				// Nodo <Nombre>
-				Element nombre = doc.createElement("Nombre");
-				nombre.setTextContent(art.getNombre());
-				artistaNode.appendChild(nombre);
+	        for (Artista art : listaArtistas) {
+	            Element artistaNode = doc.createElement("Artista");
+	            artistaNode.setAttribute("id", String.valueOf(art.getId()));
+	            artistasContenedor.appendChild(artistaNode);
 
-				// Nodo <Tipo> (Solista o Grupo)
-				Element tipoNode = doc.createElement("Tipo");
-				if (art.getTipo() != null) {
-					tipoNode.setTextContent(art.getTipo().name());
-				} else {
-					tipoNode.setTextContent("DESCONOCIDO");
-				}
+	            Element nombreArt = doc.createElement("Nombre");
+	            nombreArt.setTextContent(art.getNombre());
+	            artistaNode.appendChild(nombreArt);
 
-				artistaNode.appendChild(tipoNode);
+	            Element tipoArt = doc.createElement("Tipo");
+	            tipoArt.setTextContent(art.getTipo() != null ? art.getTipo().name() : "DESCONOCIDO");
+	            artistaNode.appendChild(tipoArt);
 
-				// --- Ejemplo de anidación (Si el artista tiene álbumes) ---
-				/*
-				 * if (art.getListaAlbumes() != null) { Element albumesNode =
-				 * doc.createElement("Albumes"); for (Album alb : art.getListaAlbumes()) {
-				 * Element albumNode = doc.createElement("Album");
-				 * albumNode.setTextContent(alb.getNombre());
-				 * albumesNode.appendChild(albumNode); } artistaNode.appendChild(albumesNode); }
-				 */
-			}
+	            Element albumesContenedor = doc.createElement("Albumes");
+	            artistaNode.appendChild(albumesContenedor);
 
-			// 5. EL TRANSFORMADOR: De la memoria RAM al archivo físico (.xml)
-			TransformerFactory instanciaTransformador = TransformerFactory.newInstance();
-			Transformer transformador = instanciaTransformador.newTransformer();
+	            if (art.getListaAlbumes() != null) {
+	                for (Album alb : art.getListaAlbumes()) {
+	                    Element albumNode = doc.createElement("Album");
+	                    albumNode.setAttribute("id", String.valueOf(alb.getId()));
+	                    albumesContenedor.appendChild(albumNode);
 
-			// Configuración para que el XML sea legible (con saltos de línea y sangría)
-			transformador.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformador.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+	                    Element tituloAlb = doc.createElement("Titulo");
+	                    tituloAlb.setTextContent(alb.getNombre());
+	                    albumNode.appendChild(tituloAlb);
 
-			DOMSource fuente = new DOMSource(doc);
-			StreamResult resultado = new StreamResult(new File(rutaArchivo));
+	                    if (alb.getCanciones() != null) {
+	                        for (Cancion can : alb.getCanciones()) {
+	                            Element cancionNode = doc.createElement("Cancion");
+	                            cancionNode.setAttribute("id", String.valueOf(can.getId()));
+	                            cancionesContenedor.appendChild(cancionNode);
 
-			transformador.transform(fuente, resultado);
+	                            Element nomCan = doc.createElement("Nombre");
+	                            nomCan.setTextContent(can.getNombre());
+	                            cancionNode.appendChild(nomCan);
 
-			System.out.println("Archivo XML generado con éxito en: " + rutaArchivo);
+	                            Element generoNode = doc.createElement("Genero");
+	                            generoNode.setTextContent(can.getGenero() != null ? can.getGenero().name() : "DESCONOCIDO");
+	                            cancionNode.appendChild(generoNode);
 
-		} catch (ParserConfigurationException | TransformerException e) {
-			System.err.println("Error al generar el XML: " + e.getMessage());
-			e.printStackTrace();
-		}
+	                            Element albumIdRef = doc.createElement("AlbumId");
+	                            albumIdRef.setTextContent(String.valueOf(alb.getId()));
+	                            cancionNode.appendChild(albumIdRef);
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	        TransformerFactory instanciaTransformador = TransformerFactory.newInstance();
+	        Transformer transformador = instanciaTransformador.newTransformer();
+	        transformador.setOutputProperty(OutputKeys.INDENT, "yes");
+	        transformador.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+	        DOMSource fuente = new DOMSource(doc);
+	        StreamResult resultado = new StreamResult(new File(rutaArchivo));
+	        transformador.transform(fuente, resultado);
+
+	        System.out.println("XML generado con éxito en: " + rutaArchivo);
+
+	    } catch (ParserConfigurationException | TransformerException e) {
+	        System.err.println("Error al generar el XML: " + e.getMessage());
+	    }
 	}
 }

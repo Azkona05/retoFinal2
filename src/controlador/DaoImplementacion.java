@@ -1,15 +1,26 @@
 package controlador;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import com.mysql.cj.jdbc.CallableStatement;
+
+import exception.AltaException;
 import exception.LoginException;
+import main.Principal;
+import modelo.Album;
+import modelo.Artista;
+import modelo.Cancion;
+import modelo.Genero;
+import modelo.Tipo;
 import modelo.Usuario;
+import utilidades.ExportadorXML;
 
 public class DaoImplementacion implements InterfazDao {
 
@@ -24,10 +35,20 @@ public class DaoImplementacion implements InterfazDao {
 	private Connection con;
 	private PreparedStatement stmt;
 	private CallableStatement cs;
-	
+
 	// SQL Login
 	final String LOGIN = "SELECT * FROM USUARIO WHERE NOMBRE = ? AND CLAVE = ?";
+	// SQL AN
+	final String BUSCAR_ARTISTA = "SELECT * FROM ARTISTA";
+	final String BUSCAR_ALBUM = "SELECT * FROM ALBUM";
+	final String BUSCAR_CANCIONES_POR_ALBUM = "SELECT ID_C, NOMBRE, GENERO, ID_AL FROM CANCION WHERE ID_AL = ?";
+//	final String BUSCAR_CANCIONES_ARTISTA = "SELECT c.ID_C, c.NOMBRE, c.GENERO, al.NOMBRE AS nombre_album "
+//			+ "FROM CANCION c " + "JOIN ALBUM al ON c.ID_AL = al.ID_AL " + "WHERE al.ID_A = ?";
+	final String CALL_BUSCAR_CANCIONES_ARTISTA = "{call obtenerCancionesPorArtista(?)}";
+	final String SQL_BUSCAR_ALBUM_ARTISTA = "SELECT ID_AL, NOMBRE FROM ALBUM WHERE ID_A = ?";
+
 	
+	//SQL NORA
 	// ---------------------- ELIMINAR ARTISTA ----------------------
 
 	// Elimina las relaciones del artista con las canciones en la tabla TIENE
@@ -41,7 +62,9 @@ public class DaoImplementacion implements InterfazDao {
 
 	// Elimina el artista de la tabla ARTISTA
 	final String DELETE_ARTISTA = "DELETE FROM ARTISTA WHERE ID_A = ?";
-
+	
+	//PROCEDURE
+	final String CALL_ELIMINAR_ARTISTA = "{call eliminarArtistaCompleto(?)}";
 
 	// ---------------------- ELIMINAR ALBUM ----------------------
 
@@ -54,7 +77,6 @@ public class DaoImplementacion implements InterfazDao {
 	// Elimina el álbum de la tabla ALBUM
 	final String DELETE_ALBUM = "DELETE FROM ALBUM WHERE ID_AL = ?";
 
-
 	// ---------------------- ELIMINAR CANCION ----------------------
 
 	// Elimina la relación de la canción con los artistas en la tabla TIENE
@@ -62,7 +84,14 @@ public class DaoImplementacion implements InterfazDao {
 
 	// Elimina la canción de la tabla CANCION
 	final String DELETE_CANCION = "DELETE FROM CANCION WHERE ID_C = ?";
-	
+
+	//SQL RICARDO
+	final String ALTAARTI = "INSERT INTO ARTISTA (ID_A, NOMBRE, TIPO) VALUES (?, ?, ?)";
+	final String leerArtiId = "SELECT ID_A FROM ARTISTA";
+	final String leerArtiNombre = "SELECT NOMBRE FROM ARTISTA";
+	// SELECT ID_A FROM ARTISTA WHERE ID_A NOT IN (SELECT ID_A FROM ARTISTA WHERE
+	// ID_A=?)";
+
 	public DaoImplementacion() {
 		this.configFile = ResourceBundle.getBundle("modelo.configClass");
 		this.urlDB = this.configFile.getString("Conn");
@@ -103,7 +132,7 @@ public class DaoImplementacion implements InterfazDao {
 
 	}
 
-	/////////NORA
+	///////// NORA
 	public boolean eliminarArtista(int idArtista) throws SQLException {
 
 		openConnection();
@@ -137,8 +166,8 @@ public class DaoImplementacion implements InterfazDao {
 			closeConnection();
 		}
 	}
-	////////NORAAA
-	
+	//////// NORAAA
+
 	public boolean eliminarAlbum(int idAlbum) throws SQLException {
 
 		openConnection();
@@ -167,9 +196,9 @@ public class DaoImplementacion implements InterfazDao {
 			closeConnection();
 		}
 	}
-	
-	/////////NORA
-	
+
+	///////// NORA
+
 	public boolean eliminarCancion(int idCancion) throws SQLException {
 
 		openConnection();
@@ -193,6 +222,7 @@ public class DaoImplementacion implements InterfazDao {
 			closeConnection();
 		}
 	}
+
 	@Override
 	public void login(Usuario usuario) throws LoginException {
 		ResultSet rs = null;
@@ -219,5 +249,381 @@ public class DaoImplementacion implements InterfazDao {
 			}
 		}
 	}
+	//NORAA
+	public boolean eliminarArtistaProcedure(int idArtista) throws SQLException {
 
+	    openConnection();
+
+	    try {
+
+	        cs = (CallableStatement) con.prepareCall(CALL_ELIMINAR_ARTISTA);
+	        cs.setInt(1, idArtista);
+
+	        cs.executeUpdate();
+
+	        return true;
+
+	    } finally {
+	        closeConnection();
+	    }
+	}
+
+	//AN
+	@Override
+	public Object[][] devolverArtistas(Artista a) throws LoginException {
+		List<Object[]> listaArtistas = new ArrayList<>();
+		ResultSet rs = null;
+
+		try {
+			openConnection();
+			stmt = con.prepareStatement(BUSCAR_ARTISTA);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Object[] fila = { rs.getString("id_a"), rs.getString("nombre"), rs.getString("tipo"), null };
+				listaArtistas.add(fila);
+			}
+
+			return listaArtistas.toArray(new Object[0][0]);
+
+		} catch (SQLException e) {
+			throw new LoginException("Problemas en la BDs");
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	//RICARDO
+	public boolean altaArtista(Artista artista) throws AltaException {
+		// TODO Auto-generated method stub
+		boolean result = false;
+		// ResultSet rs = null;
+		openConnection();
+		try {
+			stmt = con.prepareStatement(ALTAARTI);
+			stmt.setInt(1, artista.getId());
+			stmt.setString(2, artista.getNombre());
+			stmt.setString(3, artista.getTipo().name());
+
+			int filasAfectadas = stmt.executeUpdate(); // DIFERENCIA BASTA EL EXECUTEUPDATE ES PARA INSERT UPDATE Y
+														// DELETE
+			if (filasAfectadas > 0) {
+				result = true;
+				return result;
+			}
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR, SQL ERROR");
+		} finally {
+			try {
+
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public List<Album> devolverAlbumes() throws LoginException {
+		Album al;
+		List<Album> albumes = new ArrayList<Album>();
+		ResultSet rs = null;
+		openConnection();
+		try {
+			stmt = con.prepareStatement(BUSCAR_ALBUM);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				al = new Album();
+				al.setId(rs.getInt(1));
+				al.setNombre(rs.getString(2));
+				al.setIdArtista(rs.getInt("id_a"));
+				albumes.add(al);
+			}
+		} catch (SQLException e) {
+			throw new LoginException("Problemas en la BDs");
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return albumes;
+	}
+
+	@Override
+	public ArrayList<Integer> ides() throws AltaException {
+		// TODO Auto-generated method stub
+		ArrayList<Integer> id = new ArrayList<>();
+
+		ResultSet rs = null;
+		openConnection();
+
+		try {
+			stmt = con.prepareStatement(leerArtiId);
+
+			rs = stmt.executeQuery(); // exequery es para usarlo con consultas
+			while (rs.next()) {
+				id.add(rs.getInt("ID_A"));
+
+			}
+//			if (!rs.next()) {
+//				throw new AltaException("ERROR AL LEER DATOS");
+//			}
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR, SQL ERROR");
+		} finally {
+			try {
+				rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return id;
+	}
+
+	@Override
+	public List<Cancion> devolverCanciones(int idAlbum) throws LoginException {
+		List<Cancion> canciones = new ArrayList<>();
+		ResultSet rs = null;
+		openConnection();
+
+		try {
+			stmt = con.prepareStatement(BUSCAR_CANCIONES_POR_ALBUM);
+			stmt.setInt(1, idAlbum);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Cancion cancion = new Cancion();
+				cancion.setId(rs.getInt("ID_C"));
+				cancion.setNombre(rs.getString("NOMBRE"));
+
+				String generoTexto = rs.getString("GENERO");
+				if (generoTexto != null && !generoTexto.trim().isEmpty()) {
+					cancion.setGenero(Genero.valueOf(generoTexto.toUpperCase()));
+				}
+				cancion.setIdAlbum(rs.getInt("ID_AL"));
+				canciones.add(cancion);
+			}
+		} catch (SQLException e) {
+			throw new LoginException("Error al consultar las canciones en la BD: " + e.getMessage());
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return canciones;
+	}
+
+	@Override
+	public ArrayList<String> nomArti() throws AltaException {
+		// TODO Auto-generated method stub
+		ArrayList<String> artis = new ArrayList<>();
+		ResultSet rs = null;
+		openConnection();
+		try {
+			stmt = con.prepareStatement(leerArtiNombre);
+
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				artis.add(rs.getString("NOMBRE"));
+
+			}
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR, SQL ERROR");
+		} finally {
+			try {
+				rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return artis;
+	}
+
+	@Override
+	public Object[][] devolverCancionesArtista(Artista a) {
+		List<Object[]> listaCanciones = new ArrayList<>();
+		ResultSet rs = null;
+
+		try {
+			openConnection();
+//			stmt = con.prepareStatement(BUSCAR_CANCIONES_ARTISTA);
+//			stmt.setInt(1, a.getId());
+//			rs = stmt.executeQuery();
+			cs = (CallableStatement) con.prepareCall(CALL_BUSCAR_CANCIONES_ARTISTA);
+			cs.setInt(1, a.getId());
+			rs = cs.executeQuery();
+			while (rs.next()) {
+				Object[] fila = { rs.getInt("ID_C"), rs.getString("NOMBRE"), rs.getString("GENERO"),
+						rs.getString("nombre_album") };
+				listaCanciones.add(fila);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error al buscar las canciones del artista: " + e.getMessage());
+			return new Object[0][0];
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return listaCanciones.toArray(new Object[0][0]);
+
+	}
+
+	public ArrayList<Artista> listarArtistas() throws AltaException {
+		ArrayList<Artista> artistas = new ArrayList<>();
+		ResultSet rs = null;
+		openConnection();
+
+		try {
+			cs = (CallableStatement) con.prepareCall("{call ListarArtistas()}");
+			rs = cs.executeQuery();
+
+			while (rs.next()) {
+				Artista artista = new Artista();
+				artista.setId(rs.getInt("ID_A"));
+				artista.setNombre(rs.getString("NOMBRE"));
+				artista.setTipo(Tipo.valueOf(rs.getString("TIPO")));
+				artistas.add(artista);
+			}
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR AL LISTAR ARTISTAS: " + e.getMessage());
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return artistas;
+	}
+
+	/*
+	 * @Override public Map<Integer, Artista> leerDatosArtista() throws
+	 * AltaException { // TODO Auto-generated method stub Map<Integer, Artista> ids=
+	 * new HashMap<Integer, Artista>(); ResultSet rs = null; openConnection();
+	 * Artista arti; int cont=1; try { stmt = con.prepareStatement(leerArtiId);
+	 * 
+	 * 
+	 * rs = stmt.executeQuery(); while(rs.next()){ arti = new Artista();
+	 * arti.setId(rs.getInt("Id_A")); ids.put(cont, arti); cont++;
+	 * 
+	 * } if (!rs.next()) { throw new AltaException("ERROR AL LEER DATOS"); }
+	 * 
+	 * } catch (SQLException e) { throw new AltaException("ERROR, SQL ERROR"); }
+	 * finally { try { rs.close(); closeConnection(); } catch (SQLException e) {
+	 * e.printStackTrace(); } } }
+	 * 
+	 * 
+	 * return ids; }
+	 */
+	@Override
+	public List<Artista> obtenerTodosLosArtistasCompletos() throws LoginException {
+		List<Artista> listaArtistas = new ArrayList<>();
+		ResultSet rs = null;
+		openConnection();
+
+		try {
+			stmt = con.prepareStatement(BUSCAR_ARTISTA);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Artista art = new Artista();
+				art.setId(rs.getInt("ID_A"));
+				art.setNombre(rs.getString("NOMBRE"));
+				art.setTipo(Tipo.valueOf(rs.getString("TIPO").toUpperCase()));
+				art.setListaAlbumes((ArrayList<Album>) cargarAlbumesPorArtista(art.getId()));
+
+				listaArtistas.add(art);
+			}
+		} catch (SQLException e) {
+			throw new LoginException("Error al cargar la jerarquía completa: " + e.getMessage());
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return listaArtistas;
+	}
+
+	private List<Album> cargarAlbumesPorArtista(int idArtista) throws SQLException {
+		List<Album> albumes = new ArrayList<>();
+		try (PreparedStatement psAlb = con.prepareStatement(SQL_BUSCAR_ALBUM_ARTISTA)) {
+			psAlb.setInt(1, idArtista);
+			try (ResultSet rsAlb = psAlb.executeQuery()) {
+				while (rsAlb.next()) {
+					Album alb = new Album();
+					alb.setId(rsAlb.getInt("ID_AL"));
+					alb.setNombre(rsAlb.getString("NOMBRE"));
+
+					alb.setCanciones((ArrayList<Cancion>) cargarCancionesPorAlbum(alb.getId()));
+
+					albumes.add(alb);
+				}
+			}
+		}
+		return albumes;
+	}
+
+	private List<Cancion> cargarCancionesPorAlbum(int idAlbum) throws SQLException {
+		List<Cancion> canciones = new ArrayList<>();
+		try (PreparedStatement psCan = con.prepareStatement(BUSCAR_CANCIONES_POR_ALBUM)) {
+			psCan.setInt(1, idAlbum);
+			try (ResultSet rsCan = psCan.executeQuery()) {
+				while (rsCan.next()) {
+					Cancion can = new Cancion();
+					can.setId(rsCan.getInt("ID_C"));
+					can.setNombre(rsCan.getString("NOMBRE"));
+
+					String gen = rsCan.getString("GENERO");
+					if (gen != null) {
+						can.setGenero(Genero.valueOf(gen.toUpperCase()));
+					}
+					canciones.add(can);
+				}
+			}
+		}
+		return canciones;
+	}
+
+	public void forzarGuardadoXML() {
+	    try {
+	        List<Artista> listaParaExportar = Principal.obtenerTodosLosArtistasCompletos();
+	        ExportadorXML exportador = new ExportadorXML();
+	        String ruta = "artistas.xml";
+	        exportador.exportarArtistas(listaParaExportar, ruta);
+	        System.out.println("XML sincronizado automáticamente.");
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	    }
+	}
 }

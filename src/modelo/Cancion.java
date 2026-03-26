@@ -5,6 +5,7 @@ public class Cancion {
 	private int id;
 	private String nombre;
 	private Genero genero;
+	private int idAlbum;
 	
 	public Cancion() {
 		
@@ -42,6 +43,14 @@ public class Cancion {
 	
 	public String toString() {
 		return "Cancion [id=" + id + ", nombre=" + nombre + ", genero=" + genero + "]";
+	}
+
+	public int getIdAlbum() {
+		return idAlbum;
+	}
+
+	public void setIdAlbum(int idAlbum) {
+		this.idAlbum = idAlbum;
 	}
 	
 	
