@@ -46,6 +46,7 @@ public class DaoImplementacion implements InterfazDao {
 //			+ "FROM CANCION c " + "JOIN ALBUM al ON c.ID_AL = al.ID_AL " + "WHERE al.ID_A = ?";
 	final String CALL_BUSCAR_CANCIONES_ARTISTA = "{call obtenerCancionesPorArtista(?)}";
 	final String SQL_BUSCAR_ALBUM_ARTISTA = "SELECT ID_AL, NOMBRE FROM ALBUM WHERE ID_A = ?";
+
 	final String BUSCAR_CANCIONES = "SELECT * FROM CANCION";
 	
 	//SQL NORA
@@ -62,6 +63,9 @@ public class DaoImplementacion implements InterfazDao {
 
 	// Elimina el artista de la tabla ARTISTA
 	final String DELETE_ARTISTA = "DELETE FROM ARTISTA WHERE ID_A = ?";
+	
+	//PROCEDURE
+	final String CALL_ELIMINAR_ARTISTA = "{call eliminarArtistaCompleto(?)}";
 
 	// ---------------------- ELIMINAR ALBUM ----------------------
 
@@ -245,6 +249,24 @@ public class DaoImplementacion implements InterfazDao {
 				e.printStackTrace();
 			}
 		}
+	}
+	//NORAA
+	public boolean eliminarArtistaProcedure(int idArtista) throws SQLException {
+
+	    openConnection();
+
+	    try {
+
+	        cs = (CallableStatement) con.prepareCall(CALL_ELIMINAR_ARTISTA);
+	        cs.setInt(1, idArtista);
+
+	        cs.executeUpdate();
+
+	        return true;
+
+	    } finally {
+	        closeConnection();
+	    }
 	}
 
 	//AN

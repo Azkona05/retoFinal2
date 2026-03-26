@@ -224,7 +224,6 @@ public class VConsultar extends JDialog implements ActionListener {
 						}
 					}
 				}
-
 				if (value != null) {
 					renderCombo.setSelectedItem(value);
 				} else {

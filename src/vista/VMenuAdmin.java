@@ -24,7 +24,6 @@ import javax.swing.border.LineBorder;
 public class VMenuAdmin extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-
 	private JButton btnAlta;
 	private JButton btnBaja;
 	private JButton btnModificar;
