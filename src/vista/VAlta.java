@@ -35,7 +35,7 @@ public class VAlta extends JDialog implements ActionListener {
 	 */
 	public VAlta(VMenuAdmin padre, boolean modal) {
 		super(padre);
-		setModal(true);
+		setModal(modal);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -67,8 +67,7 @@ public class VAlta extends JDialog implements ActionListener {
 		btnVolver.addActionListener(this);
 		btnVolver.setBounds(292, 232, 121, 21);
 		contentPanel.add(btnVolver);
-		// this.setAlwaysOnTop(true);// esto es porque la ventana alta se ponia por la
-		// cara detras de eclipse
+		//this.setAlwaysOnTop(true);// esto es porque la ventana alta se ponia por la cara detras de eclipse
 	}
 
 	@Override
@@ -76,16 +75,27 @@ public class VAlta extends JDialog implements ActionListener {
 		// TODO Auto-generated method stub
 		if (e.getSource() == btnVolver) {
 			this.dispose();
-			// this.setVisible(false);
-			// vMenuAdmin.setVisible(true);
+			//this.setVisible(false);
+			//vMenuAdmin.setVisible(true);
+			
 
 		} else if (e.getSource() == buttonArtista) {
-			VArtista vArti = new VArtista(this, true);
+			VArtista vArti = new VArtista(true);
 			vArti.setVisible(true);
-
+			this.dispose();
+			
 		} else if (e.getSource() == btnMusica) {
+			
+	            	VAltaCancionAlbum vC = new VAltaCancionAlbum(true);
+	            	vC.setVisible(true);
+	            
+		
+			
 
 		} else if (e.getSource() == btnAlbum) {
+			VAlbum vAlbu = new VAlbum(true);
+			vAlbu.setVisible(true);
+			vAlbu.toFront();
 
 		}
 

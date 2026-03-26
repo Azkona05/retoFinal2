@@ -11,6 +11,7 @@ import modelo.Cancion;
 import java.util.ArrayList;
 
 import exception.AltaException;
+import java.util.Map;
 import modelo.Usuario;
 
 public interface InterfazDao {
@@ -31,7 +32,7 @@ public interface InterfazDao {
 
 	public boolean eliminarCancion(int idCancion) throws SQLException;
 
-	public boolean altaArtista(Artista artista) throws AltaException;// necesito hcer alta de artista,album,cancion
+	public boolean altaArtista(Artista artista) throws AltaException;
 
 	public ArrayList<Integer> ides() throws AltaException;
 
@@ -46,5 +47,15 @@ public interface InterfazDao {
 	public Object[][] devolverCanciones() throws LoginException;
 	
 	
+	public Map<Integer, Artista> listarArtTabla(Artista arti) throws AltaException;
+
+	public boolean altaAlbum(Album album, int idArtista) throws AltaException;
+
+	public boolean altaCancion(Cancion cancion, int idAlbum) throws AltaException;
+
+	public boolean existeIdAlbum(int id) throws AltaException;
+
+	public boolean existeIdCancion(int id) throws AltaException;
+	public boolean existeCancionEnAlbum(String nombreCancion, int idAlbum) throws AltaException;
 
 }
