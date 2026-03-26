@@ -1,82 +1,209 @@
 package vista;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 
+import exception.LoginException;
 import main.Principal;
 
-public class VEliminarAlbum extends JDialog implements ActionListener{
+public class VEliminarAlbum extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
+
+	private JTable table;
+	private DefaultTableModel model;
 	private JButton btnEliminarAlbum;
 	private JButton btnVolver;
+	private JLabel lblInfo;
 
-	/**
-	 * Create the dialog.
-	 */
 	public VEliminarAlbum(VBaja padre, boolean modal) {
-		super(padre);
-		setModal(true);
-		setBounds(100, 100, 450, 300);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(null);
-		{
-			JLabel lblNewLabel = new JLabel("Introduce el ID del album a eliminar:");
-			lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-			lblNewLabel.setBounds(86, 69, 264, 13);
-			contentPanel.add(lblNewLabel);
-		}
-		
-		textField = new JTextField();
-		textField.setBounds(156, 99, 96, 19);
-		contentPanel.add(textField);
-		textField.setColumns(10);
-		
+		super(padre, modal);
+
+		setTitle("Eliminar álbum");
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setResizable(false);
+
+		Color fondoVentana = new Color(245, 247, 250);
+		Color fondoTarjeta = Color.WHITE;
+		Color colorPrimario = new Color(220, 53, 69);
+		Color colorTexto = new Color(40, 40, 40);
+		Color colorSecundario = new Color(120, 120, 120);
+		Color colorBorde = new Color(220, 224, 230);
+		Color colorSeleccion = new Color(232, 242, 252);
+
+		JPanel contentPane = new JPanel(new BorderLayout(20, 20));
+		contentPane.setBackground(fondoVentana);
+		contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
+		setContentPane(contentPane);
+
+		JPanel panelTarjeta = new JPanel(new BorderLayout(0, 20));
+		panelTarjeta.setBackground(fondoTarjeta);
+		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(
+				new LineBorder(colorBorde, 1, true),
+				new EmptyBorder(20, 20, 20, 20)));
+
+		contentPane.add(panelTarjeta, BorderLayout.CENTER);
+
+		JPanel panelCabecera = new JPanel(new BorderLayout(0, 8));
+		panelCabecera.setBackground(fondoTarjeta);
+
+		JLabel lblTitulo = new JLabel("Eliminar álbum");
+		lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		lblTitulo.setForeground(colorTexto);
+
+		lblInfo = new JLabel("Selecciona un álbum de la tabla");
+		lblInfo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblInfo.setForeground(colorSecundario);
+
+		panelCabecera.add(lblTitulo, BorderLayout.NORTH);
+		panelCabecera.add(lblInfo, BorderLayout.SOUTH);
+
+		panelTarjeta.add(panelCabecera, BorderLayout.NORTH);
+
+		String[] columnas = { "ID Album", "Título", "ID Artista"};
+
+		model = new DefaultTableModel(columnas, 0) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+
+		table = new JTable(model);
+		table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		table.setRowHeight(30);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setShowVerticalLines(false);
+		table.setGridColor(new Color(235, 235, 235));
+		table.setSelectionBackground(colorSeleccion);
+		table.setSelectionForeground(Color.BLACK);
+		table.setFillsViewportHeight(true);
+
+		table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
+		table.getTableHeader().setBackground(Color.WHITE);
+		table.getTableHeader().setForeground(colorTexto);
+		table.getTableHeader().setReorderingAllowed(false);
+
+		table.getColumnModel().getColumn(0).setPreferredWidth(60);
+		table.getColumnModel().getColumn(1).setPreferredWidth(220);
+		table.getColumnModel().getColumn(2).setPreferredWidth(180);
+
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBorder(new LineBorder(colorBorde, 1, true));
+		scrollPane.getViewport().setBackground(Color.WHITE);
+		table.setPreferredScrollableViewportSize(new Dimension(560, 240));
+
+		panelTarjeta.add(scrollPane, BorderLayout.CENTER);
+
+		JPanel panelInferior = new JPanel(new BorderLayout());
+		panelInferior.setBackground(fondoTarjeta);
+
+		JLabel lblAviso = new JLabel("Se eliminará el álbum seleccionado");
+		lblAviso.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		lblAviso.setForeground(colorSecundario);
+
+		JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+		panelBotones.setBackground(fondoTarjeta);
+
 		btnVolver = new JButton("Volver");
+		btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btnVolver.setFocusPainted(false);
+		btnVolver.setBackground(new Color(240, 240, 240));
+		btnVolver.setForeground(colorTexto);
+		btnVolver.setBorder(new LineBorder(new Color(200, 200, 200), 1, true));
 		btnVolver.addActionListener(this);
-		btnVolver.setBounds(341, 222, 85, 21);
-		contentPanel.add(btnVolver);
-		
-		btnEliminarAlbum = new JButton("ELIMINAR");
+
+		btnEliminarAlbum = new JButton("Eliminar seleccionado");
+		btnEliminarAlbum.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btnEliminarAlbum.setFocusPainted(false);
+		btnEliminarAlbum.setBorderPainted(false);
+		btnEliminarAlbum.setOpaque(true);
+		btnEliminarAlbum.setBackground(colorPrimario);
+		btnEliminarAlbum.setForeground(Color.WHITE);
 		btnEliminarAlbum.addActionListener(this);
-		btnEliminarAlbum.setBounds(166, 128, 85, 21);
-		contentPanel.add(btnEliminarAlbum);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+
+		panelBotones.add(btnVolver);
+		panelBotones.add(btnEliminarAlbum);
+
+		panelInferior.add(lblAviso, BorderLayout.WEST);
+		panelInferior.add(panelBotones, BorderLayout.EAST);
+
+		panelTarjeta.add(panelInferior, BorderLayout.SOUTH);
+
+		try {
+			Object[][] datos = Principal.devolverAlbumesT();
+
+			model.setRowCount(0);
+
+			for (Object[] fila : datos) {
+				model.addRow(fila);
+			}
+
+			lblInfo.setText("Álbumes cargados: " + model.getRowCount());
+
+		} catch (LoginException e) {
+			JOptionPane.showMessageDialog(this, "Error al cargar los álbumes");
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, "Revisa el método que devuelve los álbumes");
 		}
+
+		pack();
+		setLocationRelativeTo(padre);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btnVolver)) {
-			this.dispose();
-		}else if (e.getSource().equals(btnEliminarAlbum)) {
+			dispose();
+		}
 
-			int idAlbum = Integer.parseInt(textField.getText());
+		else if (e.getSource().equals(btnEliminarAlbum)) {
+			int filaSeleccionada = table.getSelectedRow();
+
+			if (filaSeleccionada == -1) {
+				JOptionPane.showMessageDialog(this, "Selecciona un álbum de la tabla");
+				return;
+			}
+
+			int confirmacion = JOptionPane.showConfirmDialog(
+					this,
+					"¿Seguro que quieres eliminar el álbum seleccionado?",
+					"Confirmar eliminación",
+					JOptionPane.YES_NO_OPTION);
+
+			if (confirmacion != JOptionPane.YES_OPTION) {
+				return;
+			}
+
+			int idAlbum = Integer.parseInt(model.getValueAt(filaSeleccionada, 0).toString());
 
 			try {
 				boolean eliminado = Principal.eliminarAlbum(idAlbum);
 
 				if (eliminado) {
+					model.removeRow(filaSeleccionada);
+					lblInfo.setText("Álbumes cargados: " + model.getRowCount());
 					JOptionPane.showMessageDialog(this, "Álbum eliminado correctamente");
-					this.dispose();
 				} else {
 					JOptionPane.showMessageDialog(this, "No existe ese álbum");
 				}
@@ -85,7 +212,5 @@ public class VEliminarAlbum extends JDialog implements ActionListener{
 				JOptionPane.showMessageDialog(this, "Error al eliminar");
 			}
 		}
-				
-		
 	}
 }

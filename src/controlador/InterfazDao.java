@@ -19,11 +19,11 @@ public interface InterfazDao {
 
 	public Object[][] devolverArtistas(Artista a) throws LoginException;
 
-	public List<Album> devolverAlbumes() throws LoginException;
-
 	public List<Cancion> devolverCanciones(int idAlbum) throws LoginException;
 
 	public Object[][] devolverCancionesArtista(Artista a);
+	
+	public Object[][] devolverAlbumesT() throws LoginException;
 
 	public boolean eliminarAlbum(int idAlbum) throws SQLException;
 
@@ -40,5 +40,11 @@ public interface InterfazDao {
 	public List<Artista> obtenerTodosLosArtistasCompletos() throws LoginException;
 
 	public void forzarGuardadoXML();
+
+	public List<Album> devolverAlbumes() throws LoginException;
+	
+	public Object[][] devolverCanciones() throws LoginException;
+	
+	
 
 }
