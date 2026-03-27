@@ -16,6 +16,7 @@ import modelo.Usuario;
 
 public interface InterfazDao {
 
+	//METODOS COMUNES
 	public void login(Usuario usuario) throws LoginException;
 
 	public Object[][] devolverArtistas(Artista a) throws LoginException;
@@ -45,8 +46,7 @@ public interface InterfazDao {
 	public List<Album> devolverAlbumes() throws LoginException;
 	
 	public Object[][] devolverCanciones() throws LoginException;
-	
-	
+		
 	public Map<Integer, Artista> listarArtTabla(Artista arti) throws AltaException;
 
 	public boolean altaAlbum(Album album, int idArtista) throws AltaException;
@@ -56,6 +56,7 @@ public interface InterfazDao {
 	public boolean existeIdAlbum(int id) throws AltaException;
 
 	public boolean existeIdCancion(int id) throws AltaException;
+	
 	public boolean existeCancionEnAlbum(String nombreCancion, int idAlbum) throws AltaException;
 
 }

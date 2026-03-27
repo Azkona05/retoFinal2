@@ -99,29 +99,33 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 
 		panelTarjeta.add(panelCabecera, BorderLayout.NORTH);
 
-		JPanel panelCentro = new JPanel(new BorderLayout(0, 20));
+		JPanel panelCentro = new JPanel();
 		panelCentro.setBackground(fondoTarjeta);
+		panelCentro.setLayout(new BorderLayout(0, 20));
 
+		// =========================
+		// PANEL TABLAS
+		// =========================
 		JPanel panelTablas = new JPanel(new GridBagLayout());
 		panelTablas.setBackground(fondoTarjeta);
 
 		GridBagConstraints gbcTablas = new GridBagConstraints();
-		gbcTablas.insets = new Insets(8, 8, 8, 8);
-		gbcTablas.fill = GridBagConstraints.BOTH;
+		gbcTablas.gridx = 0;
+		gbcTablas.insets = new Insets(6, 0, 6, 0);
+		gbcTablas.anchor = GridBagConstraints.WEST;
+		gbcTablas.fill = GridBagConstraints.HORIZONTAL;
 		gbcTablas.weightx = 1.0;
 
 		JLabel lblArtistas = new JLabel("Artistas");
 		lblArtistas.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lblArtistas.setForeground(colorTexto);
 
-		JLabel lblAlbumes = new JLabel("Álbumes del artista seleccionado");
-		lblAlbumes.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		lblAlbumes.setForeground(colorTexto);
+		gbcTablas.gridy = 0;
+		panelTablas.add(lblArtistas, gbcTablas);
 
 		String[] columnasArtistas = { "ID", "NOMBRE", "TIPO" };
 		DefaultTableModel modelArtistas = new DefaultTableModel(null, columnasArtistas) {
 			private static final long serialVersionUID = 1L;
-
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
@@ -134,11 +138,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 			if (artiMap != null && !artiMap.isEmpty()) {
 				for (Map.Entry<Integer, Artista> entry : artiMap.entrySet()) {
 					Artista artista = entry.getValue();
-					Object[] fila = {
-							artista.getId(),
-							artista.getNombre(),
-							artista.getTipo().name()
-					};
+					Object[] fila = { artista.getId(), artista.getNombre(), artista.getTipo().name() };
 					modelArtistas.addRow(fila);
 				}
 			}
@@ -148,7 +148,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 
 		tablaArtistas = new JTable(modelArtistas);
 		tablaArtistas.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		tablaArtistas.setRowHeight(30);
+		tablaArtistas.setRowHeight(28);
 		tablaArtistas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tablaArtistas.setShowVerticalLines(false);
 		tablaArtistas.setGridColor(new Color(235, 235, 235));
@@ -161,16 +161,19 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 		tablaArtistas.getTableHeader().setForeground(colorTexto);
 		tablaArtistas.getTableHeader().setReorderingAllowed(false);
 
-		tablaArtistas.getColumnModel().getColumn(0).setPreferredWidth(60);
-		tablaArtistas.getColumnModel().getColumn(1).setPreferredWidth(220);
-		tablaArtistas.getColumnModel().getColumn(2).setPreferredWidth(100);
-
 		tablaArtistas.getSelectionModel().addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting()) {
 				int fila = tablaArtistas.getSelectedRow();
 				if (fila != -1) {
 					idArtistaSeleccionado = Integer.parseInt(tablaArtistas.getValueAt(fila, 0).toString());
 					String nombreArtista = tablaArtistas.getValueAt(fila, 1).toString();
+
+					idAlbumSeleccionado = 0;
+					textFieldIdAlbum.setText("");
+					textFieldNombreAlbum.setText("");
+					textFieldIdArtista.setText("");
+					textFieldNombreArtista.setText("");
+
 					cargarAlbumesPorArtista(idArtistaSeleccionado, nombreArtista);
 				}
 			}
@@ -179,12 +182,21 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 		JScrollPane scrollArtistas = new JScrollPane(tablaArtistas);
 		scrollArtistas.setBorder(new LineBorder(colorBorde, 1, true));
 		scrollArtistas.getViewport().setBackground(Color.WHITE);
-		tablaArtistas.setPreferredScrollableViewportSize(new Dimension(740, 150));
+		scrollArtistas.setPreferredSize(new Dimension(720, 140));
+
+		gbcTablas.gridy = 1;
+		panelTablas.add(scrollArtistas, gbcTablas);
+
+		JLabel lblAlbumes = new JLabel("Álbumes del artista seleccionado");
+		lblAlbumes.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		lblAlbumes.setForeground(colorTexto);
+
+		gbcTablas.gridy = 2;
+		panelTablas.add(lblAlbumes, gbcTablas);
 
 		String[] columnasAlbumes = { "ID_ALBUM", "NOMBRE_ALBUM", "ID_ARTISTA", "ARTISTA" };
 		DefaultTableModel modelAlbumes = new DefaultTableModel(null, columnasAlbumes) {
 			private static final long serialVersionUID = 1L;
-
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
@@ -193,7 +205,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 
 		tablaAlbumes = new JTable(modelAlbumes);
 		tablaAlbumes.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		tablaAlbumes.setRowHeight(30);
+		tablaAlbumes.setRowHeight(28);
 		tablaAlbumes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tablaAlbumes.setShowVerticalLines(false);
 		tablaAlbumes.setGridColor(new Color(235, 235, 235));
@@ -205,11 +217,6 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 		tablaAlbumes.getTableHeader().setBackground(Color.WHITE);
 		tablaAlbumes.getTableHeader().setForeground(colorTexto);
 		tablaAlbumes.getTableHeader().setReorderingAllowed(false);
-
-		tablaAlbumes.getColumnModel().getColumn(0).setPreferredWidth(90);
-		tablaAlbumes.getColumnModel().getColumn(1).setPreferredWidth(220);
-		tablaAlbumes.getColumnModel().getColumn(2).setPreferredWidth(90);
-		tablaAlbumes.getColumnModel().getColumn(3).setPreferredWidth(180);
 
 		tablaAlbumes.getSelectionModel().addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting()) {
@@ -231,26 +238,16 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 		JScrollPane scrollAlbumes = new JScrollPane(tablaAlbumes);
 		scrollAlbumes.setBorder(new LineBorder(colorBorde, 1, true));
 		scrollAlbumes.getViewport().setBackground(Color.WHITE);
-		tablaAlbumes.setPreferredScrollableViewportSize(new Dimension(740, 120));
+		scrollAlbumes.setPreferredSize(new Dimension(720, 120));
 
-		gbcTablas.gridx = 0;
-		gbcTablas.gridy = 0;
-		panelTablas.add(lblArtistas, gbcTablas);
-
-		gbcTablas.gridx = 0;
-		gbcTablas.gridy = 1;
-		panelTablas.add(scrollArtistas, gbcTablas);
-
-		gbcTablas.gridx = 0;
-		gbcTablas.gridy = 2;
-		panelTablas.add(lblAlbumes, gbcTablas);
-
-		gbcTablas.gridx = 0;
 		gbcTablas.gridy = 3;
 		panelTablas.add(scrollAlbumes, gbcTablas);
 
 		panelCentro.add(panelTablas, BorderLayout.NORTH);
 
+		// =========================
+		// FORMULARIO
+		// =========================
 		JPanel panelFormulario = new JPanel(new GridBagLayout());
 		panelFormulario.setBackground(fondoTarjeta);
 		panelFormulario.setBorder(BorderFactory.createCompoundBorder(
@@ -269,6 +266,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 		textFieldIdAlbum = new JTextField();
 		textFieldIdAlbum.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		textFieldIdAlbum.setEditable(false);
+		textFieldIdAlbum.setPreferredSize(new Dimension(180, 34));
 		textFieldIdAlbum.setBorder(BorderFactory.createCompoundBorder(
 				new LineBorder(new Color(210, 214, 220), 1, true),
 				new EmptyBorder(5, 8, 5, 8)));
@@ -280,6 +278,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 		textFieldNombreAlbum = new JTextField();
 		textFieldNombreAlbum.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		textFieldNombreAlbum.setEditable(false);
+		textFieldNombreAlbum.setPreferredSize(new Dimension(300, 34));
 		textFieldNombreAlbum.setBorder(BorderFactory.createCompoundBorder(
 				new LineBorder(new Color(210, 214, 220), 1, true),
 				new EmptyBorder(5, 8, 5, 8)));
@@ -291,6 +290,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 		textFieldIdArtista = new JTextField();
 		textFieldIdArtista.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		textFieldIdArtista.setEditable(false);
+		textFieldIdArtista.setPreferredSize(new Dimension(180, 34));
 		textFieldIdArtista.setBorder(BorderFactory.createCompoundBorder(
 				new LineBorder(new Color(210, 214, 220), 1, true),
 				new EmptyBorder(5, 8, 5, 8)));
@@ -302,6 +302,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 		textFieldNombreArtista = new JTextField();
 		textFieldNombreArtista.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		textFieldNombreArtista.setEditable(false);
+		textFieldNombreArtista.setPreferredSize(new Dimension(300, 34));
 		textFieldNombreArtista.setBorder(BorderFactory.createCompoundBorder(
 				new LineBorder(new Color(210, 214, 220), 1, true),
 				new EmptyBorder(5, 8, 5, 8)));
@@ -320,6 +321,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 
 		textFieldNombreCancion = new JTextField();
 		textFieldNombreCancion.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		textFieldNombreCancion.setPreferredSize(new Dimension(300, 34));
 		textFieldNombreCancion.setBorder(BorderFactory.createCompoundBorder(
 				new LineBorder(new Color(210, 214, 220), 1, true),
 				new EmptyBorder(5, 8, 5, 8)));
@@ -331,6 +333,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 		comboBoxGenero = new JComboBox<>(Genero.values());
 		comboBoxGenero.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		comboBoxGenero.setBackground(Color.WHITE);
+		comboBoxGenero.setPreferredSize(new Dimension(220, 34));
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -340,60 +343,61 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 		gbc.gridy = 0;
 		panelFormulario.add(textFieldIdAlbum, gbc);
 
-		gbc.gridx = 2;
-		gbc.gridy = 0;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
 		panelFormulario.add(lblNombreAlbum, gbc);
 
-		gbc.gridx = 3;
-		gbc.gridy = 0;
+		gbc.gridx = 1;
+		gbc.gridy = 1;
 		panelFormulario.add(textFieldNombreAlbum, gbc);
 
 		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = 2;
 		panelFormulario.add(lblIdArtista, gbc);
 
 		gbc.gridx = 1;
-		gbc.gridy = 1;
+		gbc.gridy = 2;
 		panelFormulario.add(textFieldIdArtista, gbc);
 
-		gbc.gridx = 2;
-		gbc.gridy = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 3;
 		panelFormulario.add(lblNombreArtista, gbc);
 
-		gbc.gridx = 3;
-		gbc.gridy = 1;
+		gbc.gridx = 1;
+		gbc.gridy = 3;
 		panelFormulario.add(textFieldNombreArtista, gbc);
 
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 4;
 		panelFormulario.add(lblId, gbc);
 
 		gbc.gridx = 1;
-		gbc.gridy = 2;
+		gbc.gridy = 4;
 		panelFormulario.add(lblIdGenerado, gbc);
 
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 5;
 		panelFormulario.add(lblNombre, gbc);
 
 		gbc.gridx = 1;
-		gbc.gridy = 3;
-		gbc.gridwidth = 3;
+		gbc.gridy = 5;
 		panelFormulario.add(textFieldNombreCancion, gbc);
 
 		gbc.gridx = 0;
-		gbc.gridy = 4;
-		gbc.gridwidth = 1;
+		gbc.gridy = 6;
 		panelFormulario.add(lblGenero, gbc);
 
 		gbc.gridx = 1;
-		gbc.gridy = 4;
-		gbc.gridwidth = 3;
+		gbc.gridy = 6;
 		panelFormulario.add(comboBoxGenero, gbc);
 
 		panelCentro.add(panelFormulario, BorderLayout.CENTER);
+		JScrollPane scrollPrincipal = new JScrollPane(panelCentro);
+		scrollPrincipal.setBorder(null);
+		scrollPrincipal.getVerticalScrollBar().setUnitIncrement(16);
+		scrollPrincipal.getViewport().setBackground(fondoTarjeta);
 
-		panelTarjeta.add(panelCentro, BorderLayout.CENTER);
+		panelTarjeta.add(scrollPrincipal, BorderLayout.CENTER);
 
 		JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
 		panelInferior.setBackground(fondoTarjeta);
@@ -424,7 +428,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 
 		generarNuevoId();
 
-		pack();
+		setSize(820, 660);
 		setLocationRelativeTo(null);
 	}
 
@@ -450,21 +454,15 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 				model.setRowCount(0);
 
 				while (rs.next()) {
-					Object[] fila = {
-							rs.getInt("ID_AL"),
-							rs.getString("NOMBRE"),
-							idArtista,
-							nombreArtista
-					};
+					Object[] fila = { rs.getInt("ID_AL"), rs.getString("NOMBRE"), idArtista, nombreArtista };
 					model.addRow(fila);
 				}
 
 				if (model.getRowCount() == 0) {
-					JOptionPane.showMessageDialog(
-							this,
-							"El artista " + nombreArtista + " no tiene álbumes.\nPrimero debes crear un álbum para este artista.",
-							"Información",
-							JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(this,
+							"El artista " + nombreArtista
+									+ " no tiene álbumes.\nPrimero debes crear un álbum para este artista.",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
 				}
 
 			} catch (Exception ex) {
@@ -474,7 +472,6 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 				if (stmt != null) stmt.close();
 				if (con != null) con.close();
 			}
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -501,20 +498,14 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 
 	private boolean validarCampos() {
 		if (idAlbumSeleccionado == 0) {
-			JOptionPane.showMessageDialog(
-					this,
-					"Por favor, selecciona un álbum de la tabla.",
-					"Campo requerido",
+			JOptionPane.showMessageDialog(this, "Por favor, selecciona un álbum de la tabla.", "Campo requerido",
 					JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
 
 		String nombreCancion = textFieldNombreCancion.getText().trim();
 		if (nombreCancion.isEmpty()) {
-			JOptionPane.showMessageDialog(
-					this,
-					"Por favor, introduce el nombre de la canción.",
-					"Campo requerido",
+			JOptionPane.showMessageDialog(this, "Por favor, introduce el nombre de la canción.", "Campo requerido",
 					JOptionPane.WARNING_MESSAGE);
 			textFieldNombreCancion.requestFocus();
 			return false;
@@ -522,20 +513,15 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 
 		try {
 			if (Principal.existeCancionEnAlbum(nombreCancion, idAlbumSeleccionado)) {
-				JOptionPane.showMessageDialog(
-						this,
+				JOptionPane.showMessageDialog(this,
 						"Ya existe una canción con el nombre '" + nombreCancion
 								+ "' en el álbum seleccionado.\nPor favor, elige otro nombre.",
-						"Nombre duplicado",
-						JOptionPane.WARNING_MESSAGE);
+						"Nombre duplicado", JOptionPane.WARNING_MESSAGE);
 				textFieldNombreCancion.requestFocus();
 				return false;
 			}
 		} catch (AltaException e) {
-			JOptionPane.showMessageDialog(
-					this,
-					"Error al comprobar nombre: " + e.getMessage(),
-					"Error",
+			JOptionPane.showMessageDialog(this, "Error al comprobar nombre: " + e.getMessage(), "Error",
 					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
@@ -560,44 +546,29 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 			boolean exito = Principal.altaCancion(cancion, idAlbumSeleccionado);
 
 			if (exito) {
-				JOptionPane.showMessageDialog(
-						this,
-						"¡Canción añadida correctamente!\n\n"
-								+ "ID: " + idCancionActual + "\n"
-								+ "Canción: " + nombreCancion + "\n"
-								+ "Género: " + genero + "\n"
-								+ "Álbum: " + textFieldNombreAlbum.getText(),
-						"Éxito",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this,
+						"¡Canción añadida correctamente!\n\n" + "ID: " + idCancionActual + "\n" + "Canción: "
+								+ nombreCancion + "\n" + "Género: " + genero + "\n" + "Álbum: "
+								+ textFieldNombreAlbum.getText(),
+						"Éxito", JOptionPane.INFORMATION_MESSAGE);
 
 				textFieldNombreCancion.setText("");
 				comboBoxGenero.setSelectedIndex(0);
 				generarNuevoId();
 
-				int respuesta = JOptionPane.showConfirmDialog(
-						this,
-						"¿Quieres añadir otra canción al mismo álbum?",
-						"Continuar",
-						JOptionPane.YES_NO_OPTION);
+				int respuesta = JOptionPane.showConfirmDialog(this, "¿Quieres añadir otra canción al mismo álbum?",
+						"Continuar", JOptionPane.YES_NO_OPTION);
 
 				if (respuesta != JOptionPane.YES_OPTION) {
 					dispose();
 				}
 
 			} else {
-				JOptionPane.showMessageDialog(
-						this,
-						"Error al guardar la canción.",
-						"Error",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Error al guardar la canción.", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 
 		} catch (AltaException ex) {
-			JOptionPane.showMessageDialog(
-					this,
-					"Error: " + ex.getMessage(),
-					"Error",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
