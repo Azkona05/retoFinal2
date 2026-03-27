@@ -42,6 +42,11 @@ public class Principal {
 		return dao.ides();
 
 	}
+	
+
+	public static Map<Integer, Album> listarAlbumesPorArtista(int idArtista) throws AltaException {
+	    return dao.listarAlbumesPorArtista(idArtista);
+	}
 
 	public static ArrayList<String> leerNombreArti() throws AltaException {
 		return dao.nomArti();

@@ -23,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 
 import exception.AltaException;
 import main.Principal;
+import modelo.Album;
 import modelo.Artista;
 import modelo.Cancion;
 import modelo.Genero;
@@ -213,53 +214,34 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
         contentPanel.add(scrollArtistas);
     }
     
+    // ✅ MÉTODO MODIFICADO - Usa DAO en lugar de conexión directa
     private void cargarAlbumesPorArtista(int idArtista, String nombreArtista) {
         try {
-            java.sql.Connection con = null;
-            java.sql.PreparedStatement stmt = null;
-            java.sql.ResultSet rs = null;
+            Map<Integer, Album> albumesMap = Principal.listarAlbumesPorArtista(idArtista);
             
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                con = java.sql.DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/TartangaMusic?serverTimezone=Europe/Madrid&useSSL=false", 
-                    "root", 
-                    "abcd*1234");
-                
-                String sql = "SELECT ID_AL, NOMBRE FROM ALBUM WHERE ID_A = ?";
-                stmt = con.prepareStatement(sql);
-                stmt.setInt(1, idArtista);
-                rs = stmt.executeQuery();
-                
-                DefaultTableModel model = (DefaultTableModel) tablaAlbumes.getModel();
-                model.setRowCount(0);
-                
-                while (rs.next()) {
+            DefaultTableModel model = (DefaultTableModel) tablaAlbumes.getModel();
+            model.setRowCount(0); // Limpiar tabla
+            
+            if (albumesMap != null && !albumesMap.isEmpty()) {
+                for (Map.Entry<Integer, Album> entry : albumesMap.entrySet()) {
+                    Album album = entry.getValue();
                     Object[] fila = {
-                        rs.getInt("ID_AL"),
-                        rs.getString("NOMBRE"),
+                        album.getId(),
+                        album.getNombre(),
                         idArtista,
                         nombreArtista
                     };
                     model.addRow(fila);
                 }
-                
-                if (model.getRowCount() == 0) {
-                    JOptionPane.showMessageDialog(this, 
-                        "El artista " + nombreArtista + " no tiene álbumes.\nPrimero debes crear un álbum para este artista.", 
-                        "Información", JOptionPane.INFORMATION_MESSAGE);
-                }
-                
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error al cargar álbumes: " + ex.getMessage());
-            } finally {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-                if (con != null) con.close();
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "El artista " + nombreArtista + " no tiene álbumes.\nPrimero debes crear un álbum para este artista.", 
+                    "Información", JOptionPane.INFORMATION_MESSAGE);
             }
             
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (AltaException ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar álbumes: " + ex.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -331,7 +313,6 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
             return false;
         }
         
-        //  VALIDACIÓN CON EL MÉTODO DE DAO (ya no es local)
         try {
             if (Principal.existeCancionEnAlbum(nombreCancion, idAlbumSeleccionado)) {
                 JOptionPane.showMessageDialog(this, 

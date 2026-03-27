@@ -19,6 +19,7 @@ public interface InterfazDao {
 	public ArrayList<Integer> ides() throws AltaException;
 
 	public ArrayList<String> nomArti() throws AltaException;
+	 public Map<Integer, Album> listarAlbumesPorArtista(int idArtista) throws AltaException;
 
 	public Map<Integer, Artista> listarArtTabla(Artista arti) throws AltaException;
 
