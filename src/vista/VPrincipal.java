@@ -20,6 +20,7 @@ public class VPrincipal extends JFrame implements ActionListener {
 		setSize(900, 550);
 		setLocationRelativeTo(null);
 		setResizable(false);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));
 
 		Color fondo = new Color(245, 247, 250);
 		Color header = new Color(255, 255, 255);

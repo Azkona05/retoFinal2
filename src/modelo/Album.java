@@ -33,6 +33,9 @@ public class Album {
 	}
 
 	public void setNombre(String nombre) {
+		if (nombre == null) {
+			throw new IllegalArgumentException("El nombre del álbum no puede ser nulo");
+		}
 		this.nombre = nombre;
 	}
 
@@ -54,6 +57,14 @@ public class Album {
 
 	public void setIdArtista(int idArtista) {
 		this.idArtista = idArtista;
+	}
+	
+	public boolean tieneCanciones() {
+	    return this.canciones != null && !this.canciones.isEmpty();
+	}
+
+	public boolean esNombreValido() {
+	    return this.nombre != null && !this.nombre.trim().isEmpty();
 	}
 
 }

@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public class VAlbumCanci extends JDialog implements ActionListener {
 	private int idActual;
 
 	public VAlbumCanci(int idAlbum, int cancionesPendientes, String nombreAlbum) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));
 		this.idAlbum = idAlbum;
 		this.cancionesPendientes = cancionesPendientes;
 		this.cancionesAñadidas = 0;
