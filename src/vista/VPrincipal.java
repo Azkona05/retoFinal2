@@ -22,11 +22,11 @@ public class VPrincipal extends JFrame implements ActionListener {
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));
 
-		Color fondo = new Color(245, 247, 250);
-		Color header = new Color(255, 255, 255);
-		Color azul = new Color(52, 120, 246);
-		Color texto = new Color(40, 40, 40);
-		Color gris = new Color(120, 120, 120);
+		Color fondo = new Color(33, 37, 41);
+		Color header = new Color(45, 49, 54);
+		Color naranjaPalo = new Color(244, 162, 97);
+		Color texto = new Color(248, 249, 250);
+		Color gris = new Color(173, 181, 189);
 
 		contentPane = new JPanel(new BorderLayout());
 		contentPane.setBackground(fondo);
@@ -41,7 +41,7 @@ public class VPrincipal extends JFrame implements ActionListener {
 		titulo.setForeground(texto);
 
 		btnInicioSesion = new JButton("Iniciar sesión");
-		estiloBotonPrimario(btnInicioSesion, azul);
+		estiloBotonPrimario(btnInicioSesion, naranjaPalo);
 		btnInicioSesion.setPreferredSize(new Dimension(150, 40));
 		btnInicioSesion.addActionListener(this);
 
@@ -57,19 +57,19 @@ public class VPrincipal extends JFrame implements ActionListener {
 		bloque.setLayout(new BoxLayout(bloque, BoxLayout.Y_AXIS));
 		bloque.setBackground(fondo);
 
-		JLabel icono = new JLabel("♪");
+		JLabel icono = new JLabel();
 		icono.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 80));
-		icono.setForeground(azul);
+		icono.setForeground(naranjaPalo);
 		icono.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		JLabel bienvenida = new JLabel("Bienvenido a Tartanga Music");
+		JLabel bienvenida = new JLabel("¡Hola!");
 		bienvenida.setFont(new Font("Segoe UI", Font.BOLD, 30));
 		bienvenida.setForeground(texto);
 		bienvenida.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		JLabel linea1 = new JLabel("Gestiona música, usuarios y contenido");
-		JLabel linea2 = new JLabel("de forma sencilla.");
-		JLabel linea3 = new JLabel("Accede con tu cuenta para continuar.");
+		JLabel linea1 = new JLabel("Toda tu música y comunidad en un solo lugar.");
+		JLabel linea2 = new JLabel("Explora, gestiona y disfruta de tus artistas.");
+		JLabel linea3 = new JLabel("");
 
 		JLabel[] lineas = { linea1, linea2, linea3 };
 
@@ -79,8 +79,8 @@ public class VPrincipal extends JFrame implements ActionListener {
 			l.setAlignmentX(Component.CENTER_ALIGNMENT);
 		}
 
-		btnAcceder = new JButton("Acceder");
-		estiloBotonPrimario(btnAcceder, azul);
+		btnAcceder = new JButton("Entrar");
+		estiloBotonPrimario(btnAcceder, naranjaPalo);
 		btnAcceder.setPreferredSize(new Dimension(180, 45));
 		btnAcceder.setMaximumSize(new Dimension(180, 45));
 		btnAcceder.setAlignmentX(Component.CENTER_ALIGNMENT);

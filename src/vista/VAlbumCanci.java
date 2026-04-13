@@ -66,7 +66,7 @@ public class VAlbumCanci extends JDialog implements ActionListener {
 
 		Color fondoVentana = new Color(245, 247, 250);
 		Color fondoTarjeta = Color.WHITE;
-		Color colorPrimario = new Color(52, 120, 246);
+		Color naranjaPalo = new Color(244, 162, 97);
 		Color colorTexto = new Color(40, 40, 40);
 		Color colorSecundario = new Color(120, 120, 120);
 		Color colorBorde = new Color(220, 224, 230);
@@ -138,7 +138,7 @@ public class VAlbumCanci extends JDialog implements ActionListener {
 
 		lblIdGenerado = new JLabel("");
 		lblIdGenerado.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		lblIdGenerado.setForeground(colorPrimario);
+		lblIdGenerado.setForeground(naranjaPalo);
 
 		btnRegenerarId = new JButton("Regenerar ID");
 		btnRegenerarId.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -239,7 +239,7 @@ public class VAlbumCanci extends JDialog implements ActionListener {
 		btnAceptar.setFocusPainted(false);
 		btnAceptar.setBorderPainted(false);
 		btnAceptar.setOpaque(true);
-		btnAceptar.setBackground(colorPrimario);
+		btnAceptar.setBackground(naranjaPalo);
 		btnAceptar.setForeground(Color.WHITE);
 		btnAceptar.addActionListener(this);
 

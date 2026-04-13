@@ -96,7 +96,7 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 
 		Color fondoVentana = new Color(245, 247, 250);
 		Color fondoTarjeta = Color.WHITE;
-		Color colorPrimario = new Color(52, 120, 246);
+		Color naranjaPalo = new Color(244, 162, 97);
 		Color colorTexto = new Color(40, 40, 40);
 		Color colorSecundario = new Color(120, 120, 120);
 		Color colorBorde = new Color(220, 224, 230);
@@ -121,7 +121,7 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 
 		JLabel lblPanel = new JLabel("Consulta");
 		lblPanel.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		lblPanel.setForeground(colorPrimario);
+		lblPanel.setForeground(naranjaPalo);
 		lblPanel.setAlignmentX(CENTER_ALIGNMENT);
 
 		JLabel lblTitulo = new JLabel("Listado de canciones");
@@ -210,7 +210,7 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 				btnPlay.setFocusPainted(false);
 				btnPlay.setBorderPainted(false);
 				btnPlay.setOpaque(true);
-				btnPlay.setBackground(colorPrimario);
+				btnPlay.setBackground(naranjaPalo);
 				btnPlay.setForeground(Color.WHITE);
 
 				return btnPlay;

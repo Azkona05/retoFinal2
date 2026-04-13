@@ -341,6 +341,7 @@ public class DaoImplementacion implements InterfazDao {
 		
 	}
 
+	//RICARDO	
 	@Override
 	public ArrayList<Integer> ides() throws AltaException {
 		// TODO Auto-generated method stub
@@ -373,6 +374,7 @@ public class DaoImplementacion implements InterfazDao {
 		return id;
 	}
 
+	//AN
 	@Override
 	public List<Cancion> devolverCanciones(int idAlbum) throws LoginException {
 		List<Cancion> canciones = new ArrayList<>();
@@ -409,7 +411,7 @@ public class DaoImplementacion implements InterfazDao {
 		}
 		return canciones;
 	}
-
+	//RICARDO
 	@Override
 	public ArrayList<String> nomArti() throws AltaException {
 		// TODO Auto-generated method stub
@@ -439,6 +441,7 @@ public class DaoImplementacion implements InterfazDao {
 		return artis;
 	}
 
+	//RICARDO
 	@Override
 	public Map<Integer, Artista> listarArtTabla(Artista arti) throws AltaException {
 		// TODO Auto-generated method stub
@@ -474,7 +477,7 @@ public class DaoImplementacion implements InterfazDao {
 	}
 	
 	
-	
+	//RICARDO
 	@Override
 	public boolean altaAlbum(Album album, int idArtista) throws AltaException {
 	    openConnection();
@@ -498,6 +501,7 @@ public class DaoImplementacion implements InterfazDao {
 	    }
 	}
 
+	//RICARDO
 	@Override
 	public boolean altaCancion(Cancion cancion, int idAlbum) throws AltaException {
 	    openConnection();
@@ -522,6 +526,7 @@ public class DaoImplementacion implements InterfazDao {
 	    }
 	}
 
+	//RICARDO
 	@Override
 	public boolean existeIdAlbum(int id) throws AltaException {
 	    ResultSet rs = null;
@@ -566,6 +571,7 @@ public class DaoImplementacion implements InterfazDao {
 	    }
 	}
 	
+	//RICARDO
 	@Override
 	public boolean existeCancionEnAlbum(String nombreCancion, int idAlbum) throws AltaException {
 	    ResultSet rs = null;
@@ -590,6 +596,7 @@ public class DaoImplementacion implements InterfazDao {
 	    }
 	}
 
+	//AN
 	@Override
 	public Object[][] devolverCancionesArtista(Artista a) {
 		List<Object[]> listaCanciones = new ArrayList<>();
@@ -625,6 +632,7 @@ public class DaoImplementacion implements InterfazDao {
 
 	}
 
+	//RICARDO
 	public ArrayList<Artista> listarArtistas() throws AltaException {
 		ArrayList<Artista> artistas = new ArrayList<>();
 		ResultSet rs = null;
@@ -656,6 +664,7 @@ public class DaoImplementacion implements InterfazDao {
 		return artistas;
 	}
 	 
+	//AN
 	@Override
 	public List<Artista> obtenerTodosLosArtistasCompletos() throws LoginException {
 		List<Artista> listaArtistas = new ArrayList<>();
@@ -689,6 +698,7 @@ public class DaoImplementacion implements InterfazDao {
 		return listaArtistas;
 	}
 
+	//AN
 	private List<Album> cargarAlbumesPorArtista(int idArtista) throws SQLException {
 		List<Album> albumes = new ArrayList<>();
 		try (PreparedStatement psAlb = con.prepareStatement(SQL_BUSCAR_ALBUM_ARTISTA)) {
@@ -708,6 +718,7 @@ public class DaoImplementacion implements InterfazDao {
 		return albumes;
 	}
 
+	//AN
 	private List<Cancion> cargarCancionesPorAlbum(int idAlbum) throws SQLException {
 		List<Cancion> canciones = new ArrayList<>();
 		try (PreparedStatement psCan = con.prepareStatement(BUSCAR_CANCIONES_POR_ALBUM)) {
@@ -729,6 +740,7 @@ public class DaoImplementacion implements InterfazDao {
 		return canciones;
 	}
 
+	//AN
 	public void forzarGuardadoXML() {
 	    try {
 	        List<Artista> listaParaExportar = Principal.obtenerTodosLosArtistasCompletos();
@@ -740,6 +752,8 @@ public class DaoImplementacion implements InterfazDao {
 	        ex.printStackTrace();
 	    }
 	}
+	
+	//AN
 	@Override
 	public Object[][] devolverAlbumesT() throws LoginException {
 		List<Object[]> listaAlbumes = new ArrayList<>();
@@ -771,6 +785,8 @@ public class DaoImplementacion implements InterfazDao {
 
 	}
 
+	
+	//AN
 	@Override
 	public List<Album> devolverAlbumes() throws LoginException {
 		Album al;
@@ -801,6 +817,8 @@ public class DaoImplementacion implements InterfazDao {
 		return albumes;
 	}
 
+	
+	//AN
 	@Override
 	public Object[][] devolverCanciones() throws LoginException {
 		List<Object[]> listaCanciones = new ArrayList<>();

@@ -40,7 +40,7 @@ public class VAlta extends JDialog implements ActionListener {
 
 		Color fondoVentana = new Color(245, 247, 250);
 		Color fondoTarjeta = Color.WHITE;
-		Color colorPrimario = new Color(52, 120, 246);
+		Color naranjaPalo = new Color(244, 162, 97);
 		Color colorTexto = new Color(40, 40, 40);
 		Color colorSecundario = new Color(120, 120, 120);
 		Color colorBorde = new Color(220, 224, 230);
@@ -64,7 +64,7 @@ public class VAlta extends JDialog implements ActionListener {
 
 		JLabel lblSeccion = new JLabel("Administrador");
 		lblSeccion.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		lblSeccion.setForeground(colorPrimario);
+		lblSeccion.setForeground(naranjaPalo);
 		lblSeccion.setAlignmentX(CENTER_ALIGNMENT);
 
 		JLabel lblTitulo = new JLabel("Dar de alta");

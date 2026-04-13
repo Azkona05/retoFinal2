@@ -50,7 +50,7 @@ public class VLogin extends JDialog implements ActionListener {
 
 		Color fondoVentana = new Color(245, 247, 250);
 		Color fondoTarjeta = Color.WHITE;
-		Color colorPrimario = new Color(52, 120, 246);
+		Color naranjaPalo = new Color(244, 162, 97);
 		Color colorTexto = new Color(40, 40, 40);
 		Color colorSecundario = new Color(120, 120, 120);
 		Color colorBorde = new Color(210, 214, 220);
@@ -70,13 +70,13 @@ public class VLogin extends JDialog implements ActionListener {
 		JLabel lblIcono = new JLabel();
 		lblIcono.setAlignmentX(CENTER_ALIGNMENT);
 
-		ImageIcon icono = new ImageIcon("src/resources/iconoPersonaEditado.png");
+		ImageIcon icono = new ImageIcon("src/img/iconoPersonaEditado.png");
 		if (icono.getIconWidth() > 0) {
 			lblIcono.setIcon(icono);
 		} else {
 			lblIcono.setText("Usuario");
 			lblIcono.setFont(new Font("Segoe UI", Font.BOLD, 20));
-			lblIcono.setForeground(colorPrimario);
+			lblIcono.setForeground(naranjaPalo);
 		}
 
 		JLabel lblTitulo = new JLabel("Iniciar sesión");
@@ -150,11 +150,13 @@ public class VLogin extends JDialog implements ActionListener {
 		btnComprobar.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		btnComprobar.setPreferredSize(new Dimension(120, 36));
 		btnComprobar.setFocusPainted(false);
-		btnComprobar.setBackground(colorPrimario);
+		btnComprobar.setBackground(naranjaPalo);
 		btnComprobar.setForeground(Color.WHITE);
-		btnComprobar.setBorder(new LineBorder(colorPrimario, 1, true));
+		btnComprobar.setOpaque(true);
+		btnComprobar.setContentAreaFilled(true);
+		btnComprobar.setBorderPainted(false);
 		btnComprobar.addActionListener(this);
-
+		
 		panelBotones.add(btnCancelar);
 		panelBotones.add(btnComprobar);
 

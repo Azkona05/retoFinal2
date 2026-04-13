@@ -54,7 +54,7 @@ public class VArtista extends JDialog implements ActionListener {
 		
 		Color fondoVentana = new Color(245, 247, 250);
 		Color fondoTarjeta = Color.WHITE;
-		Color colorPrimario = new Color(52, 120, 246);
+		Color naranjaPalo = new Color(244, 162, 97);
 		Color colorTexto = new Color(40, 40, 40);
 		Color colorSecundario = new Color(120, 120, 120);
 		Color colorBorde = new Color(220, 224, 230);
@@ -183,7 +183,7 @@ public class VArtista extends JDialog implements ActionListener {
 		btnAnadir.setFocusPainted(false);
 		btnAnadir.setBorderPainted(false);
 		btnAnadir.setOpaque(true);
-		btnAnadir.setBackground(colorPrimario);
+		btnAnadir.setBackground(naranjaPalo);
 		btnAnadir.setForeground(Color.WHITE);
 		btnAnadir.addActionListener(this);
 

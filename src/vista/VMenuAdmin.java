@@ -43,7 +43,7 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 
 		Color fondoVentana = new Color(245, 247, 250);
 		Color fondoTarjeta = Color.WHITE;
-		Color colorPrimario = new Color(52, 120, 246);
+		Color naranjaPalo = new Color(244, 162, 97);
 		Color colorTexto = new Color(40, 40, 40);
 		Color colorSecundario = new Color(120, 120, 120);
 		Color colorBorde = new Color(220, 224, 230);
@@ -64,7 +64,7 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 
 		JLabel lblPanel = new JLabel("Administrador");
 		lblPanel.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		lblPanel.setForeground(colorPrimario);
+		lblPanel.setForeground(naranjaPalo);
 		lblPanel.setAlignmentX(CENTER_ALIGNMENT);
 
 		JLabel lblTitulo = new JLabel("Gestión de los datos");
@@ -154,7 +154,7 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 		btnCerrar.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btnCerrar.setFocusPainted(false);
 		btnCerrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		btnCerrar.setBackground(colorPrimario);
+		btnCerrar.setBackground(naranjaPalo);
 		btnCerrar.setForeground(Color.WHITE);
 		btnCerrar.setBorderPainted(false);
 		btnCerrar.setOpaque(true);
@@ -192,7 +192,6 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 			VConsultar consultar = new VConsultar(this, true);
 			consultar.setVisible(true);
 		} else if (e.getSource() == btnModificar) {
-			// Aquí abrirías la ventana de modificar cuando la tengas hecha
 		} else if (e.getSource() == btnCerrar) {
 			dispose();
 		} else if (e.getSource() == timerReloj) {

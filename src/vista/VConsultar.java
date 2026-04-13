@@ -58,7 +58,7 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 	private JTextField txtBuscador;
 	private TableRowSorter<DefaultTableModel> sorter;
 	private JLabel lblContador;
-	private Color colorTablaSeleccion, colorBorde, colorTexto, colorSecundario, colorPrimario, fondoTarjeta,
+	private Color colorTablaSeleccion, colorBorde, colorTexto, colorSecundario, naranjaPalo, fondoTarjeta,
 			fondoVentana;
 
 	public VConsultar(VMenuAdmin padre, boolean modal) {
@@ -71,7 +71,7 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 
 		fondoVentana = new Color(245, 247, 250);
 		fondoTarjeta = Color.WHITE;
-		colorPrimario = new Color(52, 120, 246);
+		naranjaPalo = new Color(244, 162, 97);
 		colorTexto = new Color(40, 40, 40);
 		colorSecundario = new Color(120, 120, 120);
 		colorBorde = new Color(220, 224, 230);
@@ -95,7 +95,7 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 
 		JLabel lblPanel = new JLabel("Administrador");
 		lblPanel.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		lblPanel.setForeground(colorPrimario);
+		lblPanel.setForeground(naranjaPalo);
 		lblPanel.setAlignmentX(CENTER_ALIGNMENT);
 
 		JLabel lblTitulo = new JLabel("Listado de artistas");
@@ -244,7 +244,7 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 		btnExportar = new JButton("Generar XML");
 		btnExportar.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btnExportar.setFocusPainted(false);
-		btnExportar.setBackground(colorPrimario);
+		btnExportar.setBackground(naranjaPalo);
 		btnExportar.setForeground(Color.WHITE);
 		btnExportar.setBorderPainted(false);
 		btnExportar.setOpaque(true);

@@ -57,7 +57,7 @@ public class VAlbum extends JDialog implements ActionListener {
 
 		Color fondoVentana = new Color(245, 247, 250);
 		Color fondoTarjeta = Color.WHITE;
-		Color colorPrimario = new Color(52, 120, 246);
+		Color naranjaPalo = new Color(244, 162, 97);
 		Color colorTexto = new Color(40, 40, 40);
 		Color colorSecundario = new Color(120, 120, 120);
 		Color colorBorde = new Color(220, 224, 230);
@@ -70,8 +70,7 @@ public class VAlbum extends JDialog implements ActionListener {
 
 		JPanel panelTarjeta = new JPanel(new BorderLayout(0, 20));
 		panelTarjeta.setBackground(fondoTarjeta);
-		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(
-				new LineBorder(colorBorde, 1, true),
+		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(new LineBorder(colorBorde, 1, true),
 				new EmptyBorder(20, 20, 20, 20)));
 
 		contentPane.add(panelTarjeta, BorderLayout.CENTER);
@@ -111,18 +110,12 @@ public class VAlbum extends JDialog implements ActionListener {
 			if (artiMap != null && !artiMap.isEmpty()) {
 				for (Map.Entry<Integer, Artista> entry : artiMap.entrySet()) {
 					Artista artista = entry.getValue();
-					Object[] fila = {
-							artista.getId(),
-							artista.getNombre(),
-							artista.getTipo().name()
-					};
+					Object[] fila = { artista.getId(), artista.getNombre(), artista.getTipo().name() };
 					model.addRow(fila);
 				}
 			}
 		} catch (AltaException e) {
-			JOptionPane.showMessageDialog(this,
-					"No se ha podido cargar los artistas: " + e.getMessage(),
-					"Error",
+			JOptionPane.showMessageDialog(this, "No se ha podido cargar los artistas: " + e.getMessage(), "Error",
 					JOptionPane.ERROR_MESSAGE);
 		}
 
@@ -190,9 +183,8 @@ public class VAlbum extends JDialog implements ActionListener {
 		textFieldIdArtista.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		textFieldIdArtista.setEditable(false);
 		textFieldIdArtista.setPreferredSize(new Dimension(220, 34));
-		textFieldIdArtista.setBorder(BorderFactory.createCompoundBorder(
-				new LineBorder(new Color(210, 214, 220), 1, true),
-				new EmptyBorder(5, 8, 5, 8)));
+		textFieldIdArtista.setBorder(BorderFactory
+				.createCompoundBorder(new LineBorder(new Color(210, 214, 220), 1, true), new EmptyBorder(5, 8, 5, 8)));
 
 		JLabel lblNombreArtista = new JLabel("Nombre artista");
 		lblNombreArtista.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -202,9 +194,8 @@ public class VAlbum extends JDialog implements ActionListener {
 		textFieldNombreArtista.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		textFieldNombreArtista.setEditable(false);
 		textFieldNombreArtista.setPreferredSize(new Dimension(220, 34));
-		textFieldNombreArtista.setBorder(BorderFactory.createCompoundBorder(
-				new LineBorder(new Color(210, 214, 220), 1, true),
-				new EmptyBorder(5, 8, 5, 8)));
+		textFieldNombreArtista.setBorder(BorderFactory
+				.createCompoundBorder(new LineBorder(new Color(210, 214, 220), 1, true), new EmptyBorder(5, 8, 5, 8)));
 
 		JLabel lblNomAlbum = new JLabel("Nombre del álbum");
 		lblNomAlbum.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -213,9 +204,8 @@ public class VAlbum extends JDialog implements ActionListener {
 		textFieldNomAlbum = new JTextField();
 		textFieldNomAlbum.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		textFieldNomAlbum.setPreferredSize(new Dimension(220, 34));
-		textFieldNomAlbum.setBorder(BorderFactory.createCompoundBorder(
-				new LineBorder(new Color(210, 214, 220), 1, true),
-				new EmptyBorder(5, 8, 5, 8)));
+		textFieldNomAlbum.setBorder(BorderFactory
+				.createCompoundBorder(new LineBorder(new Color(210, 214, 220), 1, true), new EmptyBorder(5, 8, 5, 8)));
 
 		JLabel lblNumCanciones = new JLabel("Número de canciones");
 		lblNumCanciones.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -224,9 +214,8 @@ public class VAlbum extends JDialog implements ActionListener {
 		textFieldNumCanci = new JTextField();
 		textFieldNumCanci.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		textFieldNumCanci.setPreferredSize(new Dimension(220, 34));
-		textFieldNumCanci.setBorder(BorderFactory.createCompoundBorder(
-				new LineBorder(new Color(210, 214, 220), 1, true),
-				new EmptyBorder(5, 8, 5, 8)));
+		textFieldNumCanci.setBorder(BorderFactory
+				.createCompoundBorder(new LineBorder(new Color(210, 214, 220), 1, true), new EmptyBorder(5, 8, 5, 8)));
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -280,7 +269,7 @@ public class VAlbum extends JDialog implements ActionListener {
 		anadirButton.setFocusPainted(false);
 		anadirButton.setBorderPainted(false);
 		anadirButton.setOpaque(true);
-		anadirButton.setBackground(colorPrimario);
+		anadirButton.setBackground(naranjaPalo);
 		anadirButton.setForeground(Color.WHITE);
 		anadirButton.addActionListener(this);
 
@@ -303,27 +292,21 @@ public class VAlbum extends JDialog implements ActionListener {
 		} else if (e.getSource() == anadirButton) {
 			try {
 				if (textFieldIdArtista.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(this,
-							"Por favor, selecciona un artista de la tabla",
-							"Error",
+					JOptionPane.showMessageDialog(this, "Por favor, selecciona un artista de la tabla", "Error",
 							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 
 				String nombreAlbum = textFieldNomAlbum.getText().trim();
 				if (nombreAlbum.isEmpty()) {
-					JOptionPane.showMessageDialog(this,
-							"Por favor, introduce el nombre del álbum",
-							"Error",
+					JOptionPane.showMessageDialog(this, "Por favor, introduce el nombre del álbum", "Error",
 							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 
 				String numCancionesStr = textFieldNumCanci.getText().trim();
 				if (numCancionesStr.isEmpty()) {
-					JOptionPane.showMessageDialog(this,
-							"Por favor, introduce el número de canciones",
-							"Error",
+					JOptionPane.showMessageDialog(this, "Por favor, introduce el número de canciones", "Error",
 							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -335,9 +318,7 @@ public class VAlbum extends JDialog implements ActionListener {
 						throw new NumberFormatException();
 					}
 				} catch (NumberFormatException ex) {
-					JOptionPane.showMessageDialog(this,
-							"El número de canciones debe ser un número positivo",
-							"Error",
+					JOptionPane.showMessageDialog(this, "El número de canciones debe ser un número positivo", "Error",
 							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -355,8 +336,7 @@ public class VAlbum extends JDialog implements ActionListener {
 
 				if (exito) {
 					JOptionPane.showMessageDialog(this,
-							"Álbum creado con ID: " + idAlbum + "\nAhora añade las canciones",
-							"Éxito",
+							"Álbum creado con ID: " + idAlbum + "\nAhora añade las canciones", "Éxito",
 							JOptionPane.INFORMATION_MESSAGE);
 
 					setVisible(false);
@@ -371,16 +351,11 @@ public class VAlbum extends JDialog implements ActionListener {
 					ventanaCanciones.setVisible(true);
 
 				} else {
-					JOptionPane.showMessageDialog(this,
-							"Error al crear el álbum",
-							"Error",
-							JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Error al crear el álbum", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 
 			} catch (AltaException ex) {
-				JOptionPane.showMessageDialog(this,
-						"Error en la base de datos: " + ex.getMessage(),
-						"Error",
+				JOptionPane.showMessageDialog(this, "Error en la base de datos: " + ex.getMessage(), "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
