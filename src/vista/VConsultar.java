@@ -45,30 +45,40 @@ import modelo.Album;
 import modelo.Artista;
 import utilidades.ExportadorXML;
 
+/**
+ * Ventana de consulta que permite visualizar, filtrar y exportar artistas.
+ * Implementa múltiples interfaces para gestionar clics, búsqueda en tiempo real y personalización de celdas.
+ * @author An Azkona
+ */
 public class VConsultar extends JDialog implements ActionListener, MouseListener, DocumentListener, TableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 
-	private JTable table;
-	private DefaultTableModel model;
-	private JComboBox<Album> cbAlbumes;
-	private List<Album> albumes;
+	// Componentes principales
+	private JTable table; // La tabla de datos
+	private DefaultTableModel model; // El modelo que contiene los datos de la tabla
+	private JComboBox<Album> cbAlbumes; // Combo para el editor de celdas
+	private List<Album> albumes; // Lista de todos los álbumes cargados en memoria
 	private JButton btnExportar;
 	private JButton btnCerrar;
-	private JTextField txtBuscador;
-	private TableRowSorter<DefaultTableModel> sorter;
-	private JLabel lblContador;
+	private JTextField txtBuscador; // Campo de texto para filtrar
+	private TableRowSorter<DefaultTableModel> sorter; // Objeto que permite el filtrado dinámico
+	private JLabel lblContador; // Etiqueta que indica cuántos registros hay visibles
+	
+	// Paleta de colores para la interfaz
 	private Color colorTablaSeleccion, colorBorde, colorTexto, colorSecundario, naranjaPalo, fondoTarjeta,
 			fondoVentana;
 
 	public VConsultar(VMenuAdmin padre, boolean modal) {
-		super(padre, modal);
+		super(padre, modal); // Llamada al constructor del padre (JDialog)
 
+		// Configuración inicial de la ventana
 		setTitle("Consulta de artistas");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));
 
+		// Inicialización de la paleta de colores 
 		fondoVentana = new Color(245, 247, 250);
 		fondoTarjeta = Color.WHITE;
 		naranjaPalo = new Color(244, 162, 97);
@@ -77,11 +87,13 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 		colorBorde = new Color(220, 224, 230);
 		colorTablaSeleccion = new Color(232, 242, 252);
 
+		// Contenedor principal con BorderLayout y márgenes
 		JPanel contentPane = new JPanel(new BorderLayout(20, 20));
 		contentPane.setBackground(fondoVentana);
 		contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
 		setContentPane(contentPane);
 
+		// Panel central estilo "tarjeta" con fondo blanco y bordes redondeados
 		JPanel panelTarjeta = new JPanel(new BorderLayout(0, 20));
 		panelTarjeta.setBackground(fondoTarjeta);
 		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(new LineBorder(colorBorde, 1, true),
@@ -89,6 +101,7 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 
 		contentPane.add(panelTarjeta, BorderLayout.CENTER);
 
+		// --- SECCIÓN SUPERIOR: CABECERA ---
 		JPanel panelCabecera = new JPanel();
 		panelCabecera.setBackground(fondoTarjeta);
 		panelCabecera.setLayout(new BoxLayout(panelCabecera, BoxLayout.Y_AXIS));
@@ -116,9 +129,11 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 
 		panelTarjeta.add(panelCabecera, BorderLayout.NORTH);
 
+		// --- SECCIÓN CENTRAL: BUSCADOR Y TABLA ---
 		JPanel panelCentro = new JPanel(new BorderLayout(0, 15));
 		panelCentro.setBackground(fondoTarjeta);
 
+		// Panel para la barra de búsqueda
 		JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 0));
 		panelBusqueda.setBackground(fondoTarjeta);
 
@@ -138,41 +153,45 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 
 		panelCentro.add(panelBusqueda, BorderLayout.NORTH);
 
+		// Configuración del modelo de la tabla (solo la columna de álbumes será editable)
 		String[] columnNames = { "ID", "Nombre", "Tipo", "Álbumes" };
 		model = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
-
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return column == 3;
+				return column == 3; // Solo la columna de álbumes se puede "editar" (para abrir el combo)
 			}
 		};
 
+		// Configuración visual de la tabla
 		table = new JTable(model);
 		table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		table.setRowHeight(32);
-		table.setShowVerticalLines(false);
+		table.setRowHeight(32); // Altura de las filas para mejor lectura
+		table.setShowVerticalLines(false); // Estilo moderno sin líneas verticales
 		table.setGridColor(new Color(235, 235, 235));
 		table.setSelectionBackground(colorTablaSeleccion);
 		table.setSelectionForeground(Color.BLACK);
 		table.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		table.setFillsViewportHeight(true);
 
+		// Estilo de la cabecera de la tabla
 		table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
 		table.getTableHeader().setBackground(Color.WHITE);
 		table.getTableHeader().setForeground(colorTexto);
-		table.getTableHeader().setReorderingAllowed(false);
+		table.getTableHeader().setReorderingAllowed(false); // Impedir mover columnas
 
+		// Anchos preferidos de columnas
 		table.getColumnModel().getColumn(0).setPreferredWidth(60);
 		table.getColumnModel().getColumn(1).setPreferredWidth(200);
 		table.getColumnModel().getColumn(2).setPreferredWidth(130);
 		table.getColumnModel().getColumn(3).setPreferredWidth(220);
 
+		// Asignar el sorter para permitir el filtrado por texto
 		sorter = new TableRowSorter<>(model);
 		table.setRowSorter(sorter);
 
+		// Cargar álbumes desde la lógica de negocio
 		cbAlbumes = new JComboBox<Album>();
-
 		try {
 			albumes = Principal.devolverAlbumes();
 			for (Album a : albumes) {
@@ -184,6 +203,7 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 
 		cbAlbumes.addActionListener(this);
 
+		// --- CONFIGURACIÓN DEL EDITOR DE CELDA (COMBOBOX DENTRO DE TABLA) ---
 		TableColumn colAlbumes = table.getColumnModel().getColumn(3);
 		colAlbumes.setCellEditor(new DefaultCellEditor(new JComboBox<Album>()) {
 			private static final long serialVersionUID = 1L;
@@ -195,10 +215,12 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 				JComboBox<Album> combo = (JComboBox<Album>) super.getTableCellEditorComponent(table, value, isSelected,
 						row, column);
 
-				combo.removeAllItems();
+				combo.removeAllItems(); // Limpiamos el combo antes de mostrarlo
 
+				// Obtenemos el ID del artista de la fila seleccionada
 				int idArtistaFila = Integer.parseInt(table.getValueAt(row, 0).toString());
 
+				// Llenamos el combo solo con álbumes que pertenezcan a ese artista
 				if (albumes != null) {
 					for (Album a : albumes) {
 						if (a.getIdArtista() == idArtistaFila) {
@@ -212,10 +234,13 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 			}
 		});
 
+		// Asignar el Renderer personalizado para dibujar el combo en la celda
 		colAlbumes.setCellRenderer(this);
 
+		// Escuchador de ratón para el doble clic
 		table.addMouseListener(this);
 
+		// ScrollPane para contener la tabla
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBorder(new LineBorder(colorBorde, 1, true));
 		scrollPane.getViewport().setBackground(Color.WHITE);
@@ -223,6 +248,7 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 		panelCentro.add(scrollPane, BorderLayout.CENTER);
 		panelTarjeta.add(panelCentro, BorderLayout.CENTER);
 
+		// --- SECCIÓN INFERIOR: CONTADOR Y BOTONES ---
 		JPanel panelInferior = new JPanel(new BorderLayout(15, 0));
 		panelInferior.setBackground(fondoTarjeta);
 
@@ -258,18 +284,19 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 
 		panelTarjeta.add(panelInferior, BorderLayout.SOUTH);
 
+		// --- CARGA DE DATOS DE ARTISTAS ---
 		try {
 			Artista a = new Artista();
 			Object[][] datos = Principal.devolverArtistas(a);
 
-			model.setRowCount(0);
+			model.setRowCount(0); // Limpiar tabla
 
 			for (Object[] fila : datos) {
 				Object[] filaCompleta = new Object[4];
-				filaCompleta[0] = fila[0];
-				filaCompleta[1] = fila[1];
-				filaCompleta[2] = fila[2];
-				filaCompleta[3] = null;
+				filaCompleta[0] = fila[0]; // ID
+				filaCompleta[1] = fila[1]; // Nombre
+				filaCompleta[2] = fila[2]; // Tipo
+				filaCompleta[3] = null;    // El combo se renderiza solo
 				model.addRow(filaCompleta);
 			}
 
@@ -280,19 +307,27 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 			JOptionPane.showMessageDialog(this, "Error al cargar los artistas", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 
+		// Listener para detectar cambios en el campo de búsqueda
 		txtBuscador.getDocument().addDocumentListener(this);
+		
+		// Empaquetar y centrar
 		table.setPreferredScrollableViewportSize(new Dimension(750, 300));
 		pack();
 		setLocationRelativeTo(padre);
 	}
 
+	/**
+	 * Gestiona los eventos de los botones (Cerrar y Exportar XML)
+	 * @param e Evento de acción
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnCerrar) {
-			dispose();
+			dispose(); // Cerrar ventana
 		}
 
 		if (e.getSource() == btnExportar) {
+			// Selector de archivos para guardar el XML
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setDialogTitle("Guardar XML de Artistas");
 			fileChooser.setSelectedFile(new File("artistas.xml"));
@@ -304,10 +339,12 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 					File archivoSeleccionado = fileChooser.getSelectedFile();
 					String ruta = archivoSeleccionado.getAbsolutePath();
 
+					// Añadir extensión si no la tiene
 					if (!ruta.toLowerCase().endsWith(".xml")) {
 						ruta += ".xml";
 					}
 
+					// Lógica de exportación
 					List<Artista> listaParaExportar = Principal.obtenerTodosLosArtistasCompletos();
 					ExportadorXML exportador = new ExportadorXML();
 					exportador.exportarArtistas(listaParaExportar, ruta);
@@ -322,16 +359,20 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 		}
 	}
 
+	/**
+	 * Detecta el doble clic en la tabla para ver detalles del álbum
+	 * @param e Evento de ratón
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == table) {
-
-			if (e.getClickCount() == 2) {
+			if (e.getClickCount() == 2) { // Doble clic
 				int row = table.getSelectedRow();
 				int column = table.columnAtPoint(e.getPoint());
 
+				// Si el clic no es en la columna de álbumes, abrimos detalles
 				if (row != -1 && column != 3) {
-					int modelRow = table.convertRowIndexToModel(row);
+					int modelRow = table.convertRowIndexToModel(row); // Ajustar fila por si está filtrada
 					int idArtista = Integer.parseInt(table.getModel().getValueAt(modelRow, 0).toString());
 
 					VConsultaAlbum vCA = new VConsultaAlbum(this, true, idArtista);
@@ -341,65 +382,58 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 		}
 	}
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+	// Métodos vacíos de MouseListener
+	@Override public void mousePressed(MouseEvent e) {}
+	@Override public void mouseReleased(MouseEvent e) {}
+	@Override public void mouseEntered(MouseEvent e) {}
+	@Override public void mouseExited(MouseEvent e) {}
 
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
+	/**
+	 * Aplica el filtro de texto sobre la tabla utilizando expresiones regulares
+	 */
 	private void filtrar() {
 		String texto = txtBuscador.getText();
 
 		if (texto.trim().length() == 0) {
-			sorter.setRowFilter(null);
+			sorter.setRowFilter(null); // Sin filtro
 		} else {
+			// Filtra por la columna 1 (Nombre), ignorando mayúsculas/minúsculas (?i)
 			sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto, 1));
 		}
 
 		lblContador.setText("Artistas visibles: " + table.getRowCount());
 	}
 
+	// Métodos de DocumentListener para el buscador
 	@Override
-	public void changedUpdate(DocumentEvent e) {
-		filtrar();
-	}
-
+	public void changedUpdate(DocumentEvent e) { filtrar(); }
 	@Override
-	public void insertUpdate(DocumentEvent e) {
-		filtrar();
-	}
-
+	public void insertUpdate(DocumentEvent e) { filtrar(); }
 	@Override
-	public void removeUpdate(DocumentEvent e) {
-		filtrar();
-	}
+	public void removeUpdate(DocumentEvent e) { filtrar(); }
 
+	/**
+	 * Define cómo se dibuja la celda de la columna "Álbumes" (Renderizador)
+	 * 
+	 *  @param table La tabla que se está renderizando
+	 *  @param value El valor actual de la celda (puede ser null)
+	 *  @param isSelected Si la fila está seleccionada
+	 *  @param hasFocus Si la celda tiene el foco
+	 *  @param row La fila que se está renderizando
+	 *  @param column la columna que se está renderizando
+	 *  @return Un componente que representa la celda (en este caso, un JComboBox con los álbumes del artista)
+	 */
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
+		
 		JComboBox<Album> renderCombo = new JComboBox<Album>();
 		renderCombo.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 
+		// Identificar artista de la fila
 		int idArtistaFila = Integer.parseInt(table.getValueAt(row, 0).toString());
 
+		// Llenar combo para visualización
 		if (albumes != null) {
 			for (Album a : albumes) {
 				if (a.getIdArtista() == idArtistaFila) {
@@ -408,12 +442,14 @@ public class VConsultar extends JDialog implements ActionListener, MouseListener
 			}
 		}
 
+		// Seleccionar el valor si existe
 		if (value != null) {
 			renderCombo.setSelectedItem(value);
 		} else {
 			renderCombo.setSelectedIndex(-1);
 		}
 
+		// Color de selección
 		if (isSelected) {
 			renderCombo.setBackground(colorTablaSeleccion);
 		} else {
