@@ -21,29 +21,26 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-public class VAlta extends JDialog implements ActionListener {
-	/**
-	 * @author Ricardo Soza
-	 */
+public class VBaja extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private JButton buttonArtista;
-	private JButton btnMusica;
+	private JButton btnCancion;
 	private JButton btnAlbum;
-	private JButton btnVolver;
+	private JButton bntArtista;
+	private JButton bntVolver;
 
-	public VAlta(VMenuAdmin padre, boolean modal) {
+	public VBaja(VMenuAdmin padre, boolean modal) {
 		super(padre, modal);
 
-		setTitle("Dar de alta");
+		setTitle("Dar de baja");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));
-
+		
 		Color fondoVentana = new Color(245, 247, 250);
 		Color fondoTarjeta = Color.WHITE;
-		Color naranjaPalo = new Color(244, 162, 97);
+		Color colorPrimario = new Color(220, 53, 69);
 		Color colorTexto = new Color(40, 40, 40);
 		Color colorSecundario = new Color(120, 120, 120);
 		Color colorBorde = new Color(220, 224, 230);
@@ -67,15 +64,15 @@ public class VAlta extends JDialog implements ActionListener {
 
 		JLabel lblSeccion = new JLabel("Administrador");
 		lblSeccion.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		lblSeccion.setForeground(naranjaPalo);
+		lblSeccion.setForeground(colorPrimario);
 		lblSeccion.setAlignmentX(CENTER_ALIGNMENT);
 
-		JLabel lblTitulo = new JLabel("Dar de alta");
+		JLabel lblTitulo = new JLabel("Eliminar elementos");
 		lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		lblTitulo.setForeground(colorTexto);
 		lblTitulo.setAlignmentX(CENTER_ALIGNMENT);
 
-		JLabel lblSubtitulo = new JLabel("Selecciona qué tipo de elemento quieres añadir");
+		JLabel lblSubtitulo = new JLabel("Selecciona qué tipo de elemento quieres dar de baja");
 		lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblSubtitulo.setForeground(colorSecundario);
 		lblSubtitulo.setAlignmentX(CENTER_ALIGNMENT);
@@ -92,25 +89,25 @@ public class VAlta extends JDialog implements ActionListener {
 		panelBotones.setBackground(fondoTarjeta);
 		panelBotones.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-		buttonArtista = new JButton("Artista");
-		buttonArtista.setFont(new Font("Segoe UI", Font.BOLD, 16));
-		buttonArtista.setPreferredSize(new Dimension(150, 80));
-		buttonArtista.setFocusPainted(false);
-		buttonArtista.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		buttonArtista.setBackground(Color.WHITE);
-		buttonArtista.setForeground(colorTexto);
-		buttonArtista.setBorder(new LineBorder(colorBorde, 1, true));
-		buttonArtista.addActionListener(this);
+		bntArtista = new JButton("Artista");
+		bntArtista.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		bntArtista.setPreferredSize(new Dimension(150, 80));
+		bntArtista.setFocusPainted(false);
+		bntArtista.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		bntArtista.setBackground(Color.WHITE);
+		bntArtista.setForeground(colorTexto);
+		bntArtista.setBorder(new LineBorder(colorBorde, 1, true));
+		bntArtista.addActionListener(this);
 
-		btnMusica = new JButton("Música");
-		btnMusica.setFont(new Font("Segoe UI", Font.BOLD, 16));
-		btnMusica.setPreferredSize(new Dimension(150, 80));
-		btnMusica.setFocusPainted(false);
-		btnMusica.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		btnMusica.setBackground(Color.WHITE);
-		btnMusica.setForeground(colorTexto);
-		btnMusica.setBorder(new LineBorder(colorBorde, 1, true));
-		btnMusica.addActionListener(this);
+		btnCancion = new JButton("Canción");
+		btnCancion.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		btnCancion.setPreferredSize(new Dimension(150, 80));
+		btnCancion.setFocusPainted(false);
+		btnCancion.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnCancion.setBackground(Color.WHITE);
+		btnCancion.setForeground(colorTexto);
+		btnCancion.setBorder(new LineBorder(colorBorde, 1, true));
+		btnCancion.addActionListener(this);
 
 		btnAlbum = new JButton("Álbum");
 		btnAlbum.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -122,8 +119,8 @@ public class VAlta extends JDialog implements ActionListener {
 		btnAlbum.setBorder(new LineBorder(colorBorde, 1, true));
 		btnAlbum.addActionListener(this);
 
-		panelBotones.add(buttonArtista);
-		panelBotones.add(btnMusica);
+		panelBotones.add(bntArtista);
+		panelBotones.add(btnCancion);
 		panelBotones.add(btnAlbum);
 
 		panelTarjeta.add(panelBotones, BorderLayout.CENTER);
@@ -131,15 +128,15 @@ public class VAlta extends JDialog implements ActionListener {
 		JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 		panelInferior.setBackground(fondoTarjeta);
 
-		btnVolver = new JButton("Volver");
-		btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btnVolver.setFocusPainted(false);
-		btnVolver.setBackground(new Color(240, 240, 240));
-		btnVolver.setForeground(colorTexto);
-		btnVolver.setBorder(new LineBorder(new Color(200, 200, 200), 1, true));
-		btnVolver.addActionListener(this);
+		bntVolver = new JButton("Volver");
+		bntVolver.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		bntVolver.setFocusPainted(false);
+		bntVolver.setBackground(new Color(240, 240, 240));
+		bntVolver.setForeground(colorTexto);
+		bntVolver.setBorder(new LineBorder(new Color(200, 200, 200), 1, true));
+		bntVolver.addActionListener(this);
 
-		panelInferior.add(btnVolver);
+		panelInferior.add(bntVolver);
 
 		panelTarjeta.add(panelInferior, BorderLayout.SOUTH);
 
@@ -149,22 +146,17 @@ public class VAlta extends JDialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnVolver) {
+		if (e.getSource().equals(btnCancion)) {
+			VEliminarCancion vCancion = new VEliminarCancion(this, true);
+			vCancion.setVisible(true);
+		} else if (e.getSource().equals(btnAlbum)) {
+			VEliminarAlbum vAlbum = new VEliminarAlbum(this, true);
+			vAlbum.setVisible(true);
+		} else if (e.getSource().equals(bntArtista)) {
+			VEliminarArtista vArtista = new VEliminarArtista(this, true);
+			vArtista.setVisible(true);
+		} else if (e.getSource().equals(bntVolver)) {
 			dispose();
-
-		} else if (e.getSource() == buttonArtista) {
-			VArtista vArti = new VArtista(this, true);
-			vArti.setVisible(true);
-			dispose();
-
-		} else if (e.getSource() == btnMusica) {
-			VAltaCancionAlbum vC = new VAltaCancionAlbum(true);
-			vC.setVisible(true);
-
-		} else if (e.getSource() == btnAlbum) {
-			VAlbum vAlbu = new VAlbum(true);
-			vAlbu.setVisible(true);
-			vAlbu.toFront();
 		}
 	}
 }

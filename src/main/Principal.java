@@ -1,6 +1,10 @@
 package main;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.UIManager;
 import java.util.Map;
 
 import controlador.DaoImplementacion;
@@ -10,7 +14,7 @@ import exception.LoginException;
 import modelo.Album;
 import modelo.Artista;
 import modelo.Cancion;
-import modelo.Tipo;
+import modelo.Usuario;
 import vista.VPrincipal;
 
 public class Principal {
@@ -18,17 +22,69 @@ public class Principal {
 	private static InterfazDao dao = new DaoImplementacion();
 
 	public static void main(String[] args) {
-		VPrincipal vPrincipal = new VPrincipal();
-		vPrincipal.setVisible(true);
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			VPrincipal vPrincipal = new VPrincipal();
+			vPrincipal.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	public static void login(modelo.Usuario usuario) throws LoginException {
+	public static void login(Usuario usuario) throws LoginException {
 		dao.login(usuario);
 	}
 
-	public static boolean alta(Artista artista) throws AltaException {
-		return dao.altaArtista(artista);
+	public static Object[][] devolverArtistas(Artista a) throws LoginException {
+		return dao.devolverArtistas(a);
+	}
 
+	public static List<Album> devolverAlbumes() throws LoginException {
+		return dao.devolverAlbumes();
+	}
+
+	public static List<Cancion> devolverCanciones(int idAlbum) throws LoginException {
+		return dao.devolverCanciones(idAlbum);
+	}
+
+	public static Object[][] devolverCancionesArtista(Artista a) throws LoginException {
+		return dao.devolverCancionesArtista(a);
+	}
+	
+	public static Object[][] devolverAlbumesT() throws LoginException {
+		return dao.devolverAlbumesT();
+	}
+
+	public static boolean eliminarCancion(int idC) throws SQLException {
+		boolean resultado = dao.eliminarCancion(idC);
+		if (resultado) {
+			dao.forzarGuardadoXML();
+		}
+		return resultado;
+	}
+
+	public static boolean eliminarArtista(int idArt) throws SQLException {
+		boolean resultado = dao.eliminarArtista(idArt);
+		if (resultado) {
+			dao.forzarGuardadoXML();
+		}
+		return resultado;
+	}
+
+	public static boolean eliminarAlbum(int idAlb) throws SQLException {
+		boolean resultado = dao.eliminarAlbum(idAlb);
+		if (resultado) {
+			dao.forzarGuardadoXML();
+		}
+		return resultado;
+	}
+
+	public static boolean alta(Artista artista) throws AltaException {
+		boolean resultado = dao.altaArtista(artista);
+		if (resultado) {
+			dao.forzarGuardadoXML();
+		}
+		return resultado;
 	}
 
 	public static boolean existeCancionEnAlbum(String nombreCancion, int idAlbum) throws AltaException {
@@ -42,16 +98,19 @@ public class Principal {
 		return dao.ides();
 
 	}
-	
-
-	public static Map<Integer, Album> listarAlbumesPorArtista(int idArtista) throws AltaException {
-	    return dao.listarAlbumesPorArtista(idArtista);
-	}
 
 	public static ArrayList<String> leerNombreArti() throws AltaException {
 		return dao.nomArti();
 	}
 
+	public static List<Artista> obtenerTodosLosArtistasCompletos() throws LoginException {
+		return dao.obtenerTodosLosArtistasCompletos();
+
+	}
+	
+	public static Object[][] devolverCanciones() throws LoginException {
+		return dao.devolverCanciones();
+	}
 	public static Map<Integer, Artista> listarArti(Artista arti) throws AltaException {
 		return dao.listarArtTabla(arti);
 	}

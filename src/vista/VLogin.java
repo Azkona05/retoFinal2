@@ -1,146 +1,200 @@
 package vista;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.InputMap;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import exception.LoginException;
 import main.Principal;
 import modelo.Usuario;
 
-/**
- * Clase que representa la ventana de login de la aplicación.
- * Permite al usuario introducir su nombre de usuario y contraseña para autenticarse.
- * Implementa {@link ActionListener} para manejar los eventos de los botones.
- * 
- * Se pueden realizar las siguientes acciones:
- *   Autenticarse mediante el botón "Comprobar".
- *   Cancelar y cerrar la ventana mediante el botón "Cancelar" o la tecla Escape.
- * 
- * 
- * Al presionar Enter, se activa el botón "Comprobar" por defecto.
- * 
- * @author An Azkona, Ander Arilla, Maleck Benigno, Nora Yakoubi
- */
 public class VLogin extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+
 	private JPanel contentPane;
 	private JTextField txtUsuario;
-	private JLabel lblUsuario, lblContra;
 	private JPasswordField passwordField;
 	private JButton btnComprobar;
 	private JButton btnCancelar;
 
-	/**
-	 * Constructor de la ventana de login.
-	 */
 	public VLogin(VPrincipal padre, boolean modal) {
-		super(padre,modal);
-		this.setModal(modal);
-		setTitle("Iniciar Sesion");
-		setBounds(100, 100, 705, 428);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		super(padre, modal);
+
+		setTitle("Iniciar sesión");
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setSize(520, 460);
+		setLocationRelativeTo(padre);
+		setResizable(false);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));
+
+		Color fondoVentana = new Color(245, 247, 250);
+		Color fondoTarjeta = Color.WHITE;
+		Color naranjaPalo = new Color(244, 162, 97);
+		Color colorTexto = new Color(40, 40, 40);
+		Color colorSecundario = new Color(120, 120, 120);
+		Color colorBorde = new Color(210, 214, 220);
+
+		contentPane = new JPanel(new GridBagLayout());
+		contentPane.setBackground(fondoVentana);
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		this.setResizable(false);
 
-		lblUsuario = new JLabel("Usuario: ");
-		lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblUsuario.setBounds(119, 109, 147, 29);
-		contentPane.add(lblUsuario);
+		JPanel panelTarjeta = new JPanel();
+		panelTarjeta.setBackground(fondoTarjeta);
+		panelTarjeta.setLayout(new BoxLayout(panelTarjeta, BoxLayout.Y_AXIS));
+		panelTarjeta.setPreferredSize(new Dimension(390, 370));
+		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(
+				new LineBorder(new Color(220, 224, 230), 1, true),
+				BorderFactory.createEmptyBorder(25, 30, 25, 30)));
 
-		lblContra = new JLabel("Contraseña: ");
-		lblContra.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblContra.setBounds(119, 174, 147, 29);
-		contentPane.add(lblContra);
+		JLabel lblIcono = new JLabel();
+		lblIcono.setAlignmentX(CENTER_ALIGNMENT);
 
-		btnComprobar = new JButton("Comprobar");
-		btnComprobar.addActionListener(this);
-		btnComprobar.setBounds(413, 288, 122, 29);
-		contentPane.add(btnComprobar);
-		btnComprobar.setBackground(Color.WHITE);
-		btnComprobar.setBorder(new LineBorder(Color.GREEN));
+		ImageIcon icono = new ImageIcon("src/img/iconoPersonaEditado.png");
+		if (icono.getIconWidth() > 0) {
+			lblIcono.setIcon(icono);
+		} else {
+			lblIcono.setText("Usuario");
+			lblIcono.setFont(new Font("Segoe UI", Font.BOLD, 20));
+			lblIcono.setForeground(naranjaPalo);
+		}
 
-		btnCancelar = new JButton("Cancelar");
-		btnCancelar.addActionListener(this);
-		btnCancelar.setBounds(159, 288, 112, 29);
-		contentPane.add(btnCancelar);
-		btnCancelar.setBackground(Color.WHITE);
-		btnCancelar.setBorder(new LineBorder(Color.RED));
+		JLabel lblTitulo = new JLabel("Iniciar sesión");
+		lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		lblTitulo.setForeground(colorTexto);
+		lblTitulo.setAlignmentX(CENTER_ALIGNMENT);
+
+		JLabel lblSubtitulo = new JLabel("Introduce tu usuario y contraseña");
+		lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblSubtitulo.setForeground(colorSecundario);
+		lblSubtitulo.setAlignmentX(CENTER_ALIGNMENT);
+
+		JPanel panelFormulario = new JPanel(new GridBagLayout());
+		panelFormulario.setBackground(fondoTarjeta);
+
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(8, 8, 8, 8);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+
+		JLabel lblUsuario = new JLabel("Usuario");
+		lblUsuario.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblUsuario.setForeground(colorTexto);
 
 		txtUsuario = new JTextField();
-		txtUsuario.setBounds(360, 109, 175, 29);
-		contentPane.add(txtUsuario);
-		txtUsuario.setColumns(10);
+		txtUsuario.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		txtUsuario.setPreferredSize(new Dimension(180, 32));
+		txtUsuario.setBorder(BorderFactory.createCompoundBorder(
+				new LineBorder(colorBorde, 1, true),
+				BorderFactory.createEmptyBorder(5, 8, 5, 8)));
+
+		JLabel lblContrasena = new JLabel("Contraseña");
+		lblContrasena.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblContrasena.setForeground(colorTexto);
 
 		passwordField = new JPasswordField();
-		passwordField.setBounds(360, 174, 175, 29);
-		contentPane.add(passwordField);
+		passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		passwordField.setPreferredSize(new Dimension(180, 32));
+		passwordField.setBorder(BorderFactory.createCompoundBorder(
+				new LineBorder(colorBorde, 1, true),
+				BorderFactory.createEmptyBorder(5, 8, 5, 8)));
 
-		JLabel lblImagen = new JLabel("");
-		lblImagen.setIcon(new ImageIcon("src\\resources\\iconoPersonaEditado.png"));
-		lblImagen.setBounds(319, 11, 67, 87);
-		contentPane.add(lblImagen);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panelFormulario.add(lblUsuario, gbc);
 
-		// ✅ Enter activa btnComprobar
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		panelFormulario.add(txtUsuario, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelFormulario.add(lblContrasena, gbc);
+
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		panelFormulario.add(passwordField, gbc);
+
+		JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
+		panelBotones.setBackground(fondoTarjeta);
+
+		btnCancelar = new JButton("Cancelar");
+		btnCancelar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		btnCancelar.setPreferredSize(new Dimension(120, 36));
+		btnCancelar.setFocusPainted(false);
+		btnCancelar.setBackground(new Color(240, 240, 240));
+		btnCancelar.setForeground(colorTexto);
+		btnCancelar.setBorder(new LineBorder(new Color(200, 200, 200), 1, true));
+		btnCancelar.addActionListener(this);
+
+		btnComprobar = new JButton("Entrar");
+		btnComprobar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		btnComprobar.setPreferredSize(new Dimension(120, 36));
+		btnComprobar.setFocusPainted(false);
+		btnComprobar.setBackground(naranjaPalo);
+		btnComprobar.setForeground(Color.WHITE);
+		btnComprobar.setOpaque(true);
+		btnComprobar.setContentAreaFilled(true);
+		btnComprobar.setBorderPainted(false);
+		btnComprobar.addActionListener(this);
+		
+		panelBotones.add(btnCancelar);
+		panelBotones.add(btnComprobar);
+
+		panelTarjeta.add(lblIcono);
+		panelTarjeta.add(Box.createVerticalStrut(10));
+		panelTarjeta.add(lblTitulo);
+		panelTarjeta.add(Box.createVerticalStrut(6));
+		panelTarjeta.add(lblSubtitulo);
+		panelTarjeta.add(Box.createVerticalStrut(20));
+		panelTarjeta.add(panelFormulario);
+		panelTarjeta.add(Box.createVerticalStrut(18));
+		panelTarjeta.add(panelBotones);
+
+		contentPane.add(panelTarjeta);
+
 		getRootPane().setDefaultButton(btnComprobar);
-
-		// ✅ Escape cierra el diálogo (como btnCancelar)
-		InputMap im = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-		ActionMap am = getRootPane().getActionMap();
-
-		im.put(KeyStroke.getKeyStroke("ESCAPE"), "cancelar");
-		am.put("cancelar", new AbstractAction() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			public void actionPerformed(ActionEvent e) {
-				dispose(); // Cierra el diálogo
-			}
-		});
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(btnComprobar)) {
-			this.dispose();
-			comprobar();
-		} else if (e.getSource().equals(btnCancelar)) {
-		
+		if (e.getSource() == btnCancelar) {
+			dispose();
 		}
-	}
+		if (e.getSource() == btnComprobar) {
+			Usuario usuario = new Usuario();
+			usuario.setNombre(txtUsuario.getText().trim());
+			usuario.setClave(new String(passwordField.getPassword()));
 
-	public void comprobar() {
-		Usuario usuario = new Usuario();
-		usuario.setNombre(txtUsuario.getText());
-		usuario.setClave(new String(passwordField.getPassword()));
-		try {
-			Principal.login(usuario);
-			VMenuAdmin menu = new VMenuAdmin(this, true);
-			menu.setVisible(true);
-		} catch (LoginException e) {
-			e.visualizarMsg();
+			try {
+				Principal.login(usuario);
+				dispose();
+				VMenuAdmin vM = new VMenuAdmin(this, true);
+				vM.setVisible(true);
+			} catch (LoginException e1) {
+				JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+				passwordField.setText("");
+				passwordField.requestFocus();
+			}
 		}
 	}
 }
