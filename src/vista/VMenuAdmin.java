@@ -2,6 +2,7 @@ package vista;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
@@ -234,7 +235,7 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 		// Actualización automática del reloj en el footer
 		else if (e.getSource() == timerReloj) {
 			String hora = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-			lblFooter.setText("Sesión de Administrador activa  |  " + hora + "  |  2026");
+			lblFooter.setText("Sesión de Administrador activa  |  " + hora + "  |  " + LocalDate.now().getYear());
 		}
 	}
 }
