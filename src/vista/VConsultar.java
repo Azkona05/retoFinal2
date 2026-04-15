@@ -48,6 +48,7 @@ import utilidades.ExportadorXML;
 /**
  * Ventana de consulta que permite visualizar, filtrar y exportar artistas.
  * Implementa múltiples interfaces para gestionar clics, búsqueda en tiempo real y personalización de celdas.
+ * 
  * @author An Azkona
  */
 public class VConsultar extends JDialog implements ActionListener, MouseListener, DocumentListener, TableCellRenderer {
