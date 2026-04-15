@@ -1,3 +1,5 @@
+-- DROP DATABASE TartangaMusic;
+CREATE DATABASE TartangaMusic;
 USE TartangaMusic;
 
 -- CREACION DE TABLAS
