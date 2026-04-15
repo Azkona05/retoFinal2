@@ -180,7 +180,7 @@ public class VLogin extends JDialog implements ActionListener {
 		btnComprobar.setContentAreaFilled(true); // Asegura que el área del botón se rellene con el color de fondo
 		btnComprobar.setBorderPainted(false); // Elimina el borde del botón
 		btnComprobar.addActionListener(this);
-
+		
 		panelBotones.add(btnCancelar);
 		panelBotones.add(btnComprobar);
 
