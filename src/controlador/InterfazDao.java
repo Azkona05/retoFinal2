@@ -65,5 +65,19 @@ public interface InterfazDao {
 	public boolean existeIdCancion(int id) throws AltaException;
 	
 	public boolean existeCancionEnAlbum(String nombreCancion, int idAlbum) throws AltaException;
+	
+	//JONAN
+	
+	public boolean modificarArtista(int id, String nombre, String tipo) throws SQLException;
+
+	public boolean modificarAlbum(int id, String nombre, int idArtista) throws SQLException;
+
+	public boolean modificarCancion(int id, String nombre, String genero, int idAlbum) throws SQLException;
+	
+	public Artista buscarArtista(int id);
+	
+	public Album buscarAlbum(int id);
+	
+	public Cancion buscarCancion(int id);
 
 }

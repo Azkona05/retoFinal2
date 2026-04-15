@@ -848,4 +848,220 @@ public class DaoImplementacion implements InterfazDao {
 		}
 		return listaCanciones.toArray(new Object[0][0]);
 	}
+
+	
+	//JONAN 
+	
+	@Override
+	public boolean modificarArtista(int id, String nombre, String tipo) {
+	    boolean modificado = false;
+	    try {
+	        con = DriverManager.getConnection(urlDB, userDB, passwordDB);
+	        String sql = "UPDATE ARTISTA SET NOMBRE=?, TIPO=? WHERE ID_A=?";
+	        stmt = con.prepareStatement(sql);
+
+	        stmt.setString(1, nombre);
+	        stmt.setString(2, tipo);
+	        stmt.setInt(3, id);
+	        stmt.executeUpdate();
+
+	        modificado = true;
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return modificado;
+	}
+	
+	//JONAN
+	@Override
+	public boolean modificarAlbum(int id, String nombre, int idArtista) {
+	    boolean modificado = false;
+	    try {
+	        con = DriverManager.getConnection(urlDB, userDB, passwordDB);
+	        String sql = "UPDATE ALBUM SET NOMBRE=?, ID_A=? WHERE ID_AL=?";
+	        stmt = con.prepareStatement(sql);
+
+	        stmt.setString(1, nombre);
+	        stmt.setInt(2, idArtista);
+	        stmt.setInt(3, id);
+	        stmt.executeUpdate();
+
+	        modificado = true;
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return modificado;
+	}
+	
+	//JONAN
+	@Override
+	public boolean modificarCancion(int id, String nombre, String genero, int idAlbum) {
+	    boolean modificado = false;
+	    try {
+	        con = DriverManager.getConnection(urlDB, userDB, passwordDB);
+
+	        String sql = "UPDATE CANCION SET NOMBRE=?, GENERO=?, ID_AL=? WHERE ID_C=?";
+
+	        stmt = con.prepareStatement(sql);
+	        stmt.setString(1, nombre);
+	        stmt.setString(2, genero);
+	        stmt.setInt(3, idAlbum);
+	        stmt.setInt(4, id);
+	        stmt.executeUpdate();
+
+	        modificado = true;
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return modificado;
+	}
+	
+	//JONAN
+	public Artista buscarArtista(int id) {
+
+	    Artista artista = null;
+	    ResultSet rs = null;
+
+	    try {
+	        openConnection();
+
+	        String sql = "SELECT * FROM ARTISTA WHERE ID_A = ?";
+	        stmt = con.prepareStatement(sql);
+	        stmt.setInt(1, id);
+
+	        rs = stmt.executeQuery();
+
+	        if (rs.next()) {
+	            artista = new Artista();
+	            artista.setId(rs.getInt("ID_A"));
+	            artista.setNombre(rs.getString("NOMBRE"));
+	            artista.setTipo(Tipo.valueOf(rs.getString("TIPO")));
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (rs != null) rs.close();
+	            closeConnection();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return artista;
+	}
+
+	public Album buscarAlbum(int id) {
+
+	    Album album = null;
+	    ResultSet rs = null;
+
+	    try {
+	        openConnection();
+
+	        String sql = "SELECT * FROM ALBUM WHERE ID_AL = ?";
+	        stmt = con.prepareStatement(sql);
+	        stmt.setInt(1, id);
+
+	        rs = stmt.executeQuery();
+
+	        if (rs.next()) {
+	            album = new Album();
+	            album.setId(rs.getInt("ID_AL"));
+	            album.setNombre(rs.getString("NOMBRE"));
+	            album.setIdArtista(rs.getInt("ID_A"));
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (rs != null) rs.close();
+	            closeConnection();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return album;
+	}
+	
+	public Cancion buscarCancion(int id) {
+
+	    Cancion cancion = null;
+	    ResultSet rs = null;
+
+	    try {
+	        openConnection();
+
+	        String sql = "SELECT * FROM CANCION WHERE ID_C = ?";
+	        stmt = con.prepareStatement(sql);
+	        stmt.setInt(1, id);
+
+	        rs = stmt.executeQuery();
+
+	        if (rs.next()) {
+	            cancion = new Cancion();
+	            cancion.setId(rs.getInt("ID_C"));
+	            cancion.setNombre(rs.getString("NOMBRE"));
+
+	            String gen = rs.getString("GENERO");
+	            if (gen != null) {
+	                cancion.setGenero(Genero.valueOf(gen));
+	            }
+
+	            cancion.setIdAlbum(rs.getInt("ID_AL"));
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (rs != null) rs.close();
+	            closeConnection();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return cancion;
+	}
+	
+	public String tipoAlbum(int idAlbum) {
+
+	    String resultado = "";
+
+	    try {
+
+	        openConnection();
+
+	        String sql = "SELECT TIPOALBUM(?)";
+	        stmt = con.prepareStatement(sql);
+	        stmt.setInt(1, idAlbum);
+
+	        ResultSet rs = stmt.executeQuery();
+
+	        if(rs.next()){
+	            resultado = rs.getString(1);
+	        }
+
+	        rs.close();
+	        closeConnection();
+
+	    } catch(Exception e){
+	        e.printStackTrace();
+	    }
+
+	    return resultado;
+	}
+
+	
+	
 }

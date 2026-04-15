@@ -131,4 +131,28 @@ public class Principal {
 		return dao.existeIdCancion(id);
 	}
 
+	public static boolean modificarArtista(int id, String nombre, String tipo) throws SQLException {
+		boolean resultado = dao.modificarArtista(id, nombre, tipo);
+		if (resultado) {
+			dao.forzarGuardadoXML();
+		}
+		return resultado;
+	}
+
+	public static boolean modificarAlbum(int id, String nombre, int idArtista) throws SQLException {
+		boolean resultado = dao.modificarAlbum(id, nombre, idArtista);
+		if (resultado) {
+			dao.forzarGuardadoXML();
+		}
+		return resultado;
+	}
+
+	public static boolean modificarCancion(int id, String nombre, String genero, int idAlbum) throws SQLException {
+		boolean resultado = dao.modificarCancion(id, nombre, genero, idAlbum);
+		if (resultado) {
+			dao.forzarGuardadoXML();
+		}
+		return resultado;
+	}
+
 }
