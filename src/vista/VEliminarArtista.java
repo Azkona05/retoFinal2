@@ -250,6 +250,7 @@ public class VEliminarArtista extends JDialog implements ActionListener {
 
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(this, "Error al eliminar");
+				//ex.printStackTrace();
 			}
 		}
 	}
