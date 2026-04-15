@@ -224,7 +224,8 @@ public class VMenuAdmin extends JDialog implements ActionListener {
 		}
 		// Acción para modificar (Pendiente de implementación)
 		else if (e.getSource() == btnModificar) {
-			// Reservado para futuras implementaciones de edición
+			VModificar modificar = new VModificar(this, true);
+			modificar.setVisible(true);
 		}
 		// Finaliza la sesión actual del administrador
 		else if (e.getSource() == btnCerrar) {

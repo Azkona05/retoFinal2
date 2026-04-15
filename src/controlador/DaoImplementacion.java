@@ -50,8 +50,8 @@ public class DaoImplementacion implements InterfazDao {
 	final String SQL_BUSCAR_ALBUM_ARTISTA = "SELECT ID_AL, NOMBRE FROM ALBUM WHERE ID_A = ?";
 
 	final String BUSCAR_CANCIONES = "SELECT * FROM CANCION";
-	
-	//SQL NORA
+
+	// SQL NORA
 	// ---------------------- ELIMINAR ARTISTA ----------------------
 
 	// Elimina las relaciones del artista con las canciones en la tabla TIENE
@@ -65,8 +65,8 @@ public class DaoImplementacion implements InterfazDao {
 
 	// Elimina el artista de la tabla ARTISTA
 	final String DELETE_ARTISTA = "DELETE FROM ARTISTA WHERE ID_A = ?";
-	
-	//PROCEDURE
+
+	// PROCEDURE
 	final String CALL_ELIMINAR_ARTISTA = "{call eliminarArtistaCompleto(?)}";
 
 	// ---------------------- ELIMINAR ALBUM ----------------------
@@ -88,20 +88,21 @@ public class DaoImplementacion implements InterfazDao {
 	// Elimina la canción de la tabla CANCION
 	final String DELETE_CANCION = "DELETE FROM CANCION WHERE ID_C = ?";
 
-	//SQL RICARDO
+	// SQL RICARDO
 	final String ALTAARTI = "INSERT INTO ARTISTA (ID_A, NOMBRE, TIPO) VALUES (?, ?, ?)";
 	final String leerArtiId = "SELECT ID_A FROM ARTISTA";
 	final String leerArtiNombre = "SELECT NOMBRE FROM ARTISTA";
 	// SELECT ID_A FROM ARTISTA WHERE ID_A NOT IN (SELECT ID_A FROM ARTISTA WHERE
 	// ID_A=?)";
-	final String leerArti="SELECT * FROM ARTISTA";
+	final String leerArti = "SELECT * FROM ARTISTA";
 	final String ALTAALBUM = "INSERT INTO ALBUM (ID_AL, NOMBRE, ID_A) VALUES (?, ?, ?)";
 	final String ALTACANCION = "INSERT INTO CANCION (ID_C, NOMBRE, GENERO, ID_AL) VALUES (?, ?, ?, ?)";
 	final String COMPROBAR_ALBUM = "SELECT ID_AL FROM ALBUM WHERE ID_AL = ?";
 	final String COMPROBAR_CANCION = "SELECT ID_C FROM CANCION WHERE ID_C = ?";
 	final String COMPROBAR_CANCION_EN_ALBUM = "SELECT ID_C FROM CANCION WHERE NOMBRE = ? AND ID_AL = ?";
-	//SELECT ID_A FROM ARTISTA WHERE ID_A NOT IN (SELECT ID_A FROM ARTISTA WHERE ID_A=?)";
-	
+	// SELECT ID_A FROM ARTISTA WHERE ID_A NOT IN (SELECT ID_A FROM ARTISTA WHERE
+	// ID_A=?)";
+
 	public DaoImplementacion() {
 		this.configFile = ResourceBundle.getBundle("modelo.configClass");
 		this.urlDB = this.configFile.getString("Conn");
@@ -259,26 +260,27 @@ public class DaoImplementacion implements InterfazDao {
 			}
 		}
 	}
-	//NORAA
+
+	// NORAA
 	public boolean eliminarArtistaProcedure(int idArtista) throws SQLException {
 
-	    openConnection();
+		openConnection();
 
-	    try {
+		try {
 
-	        cs = (CallableStatement) con.prepareCall(CALL_ELIMINAR_ARTISTA);
-	        cs.setInt(1, idArtista);
+			cs = (CallableStatement) con.prepareCall(CALL_ELIMINAR_ARTISTA);
+			cs.setInt(1, idArtista);
 
-	        cs.executeUpdate();
+			cs.executeUpdate();
 
-	        return true;
+			return true;
 
-	    } finally {
-	        closeConnection();
-	    }
+		} finally {
+			closeConnection();
+		}
 	}
 
-	//AN
+	// AN
 	@Override
 	public Object[][] devolverArtistas(Artista a) throws LoginException {
 		List<Object[]> listaArtistas = new ArrayList<>();
@@ -307,12 +309,13 @@ public class DaoImplementacion implements InterfazDao {
 			}
 		}
 	}
-	//RICARDO
+
+	// RICARDO
 	@Override
 	public boolean altaArtista(Artista artista) throws AltaException {
 		// TODO Auto-generated method stub
-		boolean result=false;
-		//ResultSet rs = null;
+		boolean result = false;
+		// ResultSet rs = null;
 		openConnection();
 		try {
 			stmt = con.prepareStatement(ALTAARTI);
@@ -331,17 +334,16 @@ public class DaoImplementacion implements InterfazDao {
 		} finally {
 			try {
 
-				
 				closeConnection();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 		return result;
-		
+
 	}
 
-	//RICARDO	
+	// RICARDO
 	@Override
 	public ArrayList<Integer> ides() throws AltaException {
 		// TODO Auto-generated method stub
@@ -374,7 +376,7 @@ public class DaoImplementacion implements InterfazDao {
 		return id;
 	}
 
-	//AN
+	// AN
 	@Override
 	public List<Cancion> devolverCanciones(int idAlbum) throws LoginException {
 		List<Cancion> canciones = new ArrayList<>();
@@ -411,11 +413,12 @@ public class DaoImplementacion implements InterfazDao {
 		}
 		return canciones;
 	}
-	//RICARDO
+
+	// RICARDO
 	@Override
 	public ArrayList<String> nomArti() throws AltaException {
 		// TODO Auto-generated method stub
-		ArrayList<String> artis= new ArrayList<>();
+		ArrayList<String> artis = new ArrayList<>();
 		ResultSet rs = null;
 		openConnection();
 		try {
@@ -425,178 +428,180 @@ public class DaoImplementacion implements InterfazDao {
 			while (rs.next()) {
 				artis.add(rs.getString("NOMBRE"));
 			}
-			
+
 		} catch (SQLException e) {
 			throw new AltaException("ERROR, SQL ERROR");
 		} finally {
 			try {
-				
+
 				closeConnection();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		
+
 		return artis;
 	}
 
-	//RICARDO
+	// RICARDO
 	@Override
 	public Map<Integer, Artista> listarArtTabla(Artista arti) throws AltaException {
 		// TODO Auto-generated method stub
-		
-		Map<Integer,Artista> map= new HashMap<Integer,Artista>();
-		  ResultSet rs = null;
-		  Artista artista;
-		    openConnection();
-		    
-		    try {
-		    	stmt = con.prepareStatement(leerArti);
-		        rs = stmt.executeQuery();
-		        
-		        while(rs.next()) {
-		        	artista = new Artista();
-		            artista.setId(rs.getInt("ID_A"));
-		            artista.setNombre(rs.getString("NOMBRE"));
-		            artista.setTipo(Tipo.valueOf(rs.getString("TIPO")));
-		            map.put(artista.getId(), artista);
-		        }
-		        
-		    } catch (SQLException e) {
-		        throw new AltaException("ERROR AL LISTAR ARTISTAS: " + e.getMessage());
-		    } finally {
-		        try {
-		            if(rs != null) rs.close();
-		            closeConnection();
-		        } catch (SQLException e) {
-		            e.printStackTrace();
-		        }
-		    }
+
+		Map<Integer, Artista> map = new HashMap<Integer, Artista>();
+		ResultSet rs = null;
+		Artista artista;
+		openConnection();
+
+		try {
+			stmt = con.prepareStatement(leerArti);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				artista = new Artista();
+				artista.setId(rs.getInt("ID_A"));
+				artista.setNombre(rs.getString("NOMBRE"));
+				artista.setTipo(Tipo.valueOf(rs.getString("TIPO")));
+				map.put(artista.getId(), artista);
+			}
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR AL LISTAR ARTISTAS: " + e.getMessage());
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		return map;
 	}
-	
-	
-	//RICARDO
+
+	// RICARDO
 	@Override
 	public boolean altaAlbum(Album album, int idArtista) throws AltaException {
-	    openConnection();
-	    try {
-	        stmt = con.prepareStatement(ALTAALBUM);
-	        stmt.setInt(1, album.getId());
-	        stmt.setString(2, album.getNombre());
-	        stmt.setInt(3, idArtista);
-	        
-	        int filasAfectadas = stmt.executeUpdate();
-	        return filasAfectadas > 0;
-	        
-	    } catch (SQLException e) {
-	        throw new AltaException("ERROR AL DAR DE ALTA ÁLBUM: " + e.getMessage());
-	    } finally {
-	        try {
-	            closeConnection();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
+		openConnection();
+		try {
+			stmt = con.prepareStatement(ALTAALBUM);
+			stmt.setInt(1, album.getId());
+			stmt.setString(2, album.getNombre());
+			stmt.setInt(3, idArtista);
+
+			int filasAfectadas = stmt.executeUpdate();
+			return filasAfectadas > 0;
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR AL DAR DE ALTA ÁLBUM: " + e.getMessage());
+		} finally {
+			try {
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
-	//RICARDO
+	// RICARDO
 	@Override
 	public boolean altaCancion(Cancion cancion, int idAlbum) throws AltaException {
-	    openConnection();
-	    try {
-	        stmt = con.prepareStatement(ALTACANCION);
-	        stmt.setInt(1, cancion.getId());
-	        stmt.setString(2, cancion.getNombre());
-	        stmt.setString(3, cancion.getGenero().name());
-	        stmt.setInt(4, idAlbum);
-	        
-	        int filasAfectadas = stmt.executeUpdate();
-	        return filasAfectadas > 0;
-	        
-	    } catch (SQLException e) {
-	        throw new AltaException("ERROR AL DAR DE ALTA CANCIÓN: " + e.getMessage());
-	    } finally {
-	        try {
-	            closeConnection();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
+		openConnection();
+		try {
+			stmt = con.prepareStatement(ALTACANCION);
+			stmt.setInt(1, cancion.getId());
+			stmt.setString(2, cancion.getNombre());
+			stmt.setString(3, cancion.getGenero().name());
+			stmt.setInt(4, idAlbum);
+
+			int filasAfectadas = stmt.executeUpdate();
+			return filasAfectadas > 0;
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR AL DAR DE ALTA CANCIÓN: " + e.getMessage());
+		} finally {
+			try {
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
-	//RICARDO
+	// RICARDO
 	@Override
 	public boolean existeIdAlbum(int id) throws AltaException {
-	    ResultSet rs = null;
-	    openConnection();
-	    try {
-	        stmt = con.prepareStatement(COMPROBAR_ALBUM);
-	        stmt.setInt(1, id);
-	        rs = stmt.executeQuery();
-	        return rs.next(); // true si existe
-	        
-	    } catch (SQLException e) {
-	        throw new AltaException("ERROR AL COMPROBAR ID ÁLBUM: " + e.getMessage());
-	    } finally {
-	        try {
-	            if (rs != null) rs.close();
-	            closeConnection();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
+		ResultSet rs = null;
+		openConnection();
+		try {
+			stmt = con.prepareStatement(COMPROBAR_ALBUM);
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
+			return rs.next(); // true si existe
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR AL COMPROBAR ID ÁLBUM: " + e.getMessage());
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
 	public boolean existeIdCancion(int id) throws AltaException {
-	    ResultSet rs = null;
-	    openConnection();
-	    try {
-	        stmt = con.prepareStatement(COMPROBAR_CANCION);
-	        stmt.setInt(1, id);
-	        rs = stmt.executeQuery();
-	        return rs.next(); // true si existe
-	        
-	    } catch (SQLException e) {
-	        throw new AltaException("ERROR AL COMPROBAR ID CANCIÓN: " + e.getMessage());
-	    } finally {
-	        try {
-	            if (rs != null) rs.close();
-	            closeConnection();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
-	}
-	
-	//RICARDO
-	@Override
-	public boolean existeCancionEnAlbum(String nombreCancion, int idAlbum) throws AltaException {
-	    ResultSet rs = null;
-	    openConnection();
-	    try {
-	        stmt = con.prepareStatement(COMPROBAR_CANCION_EN_ALBUM);
-	        stmt.setString(1, nombreCancion);
-	        stmt.setInt(2, idAlbum);
-	        rs = stmt.executeQuery();
-	        
-	        return rs.next(); // true si existe, false si no existe
-	        
-	    } catch (SQLException e) {
-	        throw new AltaException("ERROR AL COMPROBAR CANCIÓN EN ÁLBUM: " + e.getMessage());
-	    } finally {
-	        try {
-	            if (rs != null) rs.close();
-	            closeConnection();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
+		ResultSet rs = null;
+		openConnection();
+		try {
+			stmt = con.prepareStatement(COMPROBAR_CANCION);
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
+			return rs.next(); // true si existe
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR AL COMPROBAR ID CANCIÓN: " + e.getMessage());
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
-	//AN
+	// RICARDO
+	@Override
+	public boolean existeCancionEnAlbum(String nombreCancion, int idAlbum) throws AltaException {
+		ResultSet rs = null;
+		openConnection();
+		try {
+			stmt = con.prepareStatement(COMPROBAR_CANCION_EN_ALBUM);
+			stmt.setString(1, nombreCancion);
+			stmt.setInt(2, idAlbum);
+			rs = stmt.executeQuery();
+
+			return rs.next(); // true si existe, false si no existe
+
+		} catch (SQLException e) {
+			throw new AltaException("ERROR AL COMPROBAR CANCIÓN EN ÁLBUM: " + e.getMessage());
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	// AN
 	@Override
 	public Object[][] devolverCancionesArtista(Artista a) {
 		List<Object[]> listaCanciones = new ArrayList<>();
@@ -632,7 +637,7 @@ public class DaoImplementacion implements InterfazDao {
 
 	}
 
-	//RICARDO
+	// RICARDO
 	public ArrayList<Artista> listarArtistas() throws AltaException {
 		ArrayList<Artista> artistas = new ArrayList<>();
 		ResultSet rs = null;
@@ -663,8 +668,8 @@ public class DaoImplementacion implements InterfazDao {
 		}
 		return artistas;
 	}
-	 
-	//AN
+
+	// AN
 	@Override
 	public List<Artista> obtenerTodosLosArtistasCompletos() throws LoginException {
 		List<Artista> listaArtistas = new ArrayList<>();
@@ -698,7 +703,7 @@ public class DaoImplementacion implements InterfazDao {
 		return listaArtistas;
 	}
 
-	//AN
+	// AN
 	private List<Album> cargarAlbumesPorArtista(int idArtista) throws SQLException {
 		List<Album> albumes = new ArrayList<>();
 		try (PreparedStatement psAlb = con.prepareStatement(SQL_BUSCAR_ALBUM_ARTISTA)) {
@@ -718,7 +723,7 @@ public class DaoImplementacion implements InterfazDao {
 		return albumes;
 	}
 
-	//AN
+	// AN
 	private List<Cancion> cargarCancionesPorAlbum(int idAlbum) throws SQLException {
 		List<Cancion> canciones = new ArrayList<>();
 		try (PreparedStatement psCan = con.prepareStatement(BUSCAR_CANCIONES_POR_ALBUM)) {
@@ -740,20 +745,20 @@ public class DaoImplementacion implements InterfazDao {
 		return canciones;
 	}
 
-	//AN
+	// AN
 	public void forzarGuardadoXML() {
-	    try {
-	        List<Artista> listaParaExportar = Principal.obtenerTodosLosArtistasCompletos();
-	        ExportadorXML exportador = new ExportadorXML();
-	        String ruta = "artistas.xml";
-	        exportador.exportarArtistas(listaParaExportar, ruta);
-	        System.out.println("XML sincronizado automáticamente.");
-	    } catch (Exception ex) {
-	        ex.printStackTrace();
-	    }
+		try {
+			List<Artista> listaParaExportar = Principal.obtenerTodosLosArtistasCompletos();
+			ExportadorXML exportador = new ExportadorXML();
+			String ruta = "artistas.xml";
+			exportador.exportarArtistas(listaParaExportar, ruta);
+			System.out.println("XML sincronizado automáticamente.");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
-	
-	//AN
+
+	// AN
 	@Override
 	public Object[][] devolverAlbumesT() throws LoginException {
 		List<Object[]> listaAlbumes = new ArrayList<>();
@@ -763,7 +768,7 @@ public class DaoImplementacion implements InterfazDao {
 			openConnection();
 			stmt = con.prepareStatement(BUSCAR_ALBUM);
 			rs = stmt.executeQuery();
-			
+
 			while (rs.next()) {
 				Object[] fila = { rs.getInt("ID_AL"), rs.getString("NOMBRE"), rs.getInt("ID_A") };
 				listaAlbumes.add(fila);
@@ -785,8 +790,7 @@ public class DaoImplementacion implements InterfazDao {
 
 	}
 
-	
-	//AN
+	// AN
 	@Override
 	public List<Album> devolverAlbumes() throws LoginException {
 		Album al;
@@ -817,8 +821,7 @@ public class DaoImplementacion implements InterfazDao {
 		return albumes;
 	}
 
-	
-	//AN
+	// AN
 	@Override
 	public Object[][] devolverCanciones() throws LoginException {
 		List<Object[]> listaCanciones = new ArrayList<>();
@@ -849,219 +852,219 @@ public class DaoImplementacion implements InterfazDao {
 		return listaCanciones.toArray(new Object[0][0]);
 	}
 
-	
-	//JONAN 
-	
+	// JONAN
+
 	@Override
 	public boolean modificarArtista(int id, String nombre, String tipo) {
-	    boolean modificado = false;
-	    try {
-	        con = DriverManager.getConnection(urlDB, userDB, passwordDB);
-	        String sql = "UPDATE ARTISTA SET NOMBRE=?, TIPO=? WHERE ID_A=?";
-	        stmt = con.prepareStatement(sql);
+		boolean modificado = false;
+		try {
+			con = DriverManager.getConnection(urlDB, userDB, passwordDB);
+			String sql = "UPDATE ARTISTA SET NOMBRE=?, TIPO=? WHERE ID_A=?";
+			stmt = con.prepareStatement(sql);
 
-	        stmt.setString(1, nombre);
-	        stmt.setString(2, tipo);
-	        stmt.setInt(3, id);
-	        stmt.executeUpdate();
+			stmt.setString(1, nombre);
+			stmt.setString(2, tipo);
+			stmt.setInt(3, id);
+			stmt.executeUpdate();
 
-	        modificado = true;
+			modificado = true;
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
-	    return modificado;
+		return modificado;
 	}
-	
-	//JONAN
+
+	// JONAN
 	@Override
 	public boolean modificarAlbum(int id, String nombre, int idArtista) {
-	    boolean modificado = false;
-	    try {
-	        con = DriverManager.getConnection(urlDB, userDB, passwordDB);
-	        String sql = "UPDATE ALBUM SET NOMBRE=?, ID_A=? WHERE ID_AL=?";
-	        stmt = con.prepareStatement(sql);
+		boolean modificado = false;
+		try {
+			con = DriverManager.getConnection(urlDB, userDB, passwordDB);
+			String sql = "UPDATE ALBUM SET NOMBRE=?, ID_A=? WHERE ID_AL=?";
+			stmt = con.prepareStatement(sql);
 
-	        stmt.setString(1, nombre);
-	        stmt.setInt(2, idArtista);
-	        stmt.setInt(3, id);
-	        stmt.executeUpdate();
+			stmt.setString(1, nombre);
+			stmt.setInt(2, idArtista);
+			stmt.setInt(3, id);
+			stmt.executeUpdate();
 
-	        modificado = true;
+			modificado = true;
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
-	    return modificado;
+		return modificado;
 	}
-	
-	//JONAN
+
+	// JONAN
 	@Override
 	public boolean modificarCancion(int id, String nombre, String genero, int idAlbum) {
-	    boolean modificado = false;
-	    try {
-	        con = DriverManager.getConnection(urlDB, userDB, passwordDB);
+		boolean modificado = false;
+		try {
+			con = DriverManager.getConnection(urlDB, userDB, passwordDB);
 
-	        String sql = "UPDATE CANCION SET NOMBRE=?, GENERO=?, ID_AL=? WHERE ID_C=?";
+			String sql = "UPDATE CANCION SET NOMBRE=?, GENERO=?, ID_AL=? WHERE ID_C=?";
 
-	        stmt = con.prepareStatement(sql);
-	        stmt.setString(1, nombre);
-	        stmt.setString(2, genero);
-	        stmt.setInt(3, idAlbum);
-	        stmt.setInt(4, id);
-	        stmt.executeUpdate();
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, nombre);
+			stmt.setString(2, genero);
+			stmt.setInt(3, idAlbum);
+			stmt.setInt(4, id);
+			stmt.executeUpdate();
 
-	        modificado = true;
+			modificado = true;
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
-	    return modificado;
+		return modificado;
 	}
-	
-	//JONAN
+
+	// JONAN
 	public Artista buscarArtista(int id) {
 
-	    Artista artista = null;
-	    ResultSet rs = null;
+		Artista artista = null;
+		ResultSet rs = null;
 
-	    try {
-	        openConnection();
+		try {
+			openConnection();
 
-	        String sql = "SELECT * FROM ARTISTA WHERE ID_A = ?";
-	        stmt = con.prepareStatement(sql);
-	        stmt.setInt(1, id);
+			String sql = "SELECT * FROM ARTISTA WHERE ID_A = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, id);
 
-	        rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 
-	        if (rs.next()) {
-	            artista = new Artista();
-	            artista.setId(rs.getInt("ID_A"));
-	            artista.setNombre(rs.getString("NOMBRE"));
-	            artista.setTipo(Tipo.valueOf(rs.getString("TIPO")));
-	        }
+			if (rs.next()) {
+				artista = new Artista();
+				artista.setId(rs.getInt("ID_A"));
+				artista.setNombre(rs.getString("NOMBRE"));
+				artista.setTipo(Tipo.valueOf(rs.getString("TIPO")));
+			}
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    } finally {
-	        try {
-	            if (rs != null) rs.close();
-	            closeConnection();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 
-	    return artista;
+		return artista;
 	}
 
 	public Album buscarAlbum(int id) {
 
-	    Album album = null;
-	    ResultSet rs = null;
+		Album album = null;
+		ResultSet rs = null;
 
-	    try {
-	        openConnection();
+		try {
+			openConnection();
 
-	        String sql = "SELECT * FROM ALBUM WHERE ID_AL = ?";
-	        stmt = con.prepareStatement(sql);
-	        stmt.setInt(1, id);
+			String sql = "SELECT * FROM ALBUM WHERE ID_AL = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, id);
 
-	        rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 
-	        if (rs.next()) {
-	            album = new Album();
-	            album.setId(rs.getInt("ID_AL"));
-	            album.setNombre(rs.getString("NOMBRE"));
-	            album.setIdArtista(rs.getInt("ID_A"));
-	        }
+			if (rs.next()) {
+				album = new Album();
+				album.setId(rs.getInt("ID_AL"));
+				album.setNombre(rs.getString("NOMBRE"));
+				album.setIdArtista(rs.getInt("ID_A"));
+			}
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    } finally {
-	        try {
-	            if (rs != null) rs.close();
-	            closeConnection();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 
-	    return album;
+		return album;
 	}
-	
+
 	public Cancion buscarCancion(int id) {
 
-	    Cancion cancion = null;
-	    ResultSet rs = null;
+		Cancion cancion = null;
+		ResultSet rs = null;
 
-	    try {
-	        openConnection();
+		try {
+			openConnection();
 
-	        String sql = "SELECT * FROM CANCION WHERE ID_C = ?";
-	        stmt = con.prepareStatement(sql);
-	        stmt.setInt(1, id);
+			String sql = "SELECT * FROM CANCION WHERE ID_C = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, id);
 
-	        rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 
-	        if (rs.next()) {
-	            cancion = new Cancion();
-	            cancion.setId(rs.getInt("ID_C"));
-	            cancion.setNombre(rs.getString("NOMBRE"));
+			if (rs.next()) {
+				cancion = new Cancion();
+				cancion.setId(rs.getInt("ID_C"));
+				cancion.setNombre(rs.getString("NOMBRE"));
 
-	            String gen = rs.getString("GENERO");
-	            if (gen != null) {
-	                cancion.setGenero(Genero.valueOf(gen));
-	            }
+				String gen = rs.getString("GENERO");
+				if (gen != null) {
+					cancion.setGenero(Genero.valueOf(gen));
+				}
 
-	            cancion.setIdAlbum(rs.getInt("ID_AL"));
-	        }
+				cancion.setIdAlbum(rs.getInt("ID_AL"));
+			}
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    } finally {
-	        try {
-	            if (rs != null) rs.close();
-	            closeConnection();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 
-	    return cancion;
+		return cancion;
 	}
-	
+
 	public String tipoAlbum(int idAlbum) {
 
-	    String resultado = "";
+		String resultado = "";
 
-	    try {
+		try {
 
-	        openConnection();
+			openConnection();
 
-	        String sql = "SELECT TIPOALBUM(?)";
-	        stmt = con.prepareStatement(sql);
-	        stmt.setInt(1, idAlbum);
+			String sql = "SELECT TIPOALBUM(?)";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, idAlbum);
 
-	        ResultSet rs = stmt.executeQuery();
+			ResultSet rs = stmt.executeQuery();
 
-	        if(rs.next()){
-	            resultado = rs.getString(1);
-	        }
+			if (rs.next()) {
+				resultado = rs.getString(1);
+			}
 
-	        rs.close();
-	        closeConnection();
+			rs.close();
+			closeConnection();
 
-	    } catch(Exception e){
-	        e.printStackTrace();
-	    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	    return resultado;
+		return resultado;
 	}
 
-	
-	
 }
