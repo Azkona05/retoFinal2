@@ -3,9 +3,9 @@ package main;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.UIManager;
-import java.util.Map;
 
 import controlador.DaoImplementacion;
 import controlador.InterfazDao;
@@ -178,4 +178,8 @@ public class Principal {
 		return resultado;
 	}
 
+	//JON ANDER
+	public static String tipoAlbum(int idAlbum) throws SQLException {
+		return dao.tipoAlbum(idAlbum);
+	}
 }

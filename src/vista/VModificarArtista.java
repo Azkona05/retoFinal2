@@ -26,7 +26,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import controlador.DaoImplementacion;
 import main.Principal;
 import modelo.Tipo;
 
@@ -44,13 +43,10 @@ public class VModificarArtista extends JDialog implements ActionListener {
 	private JButton btnVolver;
 
 	private JLabel lblInfo;
-	private DaoImplementacion dao;
 	private int idSeleccionado = -1;
 
 	public VModificarArtista(JDialog padre, boolean modal) {
 		super(padre, modal);
-
-		dao = new DaoImplementacion();
 
 		setTitle("Modificar artista");
 		setResizable(false);
@@ -162,7 +158,7 @@ public class VModificarArtista extends JDialog implements ActionListener {
 	private void cargarArtistas() {
 		model.setRowCount(0);
 		try {
-			Object[][] datos = dao.devolverArtistas(null);
+			Object[][] datos = Principal.devolverArtistas(null);
 			for (Object[] fila : datos) {
 				model.addRow(fila);
 			}

@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -25,7 +26,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import controlador.DaoImplementacion;
 import main.Principal;
 
 public class VModificarAlbum extends JDialog implements ActionListener {
@@ -46,14 +46,10 @@ public class VModificarAlbum extends JDialog implements ActionListener {
 	private JLabel lblInfo;
 	private JLabel lblTipoAlbum;
 
-	private DaoImplementacion dao;
-
 	private int idSeleccionado = -1;
 
 	public VModificarAlbum(JDialog padre, boolean modal) {
 		super(padre, modal);
-
-		dao = new DaoImplementacion();
 
 		setTitle("Modificar álbum");
 		setResizable(false);
@@ -159,8 +155,14 @@ public class VModificarAlbum extends JDialog implements ActionListener {
 
 				txtIdArtista.setText(model.getValueAt(fila, 2).toString());
 
-				String tipo = dao.tipoAlbum(idSeleccionado);
-				lblTipoAlbum.setText("Tipo de álbum: " + tipo);
+				String tipo;
+				try {
+					tipo = Principal.tipoAlbum(idSeleccionado);
+					lblTipoAlbum.setText("Tipo de álbum: " + tipo);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 
@@ -173,7 +175,7 @@ public class VModificarAlbum extends JDialog implements ActionListener {
 	private void cargarAlbumes() {
 		model.setRowCount(0);
 		try {
-			Object[][] datos = dao.devolverAlbumesT();
+			Object[][] datos = Principal.devolverAlbumesT();
 			for (Object[] fila : datos) {
 				model.addRow(fila);
 			}
