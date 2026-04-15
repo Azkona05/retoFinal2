@@ -7,10 +7,11 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import javax.swing.RowFilter;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -43,7 +45,7 @@ import modelo.Album;
 import modelo.Artista;
 import utilidades.ExportadorXML;
 
-public class VConsultar extends JDialog implements ActionListener {
+public class VConsultar extends JDialog implements ActionListener, MouseListener, DocumentListener, TableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 
@@ -56,6 +58,8 @@ public class VConsultar extends JDialog implements ActionListener {
 	private JTextField txtBuscador;
 	private TableRowSorter<DefaultTableModel> sorter;
 	private JLabel lblContador;
+	private Color colorTablaSeleccion, colorBorde, colorTexto, colorSecundario, naranjaPalo, fondoTarjeta,
+			fondoVentana;
 
 	public VConsultar(VMenuAdmin padre, boolean modal) {
 		super(padre, modal);
@@ -63,14 +67,15 @@ public class VConsultar extends JDialog implements ActionListener {
 		setTitle("Consulta de artistas");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));
 
-		Color fondoVentana = new Color(245, 247, 250);
-		Color fondoTarjeta = Color.WHITE;
-		Color colorPrimario = new Color(52, 120, 246);
-		Color colorTexto = new Color(40, 40, 40);
-		Color colorSecundario = new Color(120, 120, 120);
-		Color colorBorde = new Color(220, 224, 230);
-		Color colorTablaSeleccion = new Color(232, 242, 252);
+		fondoVentana = new Color(245, 247, 250);
+		fondoTarjeta = Color.WHITE;
+		naranjaPalo = new Color(244, 162, 97);
+		colorTexto = new Color(40, 40, 40);
+		colorSecundario = new Color(120, 120, 120);
+		colorBorde = new Color(220, 224, 230);
+		colorTablaSeleccion = new Color(232, 242, 252);
 
 		JPanel contentPane = new JPanel(new BorderLayout(20, 20));
 		contentPane.setBackground(fondoVentana);
@@ -90,7 +95,7 @@ public class VConsultar extends JDialog implements ActionListener {
 
 		JLabel lblPanel = new JLabel("Administrador");
 		lblPanel.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		lblPanel.setForeground(colorPrimario);
+		lblPanel.setForeground(naranjaPalo);
 		lblPanel.setAlignmentX(CENTER_ALIGNMENT);
 
 		JLabel lblTitulo = new JLabel("Listado de artistas");
@@ -207,56 +212,9 @@ public class VConsultar extends JDialog implements ActionListener {
 			}
 		});
 
-		colAlbumes.setCellRenderer(new TableCellRenderer() {
-			@Override
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-					boolean hasFocus, int row, int column) {
+		colAlbumes.setCellRenderer(this);
 
-				JComboBox<Album> renderCombo = new JComboBox<Album>();
-				renderCombo.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-
-				int idArtistaFila = Integer.parseInt(table.getValueAt(row, 0).toString());
-
-				if (albumes != null) {
-					for (Album a : albumes) {
-						if (a.getIdArtista() == idArtistaFila) {
-							renderCombo.addItem(a);
-						}
-					}
-				}
-				if (value != null) {
-					renderCombo.setSelectedItem(value);
-				} else {
-					renderCombo.setSelectedIndex(-1);
-				}
-
-				if (isSelected) {
-					renderCombo.setBackground(colorTablaSeleccion);
-				} else {
-					renderCombo.setBackground(Color.WHITE);
-				}
-
-				return renderCombo;
-			}
-		});
-
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2) {
-					int row = table.getSelectedRow();
-					int column = table.columnAtPoint(e.getPoint());
-
-					if (row != -1 && column != 3) {
-						int modelRow = table.convertRowIndexToModel(row);
-						int idArtista = Integer.parseInt(table.getModel().getValueAt(modelRow, 0).toString());
-
-						VConsultaAlbum vCA = new VConsultaAlbum(VConsultar.this, true, idArtista);
-						vCA.setVisible(true);
-					}
-				}
-			}
-		});
+		table.addMouseListener(this);
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBorder(new LineBorder(colorBorde, 1, true));
@@ -286,7 +244,7 @@ public class VConsultar extends JDialog implements ActionListener {
 		btnExportar = new JButton("Generar XML");
 		btnExportar.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btnExportar.setFocusPainted(false);
-		btnExportar.setBackground(colorPrimario);
+		btnExportar.setBackground(naranjaPalo);
 		btnExportar.setForeground(Color.WHITE);
 		btnExportar.setBorderPainted(false);
 		btnExportar.setOpaque(true);
@@ -322,34 +280,7 @@ public class VConsultar extends JDialog implements ActionListener {
 			JOptionPane.showMessageDialog(this, "Error al cargar los artistas", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 
-		txtBuscador.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				filtrar();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				filtrar();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				filtrar();
-			}
-
-			private void filtrar() {
-				String texto = txtBuscador.getText();
-
-				if (texto.trim().length() == 0) {
-					sorter.setRowFilter(null);
-				} else {
-					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto, 1));
-				}
-
-				lblContador.setText("Artistas visibles: " + table.getRowCount());
-			}
-		});
+		txtBuscador.getDocument().addDocumentListener(this);
 		table.setPreferredScrollableViewportSize(new Dimension(750, 300));
 		pack();
 		setLocationRelativeTo(padre);
@@ -389,5 +320,106 @@ public class VConsultar extends JDialog implements ActionListener {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if (e.getSource() == table) {
+
+			if (e.getClickCount() == 2) {
+				int row = table.getSelectedRow();
+				int column = table.columnAtPoint(e.getPoint());
+
+				if (row != -1 && column != 3) {
+					int modelRow = table.convertRowIndexToModel(row);
+					int idArtista = Integer.parseInt(table.getModel().getValueAt(modelRow, 0).toString());
+
+					VConsultaAlbum vCA = new VConsultaAlbum(this, true, idArtista);
+					vCA.setVisible(true);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void filtrar() {
+		String texto = txtBuscador.getText();
+
+		if (texto.trim().length() == 0) {
+			sorter.setRowFilter(null);
+		} else {
+			sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto, 1));
+		}
+
+		lblContador.setText("Artistas visibles: " + table.getRowCount());
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+		filtrar();
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		filtrar();
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		filtrar();
+	}
+
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
+		JComboBox<Album> renderCombo = new JComboBox<Album>();
+		renderCombo.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+
+		int idArtistaFila = Integer.parseInt(table.getValueAt(row, 0).toString());
+
+		if (albumes != null) {
+			for (Album a : albumes) {
+				if (a.getIdArtista() == idArtistaFila) {
+					renderCombo.addItem(a);
+				}
+			}
+		}
+
+		if (value != null) {
+			renderCombo.setSelectedItem(value);
+		} else {
+			renderCombo.setSelectedIndex(-1);
+		}
+
+		if (isSelected) {
+			renderCombo.setBackground(colorTablaSeleccion);
+		} else {
+			renderCombo.setBackground(Color.WHITE);
+		}
+
+		return renderCombo;
 	}
 }

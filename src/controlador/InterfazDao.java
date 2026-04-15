@@ -11,11 +11,15 @@ import modelo.Cancion;
 import java.util.ArrayList;
 
 import exception.AltaException;
+import java.util.Map;
 import modelo.Usuario;
 
 public interface InterfazDao {
 
+	//METODOS COMUNES
 	public void login(Usuario usuario) throws LoginException;
+	
+	//AN
 
 	public Object[][] devolverArtistas(Artista a) throws LoginException;
 
@@ -24,27 +28,42 @@ public interface InterfazDao {
 	public Object[][] devolverCancionesArtista(Artista a);
 	
 	public Object[][] devolverAlbumesT() throws LoginException;
+	
+	public List<Artista> obtenerTodosLosArtistasCompletos() throws LoginException;
+
+	public void forzarGuardadoXML();
+	
+	public List<Album> devolverAlbumes() throws LoginException;
+	
+	public Object[][] devolverCanciones() throws LoginException;
+
+	
+	//NORA
 
 	public boolean eliminarAlbum(int idAlbum) throws SQLException;
 
 	public boolean eliminarArtista(int idArtista) throws SQLException;
 
 	public boolean eliminarCancion(int idCancion) throws SQLException;
+	
+	//RICARDO
 
-	public boolean altaArtista(Artista artista) throws AltaException;// necesito hcer alta de artista,album,cancion
+	public boolean altaArtista(Artista artista) throws AltaException;
 
 	public ArrayList<Integer> ides() throws AltaException;
 
 	public ArrayList<String> nomArti() throws AltaException;
+		
+	public Map<Integer, Artista> listarArtTabla(Artista arti) throws AltaException;
 
-	public List<Artista> obtenerTodosLosArtistasCompletos() throws LoginException;
+	public boolean altaAlbum(Album album, int idArtista) throws AltaException;
 
-	public void forzarGuardadoXML();
+	public boolean altaCancion(Cancion cancion, int idAlbum) throws AltaException;
 
-	public List<Album> devolverAlbumes() throws LoginException;
+	public boolean existeIdAlbum(int id) throws AltaException;
+
+	public boolean existeIdCancion(int id) throws AltaException;
 	
-	public Object[][] devolverCanciones() throws LoginException;
-	
-	
+	public boolean existeCancionEnAlbum(String nombreCancion, int idAlbum) throws AltaException;
 
 }

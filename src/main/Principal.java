@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.UIManager;
+import java.util.Map;
 
 import controlador.DaoImplementacion;
 import controlador.InterfazDao;
@@ -85,6 +86,10 @@ public class Principal {
 		}
 		return resultado;
 	}
+
+	public static boolean existeCancionEnAlbum(String nombreCancion, int idAlbum) throws AltaException {
+		return dao.existeCancionEnAlbum(nombreCancion, idAlbum);
+	}
 //	public static Map<Integer,Artista>leerDatosArtista()throws AltaException{
 //		return dao.leerDatosArtista();
 //	}
@@ -106,4 +111,24 @@ public class Principal {
 	public static Object[][] devolverCanciones() throws LoginException {
 		return dao.devolverCanciones();
 	}
+	public static Map<Integer, Artista> listarArti(Artista arti) throws AltaException {
+		return dao.listarArtTabla(arti);
+	}
+
+	public static boolean altaAlbum(Album album, int idArtista) throws AltaException {
+		return dao.altaAlbum(album, idArtista);
+	}
+
+	public static boolean altaCancion(Cancion cancion, int idAlbum) throws AltaException {
+		return dao.altaCancion(cancion, idAlbum);
+	}
+
+	public static boolean existeIdAlbum(int id) throws AltaException {
+		return dao.existeIdAlbum(id);
+	}
+
+	public static boolean existeIdCancion(int id) throws AltaException {
+		return dao.existeIdCancion(id);
+	}
+
 }
