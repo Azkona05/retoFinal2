@@ -1,4 +1,4 @@
--- DROP DATABASE TartangaMusic;
+DROP DATABASE TartangaMusic;
 CREATE DATABASE TartangaMusic;
 USE TartangaMusic;
 
@@ -272,7 +272,7 @@ SELECT NIVELARTISTA(1);
 
 -- =====================================================
 -- 7. ARTISTASDECANCION
--- Dado el ID de una canción, muestra todos los artistas que participan en ella según la tabla PERTENECE.
+-- Dado el ID de una canción, muestra todos los artistas que participan en ella según la tabla TIENE.
 
 DELIMITER //
 
@@ -291,7 +291,7 @@ BEGIN
 
         SELECT CONCAT('ARTISTAS QUE PARTICIPAN EN: ', NOMCANCION) AS INFO;
 
-        SELECT A.NOMBRE AS ARTISTA FROM ARTISTA A, PERTENECE P WHERE A.ID_A = P.ID_A AND P.ID_C = ID;
+        SELECT A.NOMBRE AS ARTISTA FROM ARTISTA A, TIENE P WHERE A.ID_A = P.ID_A AND P.ID_C = ID;
 
     END IF;
 
