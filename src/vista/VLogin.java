@@ -10,6 +10,8 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -22,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
+
 import exception.LoginException;
 import main.Principal;
 import modelo.Usuario;
@@ -92,7 +95,11 @@ public class VLogin extends JDialog implements ActionListener {
 		// Configuración del icono de usuario
 		JLabel lblIcono = new JLabel();
 		lblIcono.setAlignmentX(CENTER_ALIGNMENT);
-		ImageIcon icono = new ImageIcon("src/img/iconoPersonaEditado.png");
+		File file = new File("src/img/iconoPersonaEditado.png");
+		String rutaAbsoluta = file.getAbsolutePath();
+		//System.out.println("Ruta absoluta de la imagen: " + rutaAbsoluta); 
+		ImageIcon icono = new ImageIcon(rutaAbsoluta);
+		//ImageIcon icono = new ImageIcon("src/img/iconoPersonaEditado.png");
 
 		// Si la imagen existe la pone, si no, pone un texto alternativo
 		if (icono.getIconWidth() > 0) {
