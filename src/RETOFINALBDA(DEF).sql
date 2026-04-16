@@ -1,4 +1,4 @@
--- DROP DATABASE TartangaMusic;
+DROP DATABASE TartangaMusic;
 CREATE DATABASE TartangaMusic;
 USE TartangaMusic;
 
@@ -35,6 +35,8 @@ FOREIGN KEY (ID_A) REFERENCES ARTISTA (ID_A) ON DELETE CASCADE ON UPDATE CASCADE
 FOREIGN KEY (ID_C) REFERENCES CANCION (ID_C) ON DELETE CASCADE ON UPDATE CASCADE);
 
 -- INSERTS
+-- INSERTS COMPLETOS
+
 INSERT INTO USUARIO VALUES
 ('ADMIN', 'ADMIN'),
 ('123', '123');
@@ -42,24 +44,36 @@ INSERT INTO USUARIO VALUES
 INSERT INTO ARTISTA VALUES
 (1, 'BadBunny', 'SOLO', 'badbunny.jpg'),
 (2, 'Coldplay', 'GRUPO', 'coldplay.jpg'),
-(3, 'Rosalia', 'SOLO', 'rosalia.jpg');
+(3, 'Rosalia', 'SOLO', 'rosalia.jpg'),
+(4, 'AC/DC', 'GRUPO', 'acdc.jpg'),
+(5, 'Guns N Roses', 'GRUPO', 'gnr.jpg'),
+(6, 'Queen', 'GRUPO', 'queen.jpg');
 
 INSERT INTO ALBUM VALUES
 (1, 'Un Verano Sin ti', 1),
 (2, 'Parachutes', 2),
 (3, 'Motomami', 3),
-(4, 'Otra Noche en Miami', 1);
+(4, 'Otra Noche en Miami', 1),
+(5, 'Highway to Hell', 4),
+(6, 'Appetite for Destruction', 5),
+(7, 'The Works', 6);
 
 INSERT INTO CANCION VALUES
 (1, 'Tití Me Pregunto', 'REGGAETON', 1),
 (2, 'Yellow', 'ROCK', 2),
 (3, 'Saoko', 'TRAP', 3),
-(4, 'NUEVA YOL', 'REGGAETON', 1);
+(4, 'NUEVA YOL', 'REGGAETON', 1),
+(5, 'Highway to Hell', 'ROCK', 5),
+(6, 'Sweet Child O Mine', 'ROCK', 6),
+(7, 'I Want to Break Free', 'ROCK', 7);
 
 INSERT INTO TIENE VALUES
 (1,1),
 (2,2),
-(3,3);
+(3,3),
+(4,5),
+(5,6),
+(6,7);
 
 -- PROCEDIMIENTOS Y FUNCIONES
 

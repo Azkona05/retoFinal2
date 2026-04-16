@@ -200,7 +200,7 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 					boolean hasFocus, int row, int column) {
 
-				JButton btnPlay = new JButton("▶ Play");
+				JButton btnPlay = new JButton("Play");
 				btnPlay.setFont(new Font("Segoe UI", Font.BOLD, 12));
 				btnPlay.setFocusPainted(false);
 				btnPlay.setBorderPainted(false);
@@ -345,7 +345,7 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 		detenerAudio();
 
 		try {
-			File archivoMusica = new File("canciones/" + nombreCancion + ".wav");
+			File archivoMusica = new File("src/canciones/" + nombreCancion + ".wav");
 
 			if (archivoMusica.exists()) {
 				// Se abre el flujo de audio desde el archivo .wav
