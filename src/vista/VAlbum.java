@@ -35,6 +35,9 @@ import modelo.Album;
 import modelo.Artista;
 
 public class VAlbum extends JDialog implements ActionListener {
+	/**
+	 * @author Ricardo Soza
+	 */
 
 	private static final long serialVersionUID = 1L;
 
@@ -47,14 +50,24 @@ public class VAlbum extends JDialog implements ActionListener {
 	private JTextField textFieldNumCanci;
 	private int idArtistaSeleccionado;
 	private String nombreArtistaSeleccionado;
+	
+	/**
+     * 
+     * @param modal Si es modal, bloquea la interacción con la ventana padre mientras está abierto.
+     */
 
 	public VAlbum(boolean modal) {
 		setModal(modal);
 		setTitle("Alta de álbum");
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setResizable(false);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);// Cuando se cierra la ventana, se cierra solo la ventana y
+		// no termian el programa.
+		setResizable(false);// evita que el usuario redimencione la ventana (no le cambie el tamaño)
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));// Establece una
+																										// imagen
+																										// siguiendo la
+																										// ruta asignada
 
+		// Elige los colores en base a los numeros
 		Color fondoVentana = new Color(245, 247, 250);
 		Color fondoTarjeta = Color.WHITE;
 		Color naranjaPalo = new Color(244, 162, 97);
@@ -68,10 +81,15 @@ public class VAlbum extends JDialog implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
 		setContentPane(contentPane);
 
+		// Este es para dar efecto de tarjeta flotante sobre el fondo
 		JPanel panelTarjeta = new JPanel(new BorderLayout(0, 20));
 		panelTarjeta.setBackground(fondoTarjeta);
-		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(new LineBorder(colorBorde, 1, true),
-				new EmptyBorder(20, 20, 20, 20)));
+		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(new LineBorder(colorBorde, 1, true), // color,grosor y
+																										// que las
+																										// esquinas
+																										// esten
+																										// redondeadas
+				new EmptyBorder(20, 20, 20, 20)));// deje espacios en blanco
 
 		contentPane.add(panelTarjeta, BorderLayout.CENTER);
 
@@ -96,13 +114,19 @@ public class VAlbum extends JDialog implements ActionListener {
 
 		String[] columnasNombre = { "ID", "NOMBRE", "TIPO" };
 		DefaultTableModel model = new DefaultTableModel(null, columnasNombre) {
+			//Esto es una clase anónima (se crea y se usa solo aqui) que extiende DefaultTableModel para personalizar su comportamiento. Se crea la clase  al abrir las llaves
+			
+			
 			private static final long serialVersionUID = 1L;
 
+			//Este método decide si una celda específica puede ser editada por el usuario.
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return false;
+				return false;//ninguna es editable
 			}
 		};
+		
+		//Obtiene todos los artistas desde la base de datos y recorre el mapa y añade cada artista como una fila a la tabla
 
 		try {
 			Map<Integer, Artista> artiMap = Principal.listarArti(null);
@@ -121,29 +145,29 @@ public class VAlbum extends JDialog implements ActionListener {
 
 		tablaArtis = new JTable(model);
 		tablaArtis.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		tablaArtis.setRowHeight(30);
-		tablaArtis.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tablaArtis.setShowVerticalLines(false);
-		tablaArtis.setGridColor(new Color(235, 235, 235));
-		tablaArtis.setSelectionBackground(colorSeleccion);
-		tablaArtis.setSelectionForeground(Color.BLACK);
-		tablaArtis.setFillsViewportHeight(true);
+		tablaArtis.setRowHeight(30);  // Altura de cada fila (30px)
+		tablaArtis.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Solo una fila seleccionable
+		tablaArtis.setShowVerticalLines(false);//no muestra lineas verticales
+		tablaArtis.setGridColor(new Color(235, 235, 235));  // Color de líneas de la cuadrícula
+		tablaArtis.setSelectionBackground(colorSeleccion);  // Fondo de fila seleccionada
+		tablaArtis.setSelectionForeground(Color.BLACK);  // Texto de fila seleccionada
+		tablaArtis.setFillsViewportHeight(true);  // Ocupa toda la altura disponible
 
 		tablaArtis.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
 		tablaArtis.getTableHeader().setBackground(Color.WHITE);
 		tablaArtis.getTableHeader().setForeground(colorTexto);
-		tablaArtis.getTableHeader().setReorderingAllowed(false);
+		tablaArtis.getTableHeader().setReorderingAllowed(false);//no reordenar columnas
 
 		tablaArtis.getColumnModel().getColumn(0).setPreferredWidth(70);
 		tablaArtis.getColumnModel().getColumn(1).setPreferredWidth(240);
 		tablaArtis.getColumnModel().getColumn(2).setPreferredWidth(120);
 
-		tablaArtis.getSelectionModel().addListSelectionListener(e -> {
-			if (!e.getValueIsAdjusting()) {
-				int filaSeleccionada = tablaArtis.getSelectedRow();
+		tablaArtis.getSelectionModel().addListSelectionListener(e -> {//getSelectionModel obtiene el objeto que controla la selección de la tabla ,addListSelectionListener si alguna fila esta seleccionada
+			if (!e.getValueIsAdjusting()) {//getValueIsAdjusting True si sigue seleccionando, False si ya termino de seleccionar (dejo de clikear)
+				int filaSeleccionada = tablaArtis.getSelectedRow();//getSelectedRow indice de la tabla seleccionada
 				if (filaSeleccionada != -1) {
-					idArtistaSeleccionado = Integer.parseInt(tablaArtis.getValueAt(filaSeleccionada, 0).toString());
-					nombreArtistaSeleccionado = tablaArtis.getValueAt(filaSeleccionada, 1).toString();
+					idArtistaSeleccionado = Integer.parseInt(tablaArtis.getValueAt(filaSeleccionada, 0).toString());//getValueAt(id, columna)
+					nombreArtistaSeleccionado = tablaArtis.getValueAt(filaSeleccionada, 1).toString();//getValueAt(id, columna)
 					textFieldIdArtista.setText(String.valueOf(idArtistaSeleccionado));
 					textFieldNombreArtista.setText(nombreArtistaSeleccionado);
 				}
@@ -151,8 +175,8 @@ public class VAlbum extends JDialog implements ActionListener {
 		});
 
 		JScrollPane scrollPane = new JScrollPane(tablaArtis);
-		scrollPane.setBorder(new LineBorder(colorBorde, 1, true));
-		scrollPane.getViewport().setBackground(Color.WHITE);
+		scrollPane.setBorder(new LineBorder(colorBorde, 1, true));//LineBorder(color,grosor.esquinas redondeadas)
+		//scrollPane.getViewport().setBackground(Color.WHITE);
 		tablaArtis.setPreferredScrollableViewportSize(new Dimension(560, 150));
 
 		JPanel panelTabla = new JPanel(new BorderLayout(0, 10));
@@ -170,10 +194,11 @@ public class VAlbum extends JDialog implements ActionListener {
 		JPanel panelFormulario = new JPanel(new GridBagLayout());
 		panelFormulario.setBackground(fondoTarjeta);
 
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(8, 8, 8, 8);
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+		GridBagConstraints gbc = new GridBagConstraints();  // es un layout mas flexible que permite controlar con mas
+															// precision el tamaño			
+		gbc.insets = new Insets(8, 8, 8, 8); // Margen de 8px alrededor de cada componente
+		gbc.anchor = GridBagConstraints.WEST;// Alinear a la izquierda 
+		gbc.fill = GridBagConstraints.HORIZONTAL;// Expandir horizontalmente
 
 		JLabel lblIdArtista = new JLabel("ID artista");
 		lblIdArtista.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -217,12 +242,12 @@ public class VAlbum extends JDialog implements ActionListener {
 		textFieldNumCanci.setBorder(BorderFactory
 				.createCompoundBorder(new LineBorder(new Color(210, 214, 220), 1, true), new EmptyBorder(5, 8, 5, 8)));
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
+		gbc.gridx = 0;// columna 0
+		gbc.gridy = 0;//fila 0
 		panelFormulario.add(lblIdArtista, gbc);
 
-		gbc.gridx = 1;
-		gbc.gridy = 0;
+		gbc.gridx = 1;//columna 1
+		gbc.gridy = 0;//fila 0
 		panelFormulario.add(textFieldIdArtista, gbc);
 
 		gbc.gridx = 0;
@@ -280,10 +305,15 @@ public class VAlbum extends JDialog implements ActionListener {
 
 		getRootPane().setDefaultButton(anadirButton);
 
-		pack();
-		setLocationRelativeTo(null);
+		pack();// se ajusta el tamaño de la ventana al tamaño de los componentes
+			   // (Jlabels,botones...)
+		setLocationRelativeTo(null); // pone la ventena encima de la anterior o padre (centrada)
 	}
 
+	/**
+	 *@param e  hace referencia al ActionEvent y dependiendo de la accion que
+	 *           realize el usuario hará algo
+	 *    */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == volverButton) {
@@ -342,9 +372,9 @@ public class VAlbum extends JDialog implements ActionListener {
 					setVisible(false);
 
 					VAlbumCanci ventanaCanciones = new VAlbumCanci(idAlbum, numCanciones, nombreAlbum);
-					ventanaCanciones.addWindowListener(new WindowAdapter() {
+					ventanaCanciones.addWindowListener(new WindowAdapter() { //addWindowListener es un oyente que se activa cuando ocurren eventos en la nueva ventana,WindowAdapter si pusiera windowlistener tendria que poner todos sus metodos
 						@Override
-						public void windowClosed(WindowEvent e) {
+						public void windowClosed(WindowEvent e) {//windowClose se cierra esta ventana cunado se cierra la ventana hija
 							dispose();
 						}
 					});

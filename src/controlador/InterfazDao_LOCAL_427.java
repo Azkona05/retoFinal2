@@ -19,33 +19,34 @@ public interface InterfazDao {
 	//METODOS COMUNES
 	public void login(Usuario usuario) throws LoginException;
 	
-	// AN
+	//AN
 
 	public Object[][] devolverArtistas(Artista a) throws LoginException;
 
 	public List<Cancion> devolverCanciones(int idAlbum) throws LoginException;
 
 	public Object[][] devolverCancionesArtista(Artista a);
-
+	
 	public Object[][] devolverAlbumesT() throws LoginException;
-
+	
 	public List<Artista> obtenerTodosLosArtistasCompletos() throws LoginException;
 
 	public void forzarGuardadoXML();
-
+	
 	public List<Album> devolverAlbumes() throws LoginException;
-
+	
 	public Object[][] devolverCanciones() throws LoginException;
 
-	// NORA
+	
+	//NORA
 
 	public boolean eliminarAlbum(int idAlbum) throws SQLException;
 
 	public boolean eliminarArtista(int idArtista) throws SQLException;
 
 	public boolean eliminarCancion(int idCancion) throws SQLException;
-
-	// RICARDO
+	
+	//RICARDO
 
 	public boolean altaArtista(Artista artista) throws AltaException;
 

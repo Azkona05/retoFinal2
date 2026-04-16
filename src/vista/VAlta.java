@@ -22,6 +22,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 public class VAlta extends JDialog implements ActionListener {
+	/**
+	 * @author Ricardo Soza
+	 */
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,15 +32,19 @@ public class VAlta extends JDialog implements ActionListener {
 	private JButton btnMusica;
 	private JButton btnAlbum;
 	private JButton btnVolver;
-
+/**
+ * @param modal indica si el diálogo es modal (true) o no modal (false). Si es modal,
+ * bloquea la interacción con la ventana padre mientras está abierto.
+ * */
 	public VAlta(VMenuAdmin padre, boolean modal) {
 		super(padre, modal);
 
 		setTitle("Dar de alta");
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setResizable(false);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE); //Cuando se cierra la ventana, se cierra solo la ventana y no termian el programa.
+		setResizable(false);//evita que el usuario redimencione la ventana (no le cambie el tamaño)
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));//Establece una imagen siguiendo la ruta asignada
 
+		//Elige los colores en base a los numeros
 		Color fondoVentana = new Color(245, 247, 250);
 		Color fondoTarjeta = Color.WHITE;
 		Color naranjaPalo = new Color(244, 162, 97);
@@ -49,23 +56,24 @@ public class VAlta extends JDialog implements ActionListener {
 		contentPane.setBackground(fondoVentana);
 		contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
 		setContentPane(contentPane);
-
+		
+		//Este es para dar efecto de tarjeta flotante sobre el fondo
 		JPanel panelTarjeta = new JPanel(new BorderLayout(0, 20));
 		panelTarjeta.setBackground(fondoTarjeta);
 		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(
-				new LineBorder(colorBorde, 1, true),
-				new EmptyBorder(20, 20, 20, 20)));
+				new LineBorder(colorBorde, 1, true),//color,grosor y que las esquinas esten redondeadas
+				new EmptyBorder(20, 20, 20, 20)));//deje espacios en blanco 
 
 		contentPane.add(panelTarjeta, BorderLayout.CENTER);
 
 		JPanel panelCabecera = new JPanel();
 		panelCabecera.setBackground(fondoTarjeta);
-		panelCabecera.setLayout(new BoxLayout(panelCabecera, BoxLayout.Y_AXIS));
+		panelCabecera.setLayout(new BoxLayout(panelCabecera, BoxLayout.Y_AXIS));//boxlayout.y_axis para acomodarlo verticalmente 
 
 		JLabel lblSeccion = new JLabel("Administrador");
 		lblSeccion.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		lblSeccion.setForeground(naranjaPalo);
-		lblSeccion.setAlignmentX(CENTER_ALIGNMENT);
+		lblSeccion.setAlignmentX(CENTER_ALIGNMENT); //esta centrado horizontalmente 
 
 		JLabel lblTitulo = new JLabel("Dar de alta");
 		lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
@@ -78,22 +86,22 @@ public class VAlta extends JDialog implements ActionListener {
 		lblSubtitulo.setAlignmentX(CENTER_ALIGNMENT);
 
 		panelCabecera.add(lblSeccion);
-		panelCabecera.add(Box.createVerticalStrut(8));
+		panelCabecera.add(Box.createVerticalStrut(8));//Box.createVerticalStrut para que le de un tamaño de 8 pixeles de vertical al Jlabel
 		panelCabecera.add(lblTitulo);
 		panelCabecera.add(Box.createVerticalStrut(8));
 		panelCabecera.add(lblSubtitulo);
 
 		panelTarjeta.add(panelCabecera, BorderLayout.NORTH);
 
-		JPanel panelBotones = new JPanel(new GridLayout(1, 3, 18, 18));
+		JPanel panelBotones = new JPanel(new GridLayout(1, 3, 18, 18));//GridLayout es para que los botones que use sean del mismo tamaño,1 fila y 3 columnas
 		panelBotones.setBackground(fondoTarjeta);
 		panelBotones.setBorder(new EmptyBorder(10, 10, 10, 10));
 
 		buttonArtista = new JButton("Artista");
 		buttonArtista.setFont(new Font("Segoe UI", Font.BOLD, 16));
-		buttonArtista.setPreferredSize(new Dimension(150, 80));
-		buttonArtista.setFocusPainted(false);
-		buttonArtista.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		buttonArtista.setPreferredSize(new Dimension(150, 80));//el boton tendra preferencia por este tamaño
+		buttonArtista.setFocusPainted(false);//el boton se vera mas limpio
+		buttonArtista.setCursor(new Cursor(Cursor.HAND_CURSOR));//cuando el cursor este encima del boton cambia a la forma de mano
 		buttonArtista.setBackground(Color.WHITE);
 		buttonArtista.setForeground(colorTexto);
 		buttonArtista.setBorder(new LineBorder(colorBorde, 1, true));
@@ -133,17 +141,20 @@ public class VAlta extends JDialog implements ActionListener {
 		btnVolver.setFocusPainted(false);
 		btnVolver.setBackground(new Color(240, 240, 240));
 		btnVolver.setForeground(colorTexto);
-		btnVolver.setBorder(new LineBorder(new Color(200, 200, 200), 1, true));
+		btnVolver.setBorder(new LineBorder(new Color(200, 200, 200), 1, true));//color,grosor y esquinas redondeadas
 		btnVolver.addActionListener(this);
 
 		panelInferior.add(btnVolver);
 
 		panelTarjeta.add(panelInferior, BorderLayout.SOUTH);
 
-		pack();
-		setLocationRelativeTo(padre);
+		pack();//se ajusta el tamaño de la ventana al tamaño de los componentes (Jlabels,botones...)
+		setLocationRelativeTo(padre); //pone la ventena encima de la anterior o padre  (centrada)
 	}
 
+	/**
+	 * de que va
+	 * @param e hace referencia al ActionEvent y dependiendo de la accion que realize el usuario hará algo*/
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnVolver) {

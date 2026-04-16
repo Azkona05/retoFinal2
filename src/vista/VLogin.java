@@ -29,13 +29,10 @@ import modelo.Usuario;
 /**
  * Ventana de diálogo para el inicio de sesión de usuarios. Permite la entrada
  * de credenciales y su validación mediante la lógica de la aplicación.
- * 
  * @author An Azkona, Nora Yakoubi, Ricardo Soza, Jon Ander Varela 
  * 
  */
 public class VLogin extends JDialog implements ActionListener {
-
-	private static final long serialVersionUID = 1L;
 
 	// Componentes de la interfaz que requieren acceso global en la clase
 	private JPanel contentPane;

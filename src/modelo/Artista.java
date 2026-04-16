@@ -14,7 +14,7 @@ public class Artista {
 	}
 
 	public Artista(int id, String nombre, Tipo tipo, ArrayList<Album> listaAlbumes, ArrayList<Cancion> listaCanciones) {
-		this.id = id;
+		this.id = id; 	 	 	
 		this.nombre = nombre;
 		this.tipo = tipo;
 		this.listaAlbumes = listaAlbumes;
