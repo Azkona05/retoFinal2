@@ -43,6 +43,15 @@ public class VEliminarCancion extends JDialog implements ActionListener {
 	private JButton btnVolver; // botón volver
 	private JLabel lblInfo; // información dinámica
 
+	/**
+	 * Constructor de la ventana VEliminarCancion.
+	 * Inicializa la interfaz gráfica que muestra una tabla con las canciones disponibles
+	 * y permite al usuario seleccionar y eliminar una de ellas.
+	 * También carga los datos desde la lógica de la aplicación.
+	 * 
+	 * @param padre Ventana padre desde la que se abre este diálogo.
+	 * @param modal Indica si la ventana es modal (bloquea la interacción con otras ventanas).
+	 */
 	// Constructor de la ventana modal
 	public VEliminarCancion(VBaja padre, boolean modal) {
 		super(padre, modal);
@@ -201,6 +210,13 @@ public class VEliminarCancion extends JDialog implements ActionListener {
 		setLocationRelativeTo(padre);
 	}
 
+	/**
+	 * Gestiona los eventos producidos por la interacción del usuario con los botones.
+	 * Permite volver a la ventana anterior o eliminar la canción seleccionada de la tabla,
+	 * realizando validaciones, confirmación del usuario y mostrando mensajes informativos o de error.
+	 * 
+	 * @param e Evento de acción generado al hacer clic en un botón.
+	 */
 	// Manejo de eventos de botones
 	@Override
 	public void actionPerformed(ActionEvent e) {
