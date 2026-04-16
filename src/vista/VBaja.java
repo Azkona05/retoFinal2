@@ -38,6 +38,14 @@ public class VBaja extends JDialog implements ActionListener {
 	private JButton bntArtista;
 	private JButton bntVolver;
 
+	/**
+	 * Constructor de la ventana VBaja.
+	 * Inicializa la interfaz gráfica que permite al administrador seleccionar
+	 * qué tipo de elemento desea eliminar (artista, canción o álbum).
+	 * 
+	 * @param padre Ventana padre desde la que se abre este diálogo.
+	 * @param modal Indica si la ventana es modal (bloquea la interacción con otras ventanas).
+	 */
 	// Constructor de la ventana modal de "Dar de baja"
 	public VBaja(VMenuAdmin padre, boolean modal) {
 		super(padre, modal); // indica ventana padre y si es modal
@@ -172,6 +180,13 @@ public class VBaja extends JDialog implements ActionListener {
 		setLocationRelativeTo(padre);
 	}
 
+	/**
+	 * Gestiona los eventos producidos por la interacción del usuario con los botones de la interfaz.
+	 * Dependiendo del botón pulsado, abre la ventana correspondiente para eliminar
+	 * un artista, una canción o un álbum. También permite cerrar la ventana actual.
+	 * 
+	 * @param e Evento de acción generado al hacer clic en un botón.
+	 */
 	// Método que gestiona los clicks de los botones
 	@Override
 	public void actionPerformed(ActionEvent e) {

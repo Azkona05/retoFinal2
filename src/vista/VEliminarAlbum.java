@@ -43,6 +43,15 @@ public class VEliminarAlbum extends JDialog implements ActionListener {
 	private JButton btnVolver; // botón volver
 	private JLabel lblInfo; // label informativo (cantidad de álbumes)
 
+	/**
+	 * Constructor de la ventana VEliminarAlbum.
+	 * Inicializa la interfaz gráfica que muestra una tabla con los álbumes disponibles
+	 * y permite al usuario seleccionar y eliminar uno de ellos.
+	 * También carga los datos desde la lógica de la aplicación.
+	 * 
+	 * @param padre Ventana padre desde la que se abre este diálogo.
+	 * @param modal Indica si la ventana es modal (bloquea la interacción con otras ventanas).
+	 */
 	// Constructor de la ventana modal
 	public VEliminarAlbum(VBaja padre, boolean modal) {
 		super(padre, modal);
@@ -201,6 +210,13 @@ public class VEliminarAlbum extends JDialog implements ActionListener {
 		setLocationRelativeTo(padre);
 	}
 
+	/**
+	 * Gestiona los eventos producidos por la interacción del usuario con los botones.
+	 * Permite volver a la ventana anterior o eliminar el álbum seleccionado de la tabla,
+	 * realizando validaciones y mostrando mensajes de confirmación o error.
+	 * 
+	 * @param e Evento de acción generado al hacer clic en un botón.
+	 */
 	// Manejo de eventos de botones
 	@Override
 	public void actionPerformed(ActionEvent e) {

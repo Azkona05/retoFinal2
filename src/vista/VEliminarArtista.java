@@ -46,6 +46,15 @@ public class VEliminarArtista extends JDialog implements ActionListener {
 	private JButton btnVolver; // botón volver
 	private JLabel lblInfo; // información dinámica
 
+	/**
+	 * Constructor de la ventana VEliminarArtista.
+	 * Inicializa la interfaz gráfica que muestra una tabla con los artistas disponibles
+	 * y permite al usuario seleccionar y eliminar uno de ellos.
+	 * También carga los datos desde la lógica de la aplicación.
+	 * 
+	 * @param padre Ventana padre desde la que se abre este diálogo.
+	 * @param modal Indica si la ventana es modal (bloquea la interacción con otras ventanas).
+	 */
 	// Constructor de la ventana modal
 	public VEliminarArtista(VBaja padre, boolean modal) {
 		super(padre, modal);
@@ -203,6 +212,13 @@ public class VEliminarArtista extends JDialog implements ActionListener {
 		setLocationRelativeTo(padre);
 	}
 
+	/**
+	 * Gestiona los eventos producidos por la interacción del usuario con los botones.
+	 * Permite volver a la ventana anterior o eliminar el artista seleccionado de la tabla,
+	 * realizando validaciones, confirmaciones y mostrando mensajes informativos o de error.
+	 * 
+	 * @param e Evento de acción generado al hacer clic en un botón.
+	 */
 	// Manejo de eventos de botones
 	@Override
 	public void actionPerformed(ActionEvent e) {
