@@ -130,5 +130,9 @@ public class Principal {
 	public static boolean existeIdCancion(int id) throws AltaException {
 		return dao.existeIdCancion(id);
 	}
+	
+	public static Map<Integer, Album> listarAlbumesPorArtista(int idArtista) throws AltaException {
+	    return dao.listarAlbumesPorArtista(idArtista);
+	}
 
 }

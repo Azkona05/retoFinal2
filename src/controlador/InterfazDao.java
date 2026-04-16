@@ -16,44 +16,43 @@ import modelo.Usuario;
 
 public interface InterfazDao {
 
-	//METODOS COMUNES
+	// METODOS COMUNES
 	public void login(Usuario usuario) throws LoginException;
-	
-	//AN
+
+	// AN
 
 	public Object[][] devolverArtistas(Artista a) throws LoginException;
 
 	public List<Cancion> devolverCanciones(int idAlbum) throws LoginException;
 
 	public Object[][] devolverCancionesArtista(Artista a);
-	
+
 	public Object[][] devolverAlbumesT() throws LoginException;
-	
+
 	public List<Artista> obtenerTodosLosArtistasCompletos() throws LoginException;
 
 	public void forzarGuardadoXML();
-	
+
 	public List<Album> devolverAlbumes() throws LoginException;
-	
+
 	public Object[][] devolverCanciones() throws LoginException;
 
-	
-	//NORA
+	// NORA
 
 	public boolean eliminarAlbum(int idAlbum) throws SQLException;
 
 	public boolean eliminarArtista(int idArtista) throws SQLException;
 
 	public boolean eliminarCancion(int idCancion) throws SQLException;
-	
-	//RICARDO
+
+	// RICARDO
 
 	public boolean altaArtista(Artista artista) throws AltaException;
 
 	public ArrayList<Integer> ides() throws AltaException;
 
 	public ArrayList<String> nomArti() throws AltaException;
-		
+
 	public Map<Integer, Artista> listarArtTabla(Artista arti) throws AltaException;
 
 	public boolean altaAlbum(Album album, int idArtista) throws AltaException;
@@ -63,7 +62,9 @@ public interface InterfazDao {
 	public boolean existeIdAlbum(int id) throws AltaException;
 
 	public boolean existeIdCancion(int id) throws AltaException;
-	
+
+	public Map<Integer, Album> listarAlbumesPorArtista(int idArtista) throws AltaException;
+
 	public boolean existeCancionEnAlbum(String nombreCancion, int idAlbum) throws AltaException;
 
 }

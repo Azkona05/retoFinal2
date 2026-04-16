@@ -100,6 +100,7 @@ public class DaoImplementacion implements InterfazDao {
 	final String COMPROBAR_ALBUM = "SELECT ID_AL FROM ALBUM WHERE ID_AL = ?";
 	final String COMPROBAR_CANCION = "SELECT ID_C FROM CANCION WHERE ID_C = ?";
 	final String COMPROBAR_CANCION_EN_ALBUM = "SELECT ID_C FROM CANCION WHERE NOMBRE = ? AND ID_AL = ?";
+	final String LISTAR_ALBUMES_POR_ARTISTA = "SELECT ID_AL, NOMBRE FROM ALBUM WHERE ID_A = ?";
 	//SELECT ID_A FROM ARTISTA WHERE ID_A NOT IN (SELECT ID_A FROM ARTISTA WHERE ID_A=?)";
 	
 	public DaoImplementacion() {
@@ -662,6 +663,39 @@ public class DaoImplementacion implements InterfazDao {
 			}
 		}
 		return artistas;
+	}
+	
+	
+	//RICARDO
+	@Override
+	public Map<Integer, Album> listarAlbumesPorArtista(int idArtista) throws AltaException {
+	    Map<Integer, Album> albumes = new HashMap<>();
+	    ResultSet rs = null;
+	    openConnection();
+	    
+	    try {
+	        stmt = con.prepareStatement(LISTAR_ALBUMES_POR_ARTISTA);
+	        stmt.setInt(1, idArtista);
+	        rs = stmt.executeQuery();
+	        
+	        while (rs.next()) {
+	            Album album = new Album();
+	            album.setId(rs.getInt("ID_AL"));
+	            album.setNombre(rs.getString("NOMBRE"));
+	            albumes.put(album.getId(), album);
+	        }
+	        
+	    } catch (SQLException e) {
+	        throw new AltaException("ERROR AL LISTAR ÁLBUMES POR ARTISTA: " + e.getMessage());
+	    } finally {
+	        try {
+	            if (rs != null) rs.close();
+	            closeConnection();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return albumes;
 	}
 	 
 	//AN

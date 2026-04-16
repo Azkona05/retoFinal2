@@ -47,14 +47,24 @@ public class VArtista extends JDialog implements ActionListener {
 	private JRadioButton rdbtnSolo;
 	private JRadioButton rdbtnGrupo;
 
+	/**
+	 * @param modal indica si el diálogo es modal (true) o no modal (false). Si es
+	 *              modal, bloquea la interacción con la ventana padre mientras está
+	 *              abierto.
+	 */
 	public VArtista(VAlta padre, boolean modal) {
 		super(padre, modal);
 
 		setTitle("Alta de artista");
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setResizable(false);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));
-		
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);// Cuando se cierra la ventana, se cierra solo la ventana y
+															// no termian el programa.
+		setResizable(false); // evita que el usuario redimencione la ventana (no le cambie el tamaño)
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));// Establece una
+																										// imagen
+																										// siguiendo la
+																										// ruta asignada
+
+		// Elige los colores en base a los numeros
 		Color fondoVentana = new Color(245, 247, 250);
 		Color fondoTarjeta = Color.WHITE;
 		Color naranjaPalo = new Color(244, 162, 97);
@@ -67,11 +77,15 @@ public class VArtista extends JDialog implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
 		setContentPane(contentPane);
 
+		// Este es para dar efecto de tarjeta flotante sobre el fondo
 		JPanel panelTarjeta = new JPanel(new BorderLayout(0, 20));
 		panelTarjeta.setBackground(fondoTarjeta);
-		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(
-				new LineBorder(colorBorde, 1, true),
-				new EmptyBorder(20, 20, 20, 20)));
+		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(new LineBorder(colorBorde, 1, true), // color,grosor y
+																										// que las
+																										// esquinas
+																										// esten
+																										// redondeadas
+				new EmptyBorder(20, 20, 20, 20)));// deje espacios en blanco
 
 		contentPane.add(panelTarjeta, BorderLayout.CENTER);
 
@@ -91,24 +105,28 @@ public class VArtista extends JDialog implements ActionListener {
 
 		panelTarjeta.add(panelCabecera, BorderLayout.NORTH);
 
-		JPanel panelFormulario = new JPanel(new GridBagLayout());
+		JPanel panelFormulario = new JPanel(new GridBagLayout());// GridBagLayout layout mas flexible
 		panelFormulario.setBackground(fondoTarjeta);
 
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(8, 8, 8, 8);
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+		GridBagConstraints gbc = new GridBagConstraints(); // es un layout mas flexible que permite controlar con mas
+															// precision el tamaño
+		gbc.insets = new Insets(8, 8, 8, 8);// Margen de 8px alrededor de cada componente
+		gbc.anchor = GridBagConstraints.WEST; // Alinear a la izquierda
+		gbc.fill = GridBagConstraints.HORIZONTAL; // Expandir horizontalmente
 
+		// Etiqueta del ID
 		JLabel lblId = new JLabel("ID");
 		lblId.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lblId.setForeground(colorTexto);
 
+		// Campo del ID
 		textFieldID = new JTextField();
 		textFieldID.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		textFieldID.setPreferredSize(new Dimension(220, 34));
-		textFieldID.setBorder(BorderFactory.createCompoundBorder(
-				new LineBorder(new Color(210, 214, 220), 1, true),
-				new EmptyBorder(5, 8, 5, 8)));
+		textFieldID.setPreferredSize(new Dimension(220, 34));// el componente tendra preferencia por este tamaño
+		textFieldID.setBorder(BorderFactory.createCompoundBorder( // createCompoundBorder junta dos bordes para que el
+																	// texto no este pegado al borde
+				new LineBorder(new Color(210, 214, 220), 1, true), // color,grosor y que las esquinas esten redondeadas
+				new EmptyBorder(5, 8, 5, 8))); // deje espacios en blanco
 
 		JLabel lblNombre = new JLabel("Nombre");
 		lblNombre.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -117,15 +135,14 @@ public class VArtista extends JDialog implements ActionListener {
 		textFieldNombre = new JTextField();
 		textFieldNombre.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		textFieldNombre.setPreferredSize(new Dimension(220, 34));
-		textFieldNombre.setBorder(BorderFactory.createCompoundBorder(
-				new LineBorder(new Color(210, 214, 220), 1, true),
+		textFieldNombre.setBorder(BorderFactory.createCompoundBorder(new LineBorder(new Color(210, 214, 220), 1, true),
 				new EmptyBorder(5, 8, 5, 8)));
 
 		JLabel lblTipo = new JLabel("Tipo");
 		lblTipo.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lblTipo.setForeground(colorTexto);
 
-		JPanel panelRadios = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
+		JPanel panelRadios = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0)); // Alineado a la izquierda
 		panelRadios.setBackground(fondoTarjeta);
 
 		rdbtnSolo = new JRadioButton("Solo");
@@ -144,12 +161,12 @@ public class VArtista extends JDialog implements ActionListener {
 		panelRadios.add(rdbtnSolo);
 		panelRadios.add(rdbtnGrupo);
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
+		gbc.gridx = 0;// columna 0
+		gbc.gridy = 0;// fila 0
 		panelFormulario.add(lblId, gbc);
 
-		gbc.gridx = 1;
-		gbc.gridy = 0;
+		gbc.gridx = 1;// columna 1
+		gbc.gridy = 0;// fila 0
 		panelFormulario.add(textFieldID, gbc);
 
 		gbc.gridx = 0;
@@ -183,9 +200,9 @@ public class VArtista extends JDialog implements ActionListener {
 
 		btnAnadir = new JButton("Añadir");
 		btnAnadir.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btnAnadir.setFocusPainted(false);
-		btnAnadir.setBorderPainted(false);
-		btnAnadir.setOpaque(true);
+		btnAnadir.setFocusPainted(false);// el boton se vera mas limpio
+		btnAnadir.setBorderPainted(false);// el borde no se ve
+		btnAnadir.setOpaque(true);// pinta fondo el boton si es true
 		btnAnadir.setBackground(naranjaPalo);
 		btnAnadir.setForeground(Color.WHITE);
 		btnAnadir.addActionListener(this);
@@ -195,14 +212,33 @@ public class VArtista extends JDialog implements ActionListener {
 
 		panelTarjeta.add(panelInferior, BorderLayout.SOUTH);
 
-		pack();
-		setLocationRelativeTo(padre);
+		pack();// se ajusta el tamaño de la ventana al tamaño de los componentes
+				// (Jlabels,botones...)
+		setLocationRelativeTo(padre);// pone la ventena encima de la anterior o padre (centrada)
 	}
 
+	/**
+	 * 
+	 * @param e  hace referencia al ActionEvent y dependiendo de la accion que
+	 *           realize el usuario hará algo
+	 * @param id el identificador del artista a comprobar
+	 * @return {true} si el ID ya existe, { false} en caso contrario
+	 * @throws AltaException si ocurre un error al acceder a la base de datos
+	 * 
+	 * 
+	 * @param nombre el nombre del artista a comprobar
+	 * @return {@code true} si el nombre ya existe, {@code false} en caso contrario
+	 * @throws AltaException si ocurre un error al acceder a la base de datos
+	 * 
+	 * 
+	 * @param texto la cadena de texto a validar
+	 * @return {@code true} si el texto es un número entero válido, {@code false} en
+	 *         caso contrario
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(volverButton)) {
-			dispose();
+			this.dispose();
 
 		} else if (e.getSource() == btnAnadir) {
 			if (textFieldID.getText().isEmpty() || textFieldNombre.getText().isEmpty()) {
@@ -229,8 +265,7 @@ public class VArtista extends JDialog implements ActionListener {
 					return;
 				}
 			} catch (AltaException e1) {
-				JOptionPane.showMessageDialog(this, "Fallo al comprobar id", "Error",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Fallo al comprobar id", "Error", JOptionPane.INFORMATION_MESSAGE);
 				return;
 			}
 

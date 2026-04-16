@@ -31,6 +31,10 @@ import modelo.Cancion;
 import modelo.Genero;
 
 public class VAlbumCanci extends JDialog implements ActionListener {
+	/**
+	 * @author Ricardo Soza
+	 */
+
 
 	private static final long serialVersionUID = 1L;
 
@@ -47,7 +51,7 @@ public class VAlbumCanci extends JDialog implements ActionListener {
 	private int cancionesAñadidas;
 	private ArrayList<Cancion> canciones;
 	private String nombreAlbum;
-	private Set<Integer> idsGenerados;
+	private Set<Integer> idsGenerados;//SET array que guarda id no repetidos
 	private int idActual;
 
 	public VAlbumCanci(int idAlbum, int cancionesPendientes, String nombreAlbum) {
@@ -213,7 +217,7 @@ public class VAlbumCanci extends JDialog implements ActionListener {
 
 		gbc.gridx = 0;
 		gbc.gridy = 5;
-		gbc.gridwidth = 1;
+		gbc.gridwidth = 1;// numero de columnas que ocupa (si es mas de una las fusiona)
 		panelFormulario.add(lblGenero, gbc);
 
 		gbc.gridx = 1;
@@ -248,12 +252,13 @@ public class VAlbumCanci extends JDialog implements ActionListener {
 
 		panelTarjeta.add(panelInferior, BorderLayout.SOUTH);
 
-		generarNuevoId();
+		generarNuevoId();//llamo aqui al metodo para que el usuario ya vea un id generado al entrar en la ventana	
 
-		getRootPane().setDefaultButton(btnAceptar);
+		getRootPane().setDefaultButton(btnAceptar);//basicamente si presion ENTER se activa el boton aceptar	
 
-		pack();
-		setLocationRelativeTo(null);
+		pack();// se ajusta el tamaño de la ventana al tamaño de los componentes
+		   // (Jlabels,botones...)
+		setLocationRelativeTo(null);// pone la ventena encima de la anterior o padre (centrada)
 	}
 
 	private void generarNuevoId() {

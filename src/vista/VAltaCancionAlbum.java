@@ -32,6 +32,7 @@ import javax.swing.table.DefaultTableModel;
 
 import exception.AltaException;
 import main.Principal;
+import modelo.Album;
 import modelo.Artista;
 import modelo.Cancion;
 import modelo.Genero;
@@ -57,7 +58,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 
 	private int idArtistaSeleccionado = 0;
 	private int idAlbumSeleccionado = 0;
-	private Set<Integer> idsGenerados = new HashSet<>();
+	private Set<Integer> idsGenerados = new HashSet<>();//Set, para que no guarde id repetidos
 	private int idCancionActual;
 
 	public VAltaCancionAlbum(boolean modal) {
@@ -108,9 +109,8 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 		panelCentro.setBackground(fondoTarjeta);
 		panelCentro.setLayout(new BorderLayout(0, 20));
 
-		// =========================
-		// PANEL TABLAS
-		// =========================
+	
+		// Panel tablas
 		JPanel panelTablas = new JPanel(new GridBagLayout());
 		panelTablas.setBackground(fondoTarjeta);
 
@@ -119,7 +119,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 		gbcTablas.insets = new Insets(6, 0, 6, 0);
 		gbcTablas.anchor = GridBagConstraints.WEST;
 		gbcTablas.fill = GridBagConstraints.HORIZONTAL;
-		gbcTablas.weightx = 1.0;
+		gbcTablas.weightx = 1.0;//ocupar el espacio que sobre
 
 		JLabel lblArtistas = new JLabel("Artistas");
 		lblArtistas.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -433,53 +433,38 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 
 		generarNuevoId();
 
-		setSize(820, 660);
+		setSize(820, 660); //tamaño de la ventana
 		setLocationRelativeTo(null);
 	}
 
 	private void cargarAlbumesPorArtista(int idArtista, String nombreArtista) {
-		try {
-			java.sql.Connection con = null;
-			java.sql.PreparedStatement stmt = null;
-			java.sql.ResultSet rs = null;
-
-			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				con = java.sql.DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/TartangaMusic?serverTimezone=Europe/Madrid&useSSL=false",
-						"root",
-						"abcd*1234");
-
-				String sql = "SELECT ID_AL, NOMBRE FROM ALBUM WHERE ID_A = ?";
-				stmt = con.prepareStatement(sql);
-				stmt.setInt(1, idArtista);
-				rs = stmt.executeQuery();
-
-				DefaultTableModel model = (DefaultTableModel) tablaAlbumes.getModel();
-				model.setRowCount(0);
-
-				while (rs.next()) {
-					Object[] fila = { rs.getInt("ID_AL"), rs.getString("NOMBRE"), idArtista, nombreArtista };
-					model.addRow(fila);
-				}
-
-				if (model.getRowCount() == 0) {
-					JOptionPane.showMessageDialog(this,
-							"El artista " + nombreArtista
-									+ " no tiene álbumes.\nPrimero debes crear un álbum para este artista.",
-							"Información", JOptionPane.INFORMATION_MESSAGE);
-				}
-
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(this, "Error al cargar álbumes: " + ex.getMessage());
-			} finally {
-				if (rs != null) rs.close();
-				if (stmt != null) stmt.close();
-				if (con != null) con.close();
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+	    try {
+	        Map<Integer, Album> albumesMap = Principal.listarAlbumesPorArtista(idArtista);
+	        
+	        DefaultTableModel model = (DefaultTableModel) tablaAlbumes.getModel();
+	        model.setRowCount(0); //limpia la tabla
+	        
+	        if (albumesMap != null && !albumesMap.isEmpty()) {
+	            for (Map.Entry<Integer, Album> entry : albumesMap.entrySet()) {
+	                Album album = entry.getValue();
+	                Object[] fila = {
+	                    album.getId(),
+	                    album.getNombre(),
+	                    idArtista,
+	                    nombreArtista
+	                };
+	                model.addRow(fila);
+	            }
+	        } else {
+	            JOptionPane.showMessageDialog(this,
+	                "El artista " + nombreArtista + " no tiene álbumes.\nPrimero debes crear un álbum para este artista.",
+	                "Información", JOptionPane.INFORMATION_MESSAGE);
+	        }
+	        
+	    } catch (AltaException ex) {
+	        JOptionPane.showMessageDialog(this, "Error al cargar álbumes: " + ex.getMessage(), 
+	            "Error", JOptionPane.ERROR_MESSAGE);
+	    }
 	}
 
 	private void generarNuevoId() {
@@ -512,7 +497,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 		if (nombreCancion.isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Por favor, introduce el nombre de la canción.", "Campo requerido",
 					JOptionPane.WARNING_MESSAGE);
-			textFieldNombreCancion.requestFocus();
+			textFieldNombreCancion.requestFocus();//el cursor se pone automaticamente en este campo
 			return false;
 		}
 
@@ -522,7 +507,7 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 						"Ya existe una canción con el nombre '" + nombreCancion
 								+ "' en el álbum seleccionado.\nPor favor, elige otro nombre.",
 						"Nombre duplicado", JOptionPane.WARNING_MESSAGE);
-				textFieldNombreCancion.requestFocus();
+				textFieldNombreCancion.requestFocus();//el cursor se pone automaticamente en este campo
 				return false;
 			}
 		} catch (AltaException e) {

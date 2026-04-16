@@ -32,7 +32,10 @@ public class VAlta extends JDialog implements ActionListener {
 	private JButton btnMusica;
 	private JButton btnAlbum;
 	private JButton btnVolver;
-
+/**
+ * @param modal indica si el diálogo es modal (true) o no modal (false). Si es modal,
+ * bloquea la interacción con la ventana padre mientras está abierto.
+ * */
 	public VAlta(VMenuAdmin padre, boolean modal) {
 		super(padre, modal);
 
@@ -90,7 +93,7 @@ public class VAlta extends JDialog implements ActionListener {
 
 		panelTarjeta.add(panelCabecera, BorderLayout.NORTH);
 
-		JPanel panelBotones = new JPanel(new GridLayout(1, 3, 18, 18));//GridLayout es para que los botones que use sean del mismo tamaño en 1 fila y 3 columnas
+		JPanel panelBotones = new JPanel(new GridLayout(1, 3, 18, 18));//GridLayout es para que los botones que use sean del mismo tamaño,1 fila y 3 columnas
 		panelBotones.setBackground(fondoTarjeta);
 		panelBotones.setBorder(new EmptyBorder(10, 10, 10, 10));
 
@@ -146,9 +149,12 @@ public class VAlta extends JDialog implements ActionListener {
 		panelTarjeta.add(panelInferior, BorderLayout.SOUTH);
 
 		pack();//se ajusta el tamaño de la ventana al tamaño de los componentes (Jlabels,botones...)
-		setLocationRelativeTo(padre); //pone la ventena encima de la anterior o padre
+		setLocationRelativeTo(padre); //pone la ventena encima de la anterior o padre  (centrada)
 	}
 
+	/**
+	 * de que va
+	 * @param e hace referencia al ActionEvent y dependiendo de la accion que realize el usuario hará algo*/
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnVolver) {
