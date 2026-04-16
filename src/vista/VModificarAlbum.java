@@ -28,6 +28,9 @@ import javax.swing.table.DefaultTableModel;
 
 import main.Principal;
 
+/**
+ * @author Jon Ander
+ * */
 public class VModificarAlbum extends JDialog implements ActionListener {
 
 	/**

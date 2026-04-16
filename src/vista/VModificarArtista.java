@@ -29,6 +29,9 @@ import javax.swing.table.DefaultTableModel;
 import main.Principal;
 import modelo.Tipo;
 
+/**
+ * @author Jon Ander
+ * */
 public class VModificarArtista extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;

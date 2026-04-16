@@ -32,7 +32,7 @@ import modelo.Genero;
 public class VModificarCancion extends JDialog implements ActionListener {
 
 	/**
-	 * 
+	 * @author Jon Ander
 	 */
 	private static final long serialVersionUID = 1L;
 	private JTable table;

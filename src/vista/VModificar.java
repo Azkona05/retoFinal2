@@ -6,6 +6,9 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+/**
+ * @author Jon Ander
+ * */
 public class VModificar extends JDialog implements ActionListener {
     private static final long serialVersionUID = 1L;
     private JButton btnArtista, btnAlbum, btnCancion, btnVolver;
