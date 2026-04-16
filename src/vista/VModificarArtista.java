@@ -1,14 +1,33 @@
 package vista;
 
-import controlador.DaoImplementacion;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import modelo.Tipo;
-
-import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.*;
+
+import main.Principal;
+import modelo.Tipo;
 
 public class VModificarArtista extends JDialog implements ActionListener {
 
@@ -24,13 +43,10 @@ public class VModificarArtista extends JDialog implements ActionListener {
 	private JButton btnVolver;
 
 	private JLabel lblInfo;
-	private DaoImplementacion dao;
 	private int idSeleccionado = -1;
 
 	public VModificarArtista(JDialog padre, boolean modal) {
 		super(padre, modal);
-
-		dao = new DaoImplementacion();
 
 		setTitle("Modificar artista");
 		setResizable(false);
@@ -125,7 +141,7 @@ public class VModificarArtista extends JDialog implements ActionListener {
 
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				
+
 				int fila = table.getSelectedRow();
 				idSeleccionado = Integer.parseInt(model.getValueAt(fila, 0).toString());
 				txtNombre.setText(model.getValueAt(fila, 1).toString());
@@ -142,7 +158,7 @@ public class VModificarArtista extends JDialog implements ActionListener {
 	private void cargarArtistas() {
 		model.setRowCount(0);
 		try {
-			Object[][] datos = dao.devolverArtistas(null);
+			Object[][] datos = Principal.devolverArtistas(null);
 			for (Object[] fila : datos) {
 				model.addRow(fila);
 			}
@@ -166,7 +182,7 @@ public class VModificarArtista extends JDialog implements ActionListener {
 			String tipo = comboTipo.getSelectedItem().toString();
 
 			try {
-				boolean ok = dao.modificarArtista(idSeleccionado, nombre, tipo);
+				boolean ok = Principal.modificarArtista(idSeleccionado, nombre, tipo);
 				if (ok) {
 					JOptionPane.showMessageDialog(this, "Artista modificado");
 					dispose();

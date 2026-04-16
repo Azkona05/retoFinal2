@@ -1,5 +1,6 @@
 package vista;
 
+// Importaciones para interfaz gráfica Swing/AWT
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,48 +23,66 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
+// Excepción personalizada del proyecto
 import exception.LoginException;
-import main.Principal;
-import modelo.Artista;
 
+// Clase principal donde están los métodos de lógica
+import main.Principal;
+
+// Modelo de datos
+import modelo.Artista;
+/**
+ * @author Nora Yakoubi
+ */
 public class VEliminarArtista extends JDialog implements ActionListener {
 
+	// Serial version UID de Swing
 	private static final long serialVersionUID = 1L;
 
-	private JTable table;
-	private DefaultTableModel model;
-	private JButton btnEliminarArtista;
-	private JButton btnVolver;
-	private JLabel lblInfo;
+	// Componentes de la ventana
+	private JTable table; // tabla de artistas
+	private DefaultTableModel model; // modelo de la tabla
+	private JButton btnEliminarArtista; // botón eliminar
+	private JButton btnVolver; // botón volver
+	private JLabel lblInfo; // información dinámica
 
+	// Constructor de la ventana modal
 	public VEliminarArtista(VBaja padre, boolean modal) {
 		super(padre, modal);
 
-		setTitle("Eliminar artista");
+		setTitle("Eliminar artista"); // título ventana
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));
 
+		// icono de la ventana
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo-png.png")));
+
+		// Colores del diseño
 		Color fondoVentana = new Color(245, 247, 250);
 		Color fondoTarjeta = Color.WHITE;
-		Color colorPrimario = new Color(220, 53, 69);
+		Color colorPrimario = new Color(220, 53, 69); // rojo eliminar
 		Color colorTexto = new Color(40, 40, 40);
 		Color colorSecundario = new Color(120, 120, 120);
 		Color colorBorde = new Color(220, 224, 230);
 		Color colorSeleccion = new Color(232, 242, 252);
 
+		// Panel principal
 		JPanel contentPane = new JPanel(new BorderLayout(20, 20));
 		contentPane.setBackground(fondoVentana);
 		contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
 		setContentPane(contentPane);
 
+		// Panel tipo tarjeta (contenedor visual principal)
 		JPanel panelTarjeta = new JPanel(new BorderLayout(0, 20));
 		panelTarjeta.setBackground(fondoTarjeta);
-		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(new LineBorder(colorBorde, 1, true),
+		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(
+				new LineBorder(colorBorde, 1, true),
 				new EmptyBorder(20, 20, 20, 20)));
 
 		contentPane.add(panelTarjeta, BorderLayout.CENTER);
 
+		// Panel cabecera (título + info)
 		JPanel panelCabecera = new JPanel(new BorderLayout(0, 8));
 		panelCabecera.setBackground(fondoTarjeta);
 
@@ -71,6 +90,7 @@ public class VEliminarArtista extends JDialog implements ActionListener {
 		lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		lblTitulo.setForeground(colorTexto);
 
+		// Label informativo que se actualiza dinámicamente
 		lblInfo = new JLabel("Selecciona un artista de la tabla");
 		lblInfo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblInfo.setForeground(colorSecundario);
@@ -80,36 +100,42 @@ public class VEliminarArtista extends JDialog implements ActionListener {
 
 		panelTarjeta.add(panelCabecera, BorderLayout.NORTH);
 
+		// Columnas de la tabla
 		String[] columnas = { "ID", "Nombre", "Tipo" };
 
+		// Modelo de tabla (no editable)
 		model = new DefaultTableModel(columnas, 0) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return false;
+				return false; // evita edición directa
 			}
 		};
 
+		// Tabla de artistas
 		table = new JTable(model);
 		table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		table.setRowHeight(30);
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // solo una fila
 		table.setShowVerticalLines(false);
 		table.setGridColor(new Color(235, 235, 235));
 		table.setSelectionBackground(colorSeleccion);
 		table.setSelectionForeground(Color.BLACK);
 		table.setFillsViewportHeight(true);
 
+		// Estilo del encabezado de la tabla
 		table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
 		table.getTableHeader().setBackground(Color.WHITE);
 		table.getTableHeader().setForeground(colorTexto);
 		table.getTableHeader().setReorderingAllowed(false);
 
+		// Ajuste de columnas
 		table.getColumnModel().getColumn(0).setPreferredWidth(60);
 		table.getColumnModel().getColumn(1).setPreferredWidth(220);
 		table.getColumnModel().getColumn(2).setPreferredWidth(160);
 
+		// Scroll para la tabla
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBorder(new LineBorder(colorBorde, 1, true));
 		scrollPane.getViewport().setBackground(Color.WHITE);
@@ -117,6 +143,7 @@ public class VEliminarArtista extends JDialog implements ActionListener {
 
 		panelTarjeta.add(scrollPane, BorderLayout.CENTER);
 
+		// Panel inferior con botones
 		JPanel panelInferior = new JPanel(new BorderLayout());
 		panelInferior.setBackground(fondoTarjeta);
 
@@ -127,6 +154,7 @@ public class VEliminarArtista extends JDialog implements ActionListener {
 		JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
 		panelBotones.setBackground(fondoTarjeta);
 
+		// Botón volver
 		btnVolver = new JButton("Volver");
 		btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btnVolver.setFocusPainted(false);
@@ -135,6 +163,7 @@ public class VEliminarArtista extends JDialog implements ActionListener {
 		btnVolver.setBorder(new LineBorder(new Color(200, 200, 200), 1, true));
 		btnVolver.addActionListener(this);
 
+		// Botón eliminar artista seleccionado
 		btnEliminarArtista = new JButton("Eliminar seleccionado");
 		btnEliminarArtista.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btnEliminarArtista.setFocusPainted(false);
@@ -152,12 +181,14 @@ public class VEliminarArtista extends JDialog implements ActionListener {
 
 		panelTarjeta.add(panelInferior, BorderLayout.SOUTH);
 
+		// Carga de datos desde la lógica principal
 		try {
-			Artista a = new Artista();
+			Artista a = new Artista(); // objeto vacío como filtro
 			Object[][] datos = Principal.devolverArtistas(a);
 
-			model.setRowCount(0);
+			model.setRowCount(0); // limpiar tabla
 
+			// rellenar tabla con datos
 			for (Object[] fila : datos) {
 				model.addRow(fila);
 			}
@@ -172,35 +203,45 @@ public class VEliminarArtista extends JDialog implements ActionListener {
 		setLocationRelativeTo(padre);
 	}
 
+	// Manejo de eventos de botones
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
+		// Botón volver
 		if (e.getSource().equals(btnVolver)) {
 			dispose();
 		}
 
+		// Botón eliminar artista
 		else if (e.getSource().equals(btnEliminarArtista)) {
+
 			int filaSeleccionada = table.getSelectedRow();
 
+			// validación selección
 			if (filaSeleccionada == -1) {
 				JOptionPane.showMessageDialog(this, "Selecciona un artista de la tabla");
 				return;
 			}
 
-			int confirmacion = JOptionPane.showConfirmDialog(this,
-					"¿Seguro que quieres eliminar el artista seleccionado?", "Confirmar eliminación",
+			// confirmación de eliminación
+			int confirmacion = JOptionPane.showConfirmDialog(
+					this,
+					"¿Seguro que quieres eliminar el artista seleccionado?",
+					"Confirmar eliminación",
 					JOptionPane.YES_NO_OPTION);
 
 			if (confirmacion != JOptionPane.YES_OPTION) {
 				return;
 			}
 
+			// obtener ID del artista
 			int idArtista = Integer.parseInt(model.getValueAt(filaSeleccionada, 0).toString());
 
 			try {
 				boolean eliminado = Principal.eliminarArtista(idArtista);
 
 				if (eliminado) {
-					model.removeRow(filaSeleccionada);
+					model.removeRow(filaSeleccionada); // eliminar de tabla
 					lblInfo.setText("Artistas cargados: " + model.getRowCount());
 					JOptionPane.showMessageDialog(this, "Artista eliminado correctamente");
 				} else {

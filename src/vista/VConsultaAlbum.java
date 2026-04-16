@@ -1,4 +1,4 @@
- package vista;
+package vista;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -42,17 +42,14 @@ import modelo.Artista;
  * Ventana de consulta de canciones de un artista.
  * 
  * Muestra una tabla con las canciones asociadas al artista seleccionado.
- * Además, permite reproducir una canción pulsando sobre la columna
- * "Reproducir" y detener la reproducción al cerrar la ventana.
+ * Además, permite reproducir una canción pulsando sobre la columna "Reproducir"
+ * y detener la reproducción al cerrar la ventana.
  * 
- * La ventana:
- * - carga las canciones del artista recibido por parámetro
- * - muestra sus datos en una tabla
- * - simula un botón "Play" en la última columna
+ * La ventana: - carga las canciones del artista recibido por parámetro -
+ * muestra sus datos en una tabla - simula un botón "Play" en la última columna
  * - reproduce un archivo .wav cuyo nombre coincide con el nombre de la canción
  * 
  * @author An Azkona
- * @version 1.0
  */
 public class VConsultaAlbum extends JDialog implements ActionListener {
 
@@ -67,8 +64,8 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 	/**
 	 * Clip de audio actualmente en reproducción.
 	 * 
-	 * Se guarda para poder detenerlo antes de reproducir otro
-	 * o al cerrar la ventana.
+	 * Se guarda para poder detenerlo antes de reproducir otro o al cerrar la
+	 * ventana.
 	 */
 	private Clip clipActual;
 
@@ -78,12 +75,12 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 	/**
 	 * Constructor de la ventana de consulta de canciones.
 	 * 
-	 * Recibe el identificador del artista y carga todas sus canciones
-	 * en una tabla. Cada fila incluye un acceso visual para reproducir
-	 * el archivo de audio asociado a la canción.
+	 * Recibe el identificador del artista y carga todas sus canciones en una tabla.
+	 * Cada fila incluye un acceso visual para reproducir el archivo de audio
+	 * asociado a la canción.
 	 * 
-	 * @param padre ventana padre desde la que se abre este diálogo
-	 * @param modal indica si la ventana será modal o no
+	 * @param padre     ventana padre desde la que se abre este diálogo
+	 * @param modal     indica si la ventana será modal o no
 	 * @param idArtista identificador del artista cuyas canciones se desean mostrar
 	 */
 	public VConsultaAlbum(VConsultar padre, boolean modal, int idArtista) {
@@ -109,8 +106,7 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 
 		JPanel panelTarjeta = new JPanel(new BorderLayout(0, 20));
 		panelTarjeta.setBackground(fondoTarjeta);
-		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(
-				new LineBorder(colorBorde, 1, true),
+		panelTarjeta.setBorder(BorderFactory.createCompoundBorder(new LineBorder(colorBorde, 1, true),
 				new EmptyBorder(20, 20, 20, 20)));
 
 		contentPane.add(panelTarjeta, BorderLayout.CENTER);
@@ -149,11 +145,11 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 			/**
 			 * En esta tabla no se permite editar ninguna celda.
 			 * 
-			 * Aunque la última columna se vea como un botón, realmente
-			 * no es un botón editable de tabla; se dibuja con un renderer
-			 * y el clic se controla con un MouseListener.
+			 * Aunque la última columna se vea como un botón, realmente no es un botón
+			 * editable de tabla; se dibuja con un renderer y el clic se controla con un
+			 * MouseListener.
 			 * 
-			 * @param row fila consultada
+			 * @param row    fila consultada
 			 * @param column columna consultada
 			 * @return false siempre, porque la tabla es solo de visualización
 			 */
@@ -188,17 +184,16 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 			/**
 			 * Dibuja un botón visual en la columna "Reproducir".
 			 * 
-			 * Importante: esto no convierte la celda en un JButton real
-			 * funcional por sí mismo. Solo hace que la celda se vea como
-			 * un botón. La acción del clic se controla aparte con el
-			 * MouseListener de la tabla.
+			 * Importante: esto no convierte la celda en un JButton real funcional por sí
+			 * mismo. Solo hace que la celda se vea como un botón. La acción del clic se
+			 * controla aparte con el MouseListener de la tabla.
 			 * 
-			 * @param table tabla que solicita el renderizado
-			 * @param value valor de la celda
+			 * @param table      tabla que solicita el renderizado
+			 * @param value      valor de la celda
 			 * @param isSelected indica si la fila está seleccionada
-			 * @param hasFocus indica si la celda tiene foco
-			 * @param row fila actual
-			 * @param column columna actual
+			 * @param hasFocus   indica si la celda tiene foco
+			 * @param row        fila actual
+			 * @param column     columna actual
 			 * @return componente visual que representa la celda
 			 */
 			@Override
@@ -221,9 +216,9 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 			/**
 			 * Detecta clics sobre la tabla.
 			 * 
-			 * Si el usuario pulsa en la columna "Reproducir", se obtiene
-			 * el nombre de la canción de esa fila y se intenta reproducir
-			 * su archivo de audio correspondiente.
+			 * Si el usuario pulsa en la columna "Reproducir", se obtiene el nombre de la
+			 * canción de esa fila y se intenta reproducir su archivo de audio
+			 * correspondiente.
 			 * 
 			 * @param e evento de ratón producido sobre la tabla
 			 */
@@ -245,8 +240,8 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 			/**
 			 * Se ejecuta cuando la ventana se está cerrando.
 			 * 
-			 * Se detiene el audio para evitar que siga sonando
-			 * después de cerrar el diálogo.
+			 * Se detiene el audio para evitar que siga sonando después de cerrar el
+			 * diálogo.
 			 * 
 			 * @param windowEvent evento de cierre de ventana
 			 */
@@ -307,8 +302,7 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 
 		} catch (LoginException e1) {
 			e1.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Error al cargar las canciones", "Error",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Error al cargar las canciones", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 
 		pack();
@@ -318,9 +312,9 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 	/**
 	 * Gestiona las acciones de los componentes que usan ActionListener.
 	 * 
-	 * Actualmente solo se controla el botón de cerrar.
-	 * Antes de cerrar la ventana, se detiene el audio en reproducción
-	 * para evitar que continúe sonando en segundo plano.
+	 * Actualmente solo se controla el botón de cerrar. Antes de cerrar la ventana,
+	 * se detiene el audio en reproducción para evitar que continúe sonando en
+	 * segundo plano.
 	 * 
 	 * @param e evento de acción lanzado por un componente
 	 */
@@ -335,14 +329,13 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 	/**
 	 * Reproduce el archivo de audio asociado a una canción.
 	 * 
-	 * El método busca un archivo .wav dentro de la carpeta "canciones"
-	 * cuyo nombre coincida exactamente con el nombre de la canción.
+	 * El método busca un archivo .wav dentro de la carpeta "canciones" cuyo nombre
+	 * coincida exactamente con el nombre de la canción.
 	 * 
-	 * Antes de reproducir una nueva canción, se detiene cualquier audio
-	 * que estuviera sonando anteriormente.
+	 * Antes de reproducir una nueva canción, se detiene cualquier audio que
+	 * estuviera sonando anteriormente.
 	 * 
-	 * Ejemplo de ruta esperada:
-	 * canciones/NombreCancion.wav
+	 * Ejemplo de ruta esperada: canciones/NombreCancion.wav
 	 * 
 	 * @param nombreCancion nombre de la canción que se desea reproducir
 	 */
@@ -369,27 +362,22 @@ public class VConsultaAlbum extends JDialog implements ActionListener {
 			} else {
 				JOptionPane.showMessageDialog(this,
 						"No se encontró el archivo de audio:\n" + archivoMusica.getAbsolutePath(),
-						"Archivo no encontrado",
-						JOptionPane.WARNING_MESSAGE);
+						"Archivo no encontrado", JOptionPane.WARNING_MESSAGE);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this,
-					"Error al reproducir el audio.",
-					"Error",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Error al reproducir el audio.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
 	/**
 	 * Detiene la reproducción actual, si existe.
 	 * 
-	 * Si hay un clip cargado:
-	 * - se detiene si está sonando
-	 * - se cierra para liberar recursos del sistema
+	 * Si hay un clip cargado: - se detiene si está sonando - se cierra para liberar
+	 * recursos del sistema
 	 * 
-	 * Este método se llama antes de reproducir una nueva canción
-	 * y también al cerrar la ventana.
+	 * Este método se llama antes de reproducir una nueva canción y también al
+	 * cerrar la ventana.
 	 */
 	private void detenerAudio() {
 		if (clipActual != null) {

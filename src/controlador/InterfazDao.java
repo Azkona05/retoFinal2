@@ -80,4 +80,6 @@ public interface InterfazDao {
 	
 	public Cancion buscarCancion(int id);
 
+	public String tipoAlbum(int idAlbum);
+
 }
