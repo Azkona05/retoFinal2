@@ -20,10 +20,11 @@ El objetivo del proyecto es integrar:
 * MySQL
 * JDBC (conector MySQL)
 * Mockito (testing con JARs)
+* JUnit 5 
 
 **Herramientas de desarrollo:**
 
-* NetBeans
+* Notepad++
 * Eclipse IDE
 * Visual Studio Code
 
