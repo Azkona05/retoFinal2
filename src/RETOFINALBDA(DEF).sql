@@ -1,4 +1,4 @@
-DROP DATABASE TartangaMusic;
+-- DROP DATABASE TartangaMusic;
 CREATE DATABASE TartangaMusic;
 USE TartangaMusic;
 
@@ -11,7 +11,8 @@ CLAVE VARCHAR(20));
 CREATE TABLE ARTISTA
 (ID_A INT PRIMARY KEY,
 NOMBRE VARCHAR(20),
-TIPO ENUM('SOLO', 'GRUPO'));
+TIPO ENUM('SOLO', 'GRUPO'),
+IMAGEN VARCHAR(255));
 
 CREATE TABLE ALBUM
 (ID_AL INT PRIMARY KEY,
@@ -39,9 +40,9 @@ INSERT INTO USUARIO VALUES
 ('123', '123');
 
 INSERT INTO ARTISTA VALUES
-(1, 'BadBunny', 'SOLO'),
-(2, 'Coldplay', 'GRUPO'),
-(3, 'Rosalia', 'SOLO');
+(1, 'BadBunny', 'SOLO', 'badbunny.jpg'),
+(2, 'Coldplay', 'GRUPO', 'coldplay.jpg'),
+(3, 'Rosalia', 'SOLO', 'rosalia.jpg');
 
 INSERT INTO ALBUM VALUES
 (1, 'Un Verano Sin ti', 1),
@@ -52,7 +53,8 @@ INSERT INTO ALBUM VALUES
 INSERT INTO CANCION VALUES
 (1, 'Tití Me Pregunto', 'REGGAETON', 1),
 (2, 'Yellow', 'ROCK', 2),
-(3, 'Saoko', 'TRAP', 3);
+(3, 'Saoko', 'TRAP', 3),
+(4, 'NUEVA YOL', 'REGGAETON', 1);
 
 INSERT INTO TIENE VALUES
 (1,1),
@@ -136,7 +138,6 @@ BEGIN
 END //
 
 DELIMITER ;
-INSERT INTO CANCION VALUES (4, 'NUEVA YOL', 'REGGAETON', 1);
 CALL CANCIONESDEALBUM(1);
 
 -- =====================================================
@@ -209,7 +210,6 @@ END //
 
 DELIMITER ;
 
-CALL CAMBIARNOMBREALBUM(1,'Nuevo Album');
 SELECT * FROM ALBUM;
 
 -- =====================================================
@@ -272,7 +272,7 @@ SELECT NIVELARTISTA(1);
 
 -- =====================================================
 -- 7. ARTISTASDECANCION
--- Dado el ID de una canción, muestra todos los artistas que participan en ella según la tabla TIENE.
+-- Dado el ID de una canción, muestra todos los artistas que participan en ella según la tabla PERTENECE.
 
 DELIMITER //
 
@@ -406,15 +406,3 @@ BEGIN
 END //
 
 DELIMITER ;
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,14 +1,13 @@
 package controlador;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -699,6 +698,7 @@ public class DaoImplementacion implements InterfazDao {
 				listaArtistas.add(art);
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new LoginException("Error al cargar la jerarquía completa: " + e.getMessage());
 		} finally {
 			try {
