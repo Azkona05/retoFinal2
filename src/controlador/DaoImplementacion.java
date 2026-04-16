@@ -100,6 +100,7 @@ public class DaoImplementacion implements InterfazDao {
 	final String COMPROBAR_ALBUM = "SELECT ID_AL FROM ALBUM WHERE ID_AL = ?";
 	final String COMPROBAR_CANCION = "SELECT ID_C FROM CANCION WHERE ID_C = ?";
 	final String COMPROBAR_CANCION_EN_ALBUM = "SELECT ID_C FROM CANCION WHERE NOMBRE = ? AND ID_AL = ?";
+	final String LISTAR_ALBUMES_POR_ARTISTA = "SELECT ID_AL, NOMBRE FROM ALBUM WHERE ID_A = ?";
 	// SELECT ID_A FROM ARTISTA WHERE ID_A NOT IN (SELECT ID_A FROM ARTISTA WHERE
 	// ID_A=?)";
 
@@ -260,8 +261,6 @@ public class DaoImplementacion implements InterfazDao {
 			}
 		}
 	}
-	//NORAA
-	public boolean eliminarArtistaProcedure(int idArtista) throws SQLException {
 
 	// NORAA
 	public boolean eliminarArtistaProcedure(int idArtista) throws SQLException {
@@ -430,6 +429,7 @@ public class DaoImplementacion implements InterfazDao {
 			while (rs.next()) {
 				artis.add(rs.getString("NOMBRE"));
 			}
+
 		} catch (SQLException e) {
 			throw new AltaException("ERROR, SQL ERROR");
 		} finally {
@@ -1068,214 +1068,26 @@ public class DaoImplementacion implements InterfazDao {
 		return resultado;
 	}
 
-	}
-
-	//RICARDO
-	public ArrayList<Artista> listarArtistas() throws AltaException {
-		ArrayList<Artista> artistas = new ArrayList<>();
-		ResultSet rs = null;
-		openConnection();
-
-		try {
-			cs = (CallableStatement) con.prepareCall("{call ListarArtistas()}");
-			rs = cs.executeQuery();
-
-			while (rs.next()) {
-				Artista artista = new Artista();
-				artista.setId(rs.getInt("ID_A"));
-				artista.setNombre(rs.getString("NOMBRE"));
-				artista.setTipo(Tipo.valueOf(rs.getString("TIPO")));
-				artistas.add(artista);
-			}
-
-		} catch (SQLException e) {
-			throw new AltaException("ERROR AL LISTAR ARTISTAS: " + e.getMessage());
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				closeConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return artistas;
-	}
-	
-	
-	//RICARDO
 	@Override
 	public Map<Integer, Album> listarAlbumesPorArtista(int idArtista) throws AltaException {
-	    Map<Integer, Album> albumes = new HashMap<>();
-	    ResultSet rs = null;
-	    openConnection();
-	    
-	    try {
-	        stmt = con.prepareStatement(LISTAR_ALBUMES_POR_ARTISTA);
-	        stmt.setInt(1, idArtista);
-	        rs = stmt.executeQuery();
-	        
-	        while (rs.next()) {
-	            Album album = new Album();
-	            album.setId(rs.getInt("ID_AL"));
-	            album.setNombre(rs.getString("NOMBRE"));
-	            albumes.put(album.getId(), album);
-	        }
-	        
-	    } catch (SQLException e) {
-	        throw new AltaException("ERROR AL LISTAR ÁLBUMES POR ARTISTA: " + e.getMessage());
-	    } finally {
-	        try {
-	            if (rs != null) rs.close();
-	            closeConnection();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
-	    return albumes;
-	}
-	 
-	//AN
-	@Override
-	public List<Artista> obtenerTodosLosArtistasCompletos() throws LoginException {
-		List<Artista> listaArtistas = new ArrayList<>();
+		Map<Integer, Album> albumes = new HashMap<>();
 		ResultSet rs = null;
 		openConnection();
 
 		try {
-			stmt = con.prepareStatement(BUSCAR_ARTISTA);
+			stmt = con.prepareStatement(LISTAR_ALBUMES_POR_ARTISTA);
+			stmt.setInt(1, idArtista);
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				Artista art = new Artista();
-				art.setId(rs.getInt("ID_A"));
-				art.setNombre(rs.getString("NOMBRE"));
-				art.setTipo(Tipo.valueOf(rs.getString("TIPO").toUpperCase()));
-				art.setListaAlbumes((ArrayList<Album>) cargarAlbumesPorArtista(art.getId()));
-
-				listaArtistas.add(art);
-			}
-		} catch (SQLException e) {
-			throw new LoginException("Error al cargar la jerarquía completa: " + e.getMessage());
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				closeConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return listaArtistas;
-	}
-
-	//AN
-	private List<Album> cargarAlbumesPorArtista(int idArtista) throws SQLException {
-		List<Album> albumes = new ArrayList<>();
-		try (PreparedStatement psAlb = con.prepareStatement(SQL_BUSCAR_ALBUM_ARTISTA)) {
-			psAlb.setInt(1, idArtista);
-			try (ResultSet rsAlb = psAlb.executeQuery()) {
-				while (rsAlb.next()) {
-					Album alb = new Album();
-					alb.setId(rsAlb.getInt("ID_AL"));
-					alb.setNombre(rsAlb.getString("NOMBRE"));
-
-					alb.setCanciones((ArrayList<Cancion>) cargarCancionesPorAlbum(alb.getId()));
-
-					albumes.add(alb);
-				}
-			}
-		}
-		return albumes;
-	}
-
-	//AN
-	private List<Cancion> cargarCancionesPorAlbum(int idAlbum) throws SQLException {
-		List<Cancion> canciones = new ArrayList<>();
-		try (PreparedStatement psCan = con.prepareStatement(BUSCAR_CANCIONES_POR_ALBUM)) {
-			psCan.setInt(1, idAlbum);
-			try (ResultSet rsCan = psCan.executeQuery()) {
-				while (rsCan.next()) {
-					Cancion can = new Cancion();
-					can.setId(rsCan.getInt("ID_C"));
-					can.setNombre(rsCan.getString("NOMBRE"));
-
-					String gen = rsCan.getString("GENERO");
-					if (gen != null) {
-						can.setGenero(Genero.valueOf(gen.toUpperCase()));
-					}
-					canciones.add(can);
-				}
-			}
-		}
-		return canciones;
-	}
-
-	//AN
-	public void forzarGuardadoXML() {
-	    try {
-	        List<Artista> listaParaExportar = Principal.obtenerTodosLosArtistasCompletos();
-	        ExportadorXML exportador = new ExportadorXML();
-	        String ruta = "artistas.xml";
-	        exportador.exportarArtistas(listaParaExportar, ruta);
-	        System.out.println("XML sincronizado automáticamente.");
-	    } catch (Exception ex) {
-	        ex.printStackTrace();
-	    }
-	}
-	
-	//AN
-	@Override
-	public Object[][] devolverAlbumesT() throws LoginException {
-		List<Object[]> listaAlbumes = new ArrayList<>();
-		ResultSet rs = null;
-
-		try {
-			openConnection();
-			stmt = con.prepareStatement(BUSCAR_ALBUM);
-			rs = stmt.executeQuery();
-			
-			while (rs.next()) {
-				Object[] fila = { rs.getInt("ID_AL"), rs.getString("NOMBRE"), rs.getInt("ID_A") };
-				listaAlbumes.add(fila);
+				Album album = new Album();
+				album.setId(rs.getInt("ID_AL"));
+				album.setNombre(rs.getString("NOMBRE"));
+				albumes.put(album.getId(), album);
 			}
 
 		} catch (SQLException e) {
-			System.out.println("Error al buscar las canciones del artista: " + e.getMessage());
-			return new Object[0][0];
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				closeConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return listaAlbumes.toArray(new Object[0][0]);
-
-	}
-
-	
-	//AN
-	@Override
-	public List<Album> devolverAlbumes() throws LoginException {
-		Album al;
-		List<Album> albumes = new ArrayList<Album>();
-		ResultSet rs = null;
-		openConnection();
-		try {
-			stmt = con.prepareStatement(BUSCAR_ALBUM);
-			rs = stmt.executeQuery();
-			while (rs.next()) {
-				al = new Album();
-				al.setId(rs.getInt(1));
-				al.setNombre(rs.getString(2));
-				al.setIdArtista(rs.getInt("id_a"));
-				albumes.add(al);
-			}
-		} catch (SQLException e) {
-			throw new LoginException("Problemas en la BDs");
+			throw new AltaException("ERROR AL LISTAR ÁLBUMES POR ARTISTA: " + e.getMessage());
 		} finally {
 			try {
 				if (rs != null)
@@ -1286,37 +1098,5 @@ public class DaoImplementacion implements InterfazDao {
 			}
 		}
 		return albumes;
-	}
-
-	
-	//AN
-	@Override
-	public Object[][] devolverCanciones() throws LoginException {
-		List<Object[]> listaCanciones = new ArrayList<>();
-		ResultSet rs = null;
-
-		try {
-			openConnection();
-			stmt = con.prepareStatement(BUSCAR_CANCIONES);
-			rs = stmt.executeQuery();
-			while (rs.next()) {
-				Object[] fila = { rs.getInt("ID_C"), rs.getString("NOMBRE"), rs.getString("GENERO"),
-						rs.getString("ID_AL") };
-				listaCanciones.add(fila);
-			}
-
-		} catch (SQLException e) {
-			System.out.println("Error al buscar las canciones del artista: " + e.getMessage());
-			return new Object[0][0];
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				closeConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return listaCanciones.toArray(new Object[0][0]);
 	}
 }

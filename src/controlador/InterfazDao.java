@@ -65,6 +65,8 @@ public interface InterfazDao {
 	
 	public boolean existeCancionEnAlbum(String nombreCancion, int idAlbum) throws AltaException;
 	
+	public Map<Integer, Album> listarAlbumesPorArtista(int idArtista) throws AltaException;
+	
 	//JONAN
 	
 	public boolean modificarArtista(int id, String nombre, String tipo) throws SQLException;
@@ -80,5 +82,6 @@ public interface InterfazDao {
 	public Cancion buscarCancion(int id);
 
 	public String tipoAlbum(int idAlbum);
+
 
 }

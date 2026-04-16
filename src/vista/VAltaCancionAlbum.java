@@ -460,7 +460,6 @@ public class VAltaCancionAlbum extends JDialog implements ActionListener {
 	                "El artista " + nombreArtista + " no tiene álbumes.\nPrimero debes crear un álbum para este artista.",
 	                "Información", JOptionPane.INFORMATION_MESSAGE);
 	        }
-	        
 	    } catch (AltaException ex) {
 	        JOptionPane.showMessageDialog(this, "Error al cargar álbumes: " + ex.getMessage(), 
 	            "Error", JOptionPane.ERROR_MESSAGE);
