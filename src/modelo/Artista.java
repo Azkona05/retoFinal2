@@ -7,19 +7,24 @@ public class Artista {
 	private int id;
 	private String nombre;
 	private Tipo tipo; 
+	private String imagen;
 	private ArrayList<Album> listaAlbumes;
 	private ArrayList<Cancion> listaCanciones;
 
 	public Artista() {
 	}
 
-	public Artista(int id, String nombre, Tipo tipo, ArrayList<Album> listaAlbumes, ArrayList<Cancion> listaCanciones) {
-		this.id = id; 	 	 	
+	public Artista(int id, String nombre, Tipo tipo, String imagen, ArrayList<Album> listaAlbumes,
+			ArrayList<Cancion> listaCanciones) {
+		super();
+		this.id = id;
 		this.nombre = nombre;
 		this.tipo = tipo;
+		this.imagen = imagen;
 		this.listaAlbumes = listaAlbumes;
 		this.setListaCanciones(listaCanciones);
 	}
+
 
 	public int getId() {
 		return id;
@@ -45,6 +50,14 @@ public class Artista {
 		this.tipo = tipo;
 	}
 
+	public String getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
+	}
+
 	public ArrayList<Album> getListaAlbumes() {
 		return listaAlbumes;
 	}
@@ -67,5 +80,7 @@ public class Artista {
 		return "Artista [id=" + id + ", nombre=" + nombre + ", tipo=" + tipo + ", listaAlbumes=" + listaAlbumes
 				+ ", listaCanciones=" + listaCanciones + "]";
 	}
+
+
 
 }

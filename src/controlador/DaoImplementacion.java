@@ -1,5 +1,6 @@
 package controlador;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -89,7 +90,7 @@ public class DaoImplementacion implements InterfazDao {
 	final String DELETE_CANCION = "DELETE FROM CANCION WHERE ID_C = ?";
 
 	// SQL RICARDO
-	final String ALTAARTI = "INSERT INTO ARTISTA (ID_A, NOMBRE, TIPO) VALUES (?, ?, ?)";
+	final String ALTAARTI = "INSERT INTO ARTISTA (ID_A, NOMBRE, TIPO, IMAGEN) VALUES (?, ?, ?, ?)";
 	final String leerArtiId = "SELECT ID_A FROM ARTISTA";
 	final String leerArtiNombre = "SELECT NOMBRE FROM ARTISTA";
 	// SELECT ID_A FROM ARTISTA WHERE ID_A NOT IN (SELECT ID_A FROM ARTISTA WHERE
@@ -317,12 +318,18 @@ public class DaoImplementacion implements InterfazDao {
 		// TODO Auto-generated method stub
 		boolean result = false;
 		// ResultSet rs = null;
+		
+		String nombre = artista.getNombre().toLowerCase().replace(" ", "");
+		String imagen = nombre + ".jpg";
+		artista.setImagen(imagen);
+		
 		openConnection();
 		try {
 			stmt = con.prepareStatement(ALTAARTI);
 			stmt.setInt(1, artista.getId());
 			stmt.setString(2, artista.getNombre());
 			stmt.setString(3, artista.getTipo().name());
+	        stmt.setString(4, artista.getImagen());
 
 			int filasAfectadas = stmt.executeUpdate(); // DIFERENCIA BASTA EL EXECUTEUPDATE ES PARA INSERT UPDATE Y
 														// DELETE
@@ -686,6 +693,7 @@ public class DaoImplementacion implements InterfazDao {
 				art.setId(rs.getInt("ID_A"));
 				art.setNombre(rs.getString("NOMBRE"));
 				art.setTipo(Tipo.valueOf(rs.getString("TIPO").toUpperCase()));
+				art.setImagen(rs.getString("IMAGEN"));
 				art.setListaAlbumes((ArrayList<Album>) cargarAlbumesPorArtista(art.getId()));
 
 				listaArtistas.add(art);

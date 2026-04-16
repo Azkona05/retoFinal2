@@ -212,7 +212,6 @@ public class VEliminarAlbum extends JDialog implements ActionListener {
 
 	/**
 	 * Gestiona los eventos producidos por la interacción del usuario con los botones.
-	 * Permite volver a la ventana anterior o eliminar el álbum seleccionado de la tabla,
 	 * realizando validaciones y mostrando mensajes de confirmación o error.
 	 * 
 	 * @param e Evento de acción generado al hacer clic en un botón.
@@ -220,7 +219,6 @@ public class VEliminarAlbum extends JDialog implements ActionListener {
 	// Manejo de eventos de botones
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		// Volver a la ventana anterior
 		if (e.getSource().equals(btnVolver)) {
 			dispose();

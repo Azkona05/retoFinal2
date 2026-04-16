@@ -41,7 +41,7 @@ public class ExportadorXML implements InterfazExportador {
 	            Element artistaNode = doc.createElement("Artista");
 	            artistaNode.setAttribute("id", String.valueOf(art.getId()));
 	            artistasContenedor.appendChild(artistaNode);
-
+	            
 	            Element nombreArt = doc.createElement("Nombre");
 	            nombreArt.setTextContent(art.getNombre());
 	            artistaNode.appendChild(nombreArt);
@@ -49,6 +49,12 @@ public class ExportadorXML implements InterfazExportador {
 	            Element tipoArt = doc.createElement("Tipo");
 	            tipoArt.setTextContent(art.getTipo() != null ? art.getTipo().name() : "DESCONOCIDO");
 	            artistaNode.appendChild(tipoArt);
+	            
+	            Element imagenNode = doc.createElement("Imagen");
+	            imagenNode.setTextContent(
+	            	    art.getImagen() != null ? art.getImagen() : "img/default.jpg"
+	            	);
+	            artistaNode.appendChild(imagenNode);
 
 	            Element albumesContenedor = doc.createElement("Albumes");
 	            artistaNode.appendChild(albumesContenedor);

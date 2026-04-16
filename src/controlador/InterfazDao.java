@@ -83,5 +83,4 @@ public interface InterfazDao {
 
 	public String tipoAlbum(int idAlbum);
 
-
 }
