@@ -134,7 +134,7 @@ class TestArti {
             listaAlbumesTest.add(new Album());
             listaCancionesTest.add(new Cancion());
             
-            Artista artistaCompleto = new Artista(5, "Queen", Tipo.GRUPO, listaAlbumesTest, listaCancionesTest);
+            Artista artistaCompleto = new Artista(5, "Queen", Tipo.GRUPO, null, listaAlbumesTest, listaCancionesTest);
             
             assertEquals(5, artistaCompleto.getId());
             assertEquals("Queen", artistaCompleto.getNombre());
