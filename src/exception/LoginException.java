@@ -21,6 +21,7 @@ public class LoginException extends Exception {
      * @param msg El mensaje que describe el error
      */
     public LoginException(String msg) {
+    	super(msg);
         this.msg = msg;
     }
 

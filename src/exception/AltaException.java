@@ -12,7 +12,8 @@ public class AltaException extends Exception {
     private String msg;
 
     public AltaException(String msg) {
-        this.msg = msg;
+    	super(msg);
+		this.msg = msg;
     }
 
   

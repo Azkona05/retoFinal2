@@ -34,6 +34,10 @@ import modelo.Usuario;
  */
 public class VLogin extends JDialog implements ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Componentes de la interfaz que requieren acceso global en la clase
 	private JPanel contentPane;
 	private JTextField txtUsuario;

@@ -10,6 +10,16 @@ public class BajaException extends Exception {
     /** Mensaje de error asociado a la excepción */
     private String msg;
 
+    
+     /**
+	 * Constructor que inicializa la excepción con un mensaje de error.
+	 * 
+	 * @param msg El mensaje que describe el error
+	 */
+    public BajaException(String msg) {
+		super(msg);
+		this.msg = msg;
+	}
     /**
      * Constructor que inicializa la excepción con un mensaje de error.
      * 

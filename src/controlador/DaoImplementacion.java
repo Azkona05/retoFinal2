@@ -314,7 +314,6 @@ public class DaoImplementacion implements InterfazDao {
 	// RICARDO
 	@Override
 	public boolean altaArtista(Artista artista) throws AltaException {
-		// TODO Auto-generated method stub
 		boolean result = false;
 		// ResultSet rs = null;
 		
@@ -353,7 +352,6 @@ public class DaoImplementacion implements InterfazDao {
 	// RICARDO
 	@Override
 	public ArrayList<Integer> ides() throws AltaException {
-		// TODO Auto-generated method stub
 		ArrayList<Integer> id = new ArrayList<>();
 
 		ResultSet rs = null;
@@ -424,7 +422,6 @@ public class DaoImplementacion implements InterfazDao {
 	// RICARDO
 	@Override
 	public ArrayList<String> nomArti() throws AltaException {
-		// TODO Auto-generated method stub
 		ArrayList<String> artis = new ArrayList<>();
 		ResultSet rs = null;
 		openConnection();
@@ -453,8 +450,6 @@ public class DaoImplementacion implements InterfazDao {
 	// RICARDO
 	@Override
 	public Map<Integer, Artista> listarArtTabla(Artista arti) throws AltaException {
-		// TODO Auto-generated method stub
-
 		Map<Integer, Artista> map = new HashMap<Integer, Artista>();
 		ResultSet rs = null;
 		Artista artista;
